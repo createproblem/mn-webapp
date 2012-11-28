@@ -1,0 +1,7 @@
+g5_movie_index:
+    pattern:  /hello/{name}
+    defaults: { _controller: g5MovieBundle:Default:index }
+    
+g5_movie_import:
+    pattern: /import
+    defaults: { _controller:g5MovieBundle:Default:import }

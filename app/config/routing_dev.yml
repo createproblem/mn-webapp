@@ -1,15 +1,11 @@
-_welcome:
-    pattern:  /
-    defaults: { _controller: AcmeDemoBundle:Welcome:index }
+_movie_import:
+    pattern:  /import
+    defaults: { _controller: g5MovieBundle:Default:import }
 
-_demo_secured:
-    resource: "@AcmeDemoBundle/Controller/SecuredController.php"
-    type:     annotation
-
-_demo:
-    resource: "@AcmeDemoBundle/Controller/DemoController.php"
-    type:     annotation
-    prefix:   /demo
+_movie_profile:
+    pattern:	/{page}
+    defaults:	{ _controller: g5MovieBundle:Default:index, page: 1 }
+    requirements: { page: \d+ }
 
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"

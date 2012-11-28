@@ -1,5 +1,10 @@
 imports:
     - { resource: config.yml }
+    
+services:
+    tmdb:
+        class:  g5\MovieBundle\Tmdb
+        arguments: ["%tmdb_api_key%"]
 
 framework:
     router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }

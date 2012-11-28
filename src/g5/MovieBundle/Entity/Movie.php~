@@ -1,0 +1,281 @@
+<?php
+
+namespace g5\MovieBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * g5\MovieBundle\Entity\Movie
+ */
+class Movie
+{
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @var integer $tmdb_id
+     */
+    private $tmdb_id;
+
+    /**
+     * @var string $name
+     */
+    private $name;
+
+    /**
+     * @var \DateTime $release
+     */
+    private $release;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set tmdb_id
+     *
+     * @param integer $tmdbId
+     * @return Movie
+     */
+    public function setTmdbId($tmdbId)
+    {
+        $this->tmdb_id = $tmdbId;
+    
+        return $this;
+    }
+
+    /**
+     * Get tmdb_id
+     *
+     * @return integer 
+     */
+    public function getTmdbId()
+    {
+        return $this->tmdb_id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Movie
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set release
+     *
+     * @param \DateTime $release
+     * @return Movie
+     */
+    public function setRelease($release)
+    {
+        $this->release = $release;
+    
+        return $this;
+    }
+
+    /**
+     * Get release
+     *
+     * @return \DateTime 
+     */
+    public function getRelease()
+    {
+        return $this->release;
+    }
+    /**
+     * @var string $backdrop_path
+     */
+    private $backdrop_path;
+
+
+    /**
+     * Set backdrop_path
+     *
+     * @param string $backdropPath
+     * @return Movie
+     */
+    public function setBackdropPath($backdropPath)
+    {
+        $this->backdrop_path = $backdropPath;
+    
+        return $this;
+    }
+
+    /**
+     * Get backdrop_path
+     *
+     * @return string 
+     */
+    public function getBackdropPath()
+    {
+        return $this->backdrop_path;
+    }
+    /**
+     * @var string $overview
+     */
+    private $overview;
+
+
+    /**
+     * Set overview
+     *
+     * @param string $overview
+     * @return Movie
+     */
+    public function setOverview($overview)
+    {
+        $this->overview = $overview;
+    
+        return $this;
+    }
+
+    /**
+     * Get overview
+     *
+     * @return string 
+     */
+    public function getOverview()
+    {
+        return $this->overview;
+    }
+    /**
+     * @var g5\MovieBundle\Entity\Category
+     */
+    private $category;
+
+
+    /**
+     * Set category
+     *
+     * @param g5\MovieBundle\Entity\Category $category
+     * @return Movie
+     */
+    public function setCategory(\g5\MovieBundle\Entity\Category $category = null)
+    {
+        $this->category = $category;
+    
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return g5\MovieBundle\Entity\Category 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+    /**
+     * @var g5\MovieBundle\Entity\Labels
+     */
+    private $labels;
+
+
+    /**
+     * Set labels
+     *
+     * @param g5\MovieBundle\Entity\Labels $labels
+     * @return Movie
+     */
+    public function setLabels(\g5\MovieBundle\Entity\Labels $labels = null)
+    {
+        $this->labels = $labels;
+    
+        return $this;
+    }
+
+    /**
+     * Get labels
+     *
+     * @return g5\MovieBundle\Entity\Labels 
+     */
+    public function getLabels()
+    {
+        return $this->labels;
+    }
+    /**
+     * @var g5\MovieBundle\Entity\Label
+     */
+    private $label;
+
+
+    /**
+     * Set label
+     *
+     * @param g5\MovieBundle\Entity\Label $label
+     * @return Movie
+     */
+    public function setLabel(\g5\MovieBundle\Entity\Label $label = null)
+    {
+        $this->label = $label;
+    
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return g5\MovieBundle\Entity\Label 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->labels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add labels
+     *
+     * @param g5\MovieBundle\Entity\Label $labels
+     * @return Movie
+     */
+    public function addLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels[] = $labels;
+    
+        return $this;
+    }
+
+    /**
+     * Remove labels
+     *
+     * @param g5\MovieBundle\Entity\Label $labels
+     */
+    public function removeLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels->removeElement($labels);
+    }
+}
