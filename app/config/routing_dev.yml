@@ -6,6 +6,10 @@ _movie_profile:
     pattern:	/{page}
     defaults:	{ _controller: g5MovieBundle:Default:index, page: 1 }
     requirements: { page: \d+ }
+    
+_movie_add:
+    pattern:  /add
+    defaults: { _controller: g5MovieBundle:Default:add }
 
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"

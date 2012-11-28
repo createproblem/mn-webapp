@@ -35,6 +35,14 @@ class DefaultController extends Controller
         ));
     }
     
+    public function addAction()
+    {
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            throw $this->createNotFoundException();
+        }
+        return $this->render('g5MovieBundle:Default:add.html.twig');
+    }
+    
     public function importAction()
     {
         /*$em = $this->getDoctrine()->getManager();

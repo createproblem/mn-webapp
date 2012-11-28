@@ -32,7 +32,12 @@
                         <a class="brand" href="#">Movie Nightmare</a>
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="#">Movies</a></li>
+                                <li class="active dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Movies <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#myModal" data-toggle="modal" onclick="loadAddMovieForm(); return false;">Add</a></li>
+                                    </ul>
+                                </li>
                                 <li><a href="#about">About</a></li>
                                 <li><a href="#contact">Contact</a></li>
                                 <li class="dropdown">
@@ -75,5 +80,6 @@
 			{% block body %}{% endblock %}
 		</div>
         {% block javascripts %}{% endblock %}
+        {% include 'g5MovieBundle:Default:addModal.html.twig' %}
 	</body>
 </html>

@@ -1,0 +1,21 @@
+{# /src/g5/MovieBundle/Resources/views/Default/searchResult.html.twig #}
+{% extends '::base.html.twig' %}
+{% block body %}
+<div class="media">
+    <a class="pull-left" href="#">
+        <img class="media-object" src="http://cf2.imgobject.com/t/p/w92/qrWyk5g0DCy48DIe3n3ozzPo3SO.jpg">
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading">Media heading</h4>
+        +++
+        <!-- Nested media object -->
+        <div class="media">
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>
+    </div>
+</div>
+<a class="btn btn-primary" href="#"><i class="icon-arrow-left icon-white"></i></a>
+<a class="btn btn-primary" href="#"><i class="icon-ok icon-white"></i></a>
+<a class="btn btn-primary" href="#"><i class="icon-arrow-right icon-white"></i></a>
+{% endblock %}
+
