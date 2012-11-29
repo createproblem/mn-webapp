@@ -46,6 +46,9 @@ class Tmdb
     
     public function getImageUrl($path)
     {
+        if (empty($path)) {
+            return "";
+        }
         $url = self::$_configuration->images->base_url . 'w154' . $path;
         return $url;
     }

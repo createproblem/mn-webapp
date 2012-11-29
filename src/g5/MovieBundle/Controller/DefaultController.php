@@ -37,9 +37,36 @@ class DefaultController extends Controller
     
     public function addAction()
     {
+        
+        
         if (!$this->getRequest()->isXmlHttpRequest()) {
             throw $this->createNotFoundException();
         }
+        
+        if ($this->getRequest()->isMethod('POST')) {
+            $query = trim($this->getRequest()->get('searchMovie'));
+            $tmdb = $this->get('tmdb');
+            $t_movies = $tmdb->searchMovie($query);
+            $movies = array();
+            if (isset($t_movies->total_results) && $t_movies->total_results > 0) {
+                foreach ($t_movies->results as $t_movie) {
+                    $movie = new Movie();
+                    $movie->setName($t_movie->original_title);
+                    $movie->setTmdbId($t_movie->id);
+                    $movie->setRelease(new \DateTime($t_movie->release_date));
+                    $movie->setBackdropPath($tmdb->getImageUrl($t_movie->poster_path));
+                    $movieData = $tmdb->getMovieData($movie->getTmdbId());
+                    $movie->setOverview($movieData->overview);
+                    $movies[] = $movie;
+                }
+                return $this->render('g5MovieBundle:Default:searchResult.html.twig', array(
+                    'movies'    => $movies,
+                    'results'   => count($movies)
+                ));
+            }
+            return new Response('Bad');
+        }
+        
         return $this->render('g5MovieBundle:Default:add.html.twig');
     }
     

@@ -1,8 +1,19 @@
 {# /src/g5/MovieBundle/Resources/views/Default/add.html.twig #}
-<form class="form-search">
+<form id="movieSearchForm" class="form-search">
     <div class="input-prepend">
         <span class="add-on"><i class="icon-search"></i></span>
-        <input class="span3" id="prependedInput" type="text" placeholder="Username">
+        <input class="span3" id="prependedInput" name="searchMovie" type="text" placeholder="Search movie">
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button class="btn btn-primary" onclick="sendMovieSearchForm(); return false;">Search</button>
 </form>
+<div id="movieSearchResult"></div>
+<script type="text/javascript">
+    function sendMovieSearchForm()
+    {
+        $("#movieSearchResult").html("Loading...");
+        $.post("{{ path('_movie_add') }}", $("#movieSearchForm").serialize(), function(response) {
+            $("#movieSearchResult").html("");
+            $("#movieSearchResult").append(response);
+        });
+    }
+</script>

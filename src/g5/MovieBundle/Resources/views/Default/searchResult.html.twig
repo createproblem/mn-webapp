@@ -1,21 +1,53 @@
 {# /src/g5/MovieBundle/Resources/views/Default/searchResult.html.twig #}
-{% extends '::base.html.twig' %}
-{% block body %}
-<div class="media">
+{% for movie in movies %}
+<div class="media" id="movie{{ loop.index }}" style="display: none;">
     <a class="pull-left" href="#">
-        <img class="media-object" src="http://cf2.imgobject.com/t/p/w92/qrWyk5g0DCy48DIe3n3ozzPo3SO.jpg">
+        <img class="media-object" src="{{ movie.getBackdropPath }}">
     </a>
     <div class="media-body">
-        <h4 class="media-heading">Media heading</h4>
-        +++
+        <h4 class="media-heading">{{ movie.getName }}</h4>
+        <div>Release: {{ movie.getRelease | date('Y') }}</div>
         <!-- Nested media object -->
         <div class="media">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            {{ movie.getOverview }}
         </div>
     </div>
 </div>
-<a class="btn btn-primary" href="#"><i class="icon-arrow-left icon-white"></i></a>
-<a class="btn btn-primary" href="#"><i class="icon-ok icon-white"></i></a>
-<a class="btn btn-primary" href="#"><i class="icon-arrow-right icon-white"></i></a>
-{% endblock %}
-
+{% endfor %}
+<br />
+<div class="row">
+<a class="btn btn-primary span1" id="prevResult" href="#" onclick="changeResult(movieIndex - 1); return false"><i class="icon-arrow-left icon-white"></i></a>
+<a class="btn btn-primary span1 offset3" id="nextResult" href="#" onclick="changeResult(movieIndex + 1); return false"><i class="icon-arrow-right icon-white"></i></a>
+</div>
+<script type="text/javascript">
+    var movieIndex = 1;
+    var results = {{ results }}
+    $(document).ready(function() {
+        $("#movie" + movieIndex).show();
+        $("#prevResult").addClass('disabled');
+        if (movieIndex == results) {
+           $("#nextResult").addClass('disabled');
+        }
+    });
+    
+    function changeResult(index) 
+    {
+        if (index < 1 || index > results) {
+            return;
+        }
+        if (index == 1) {
+            $("#prevResult").addClass('disabled');
+        } else {
+            $("#prevResult").removeClass('disabled');
+        }
+        
+        if (index == results) {
+            $("#nextResult").addClass('disabled');
+        } else {
+            $("#nextResult").removeClass('disabled');
+        }
+        $("#movie" + movieIndex).hide();
+        $("#movie" + index).show();
+        movieIndex = index;
+    }
+</script>
