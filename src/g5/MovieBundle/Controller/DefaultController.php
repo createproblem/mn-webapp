@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use g5\MovieBundle\Form\Type\MovieType;
 use g5\MovieBundle\Entity\Movie;
 use g5\MovieBundle\Entity\Label;
+use g5\MovieBundle\Tmdb;
 
 class DefaultController extends Controller
 {
@@ -19,6 +20,8 @@ class DefaultController extends Controller
         $t_page = $page - 1;
         $limit = 20;
         $offset = $t_page * $limit;
+        
+        $tmdb = $this->get('tmdb');
         
         $mr = $this->getDoctrine()->getManager()->getRepository('g5MovieBundle:Movie');
         $movies = $mr->findBy(array(), array('name' => 'ASC'), $limit, $offset);
@@ -35,14 +38,13 @@ class DefaultController extends Controller
             'max'       => $max,
             'mid'       => $mid,
             'current'   => $page,
-            'next'      => $next
+            'next'      => $next,
+            'imgUrl'  => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
         ));
     }
     
     public function addAction()
     {
-        
-        
         if (!$this->getRequest()->isXmlHttpRequest()) {
             throw $this->createNotFoundException();
         }
@@ -149,7 +151,7 @@ class DefaultController extends Controller
             $movie->setName($movies->results[0]->original_title);
             $movie->setTmdbId($movies->results[0]->id);
             $movie->setRelease(new \DateTime($movies->results[0]->release_date));
-            $movie->setBackdropPath($tmdb->getImageUrl($movies->results[0]->poster_path));
+            $movie->setBackdropPath($movies->results[0]->poster_path);
             $movieData = $tmdb->getMovieData($movie->getTmdbId());
             $movie->setOverview($movieData->overview);
             $t_movie = $em->getRepository('g5MovieBundle:Movie')->findBy(array(

@@ -11,6 +11,10 @@ define('API_MOVIE', '/movie');
 
 class Tmdb
 {
+    const POSTER_SIZE_w154  = 'w154';
+    const POSTER_SIZE_w185  = 'w185';
+    const POSTER_SIZE_w92   = 'w92';
+    
     private $_apiKey;
     private $_lastUrl;
     
@@ -44,12 +48,9 @@ class Tmdb
         return $url;
     }
     
-    public function getImageUrl($path)
+    public function getImageUrl($size)
     {
-        if (empty($path)) {
-            return "";
-        }
-        $url = self::$_configuration->images->base_url . 'w154' . $path;
+        $url = self::$_configuration->images->base_url . $size;
         return $url;
     }
     
