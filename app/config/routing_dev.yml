@@ -10,6 +10,10 @@ _movie_profile:
 _movie_add:
     pattern:  /add
     defaults: { _controller: g5MovieBundle:Default:add }
+    
+_movie_save_tmdb:
+    pattern: /save
+    defaults: { _controller: g5MovieBundle:Default:saveTmdb }
 
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"

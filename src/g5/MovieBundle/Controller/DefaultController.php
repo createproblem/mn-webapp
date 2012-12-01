@@ -4,7 +4,11 @@ namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 
+use g5\MovieBundle\Form\Type\MovieType;
 use g5\MovieBundle\Entity\Movie;
 use g5\MovieBundle\Entity\Label;
 
@@ -59,9 +63,19 @@ class DefaultController extends Controller
                     $movie->setOverview($movieData->overview);
                     $movies[] = $movie;
                 }
+                
+                $form = $this->createForm(new MovieType());
+                $serializer = new Serializer(array(new GetSetMethodNormalizer()), array(
+                    'json'  => new JsonEncoder()
+                ));
+                
+                $jsonData = $serializer->serialize($movies, 'json');
+                //var_dump($jsonData);
                 return $this->render('g5MovieBundle:Default:searchResult.html.twig', array(
                     'movies'    => $movies,
-                    'results'   => count($movies)
+                    'results'   => count($movies),
+                    'form'      => $form->createView(),
+                    'jsont'      => $jsonData
                 ));
             }
             return new Response('Bad');
@@ -155,5 +169,47 @@ class DefaultController extends Controller
         }
         $em->flush();
         return new Response('OK');
+    }
+    
+    public function saveTmdbAction()
+    {
+        $form = $this->createForm(new MovieType());
+        $form->bind($this->getRequest());
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $tmdb = $this->get('tmdb');
+            $t_movie = $tmdb->getMovieData($form->get('tmdb_id')->getData());
+            //var_dump($form->get('tmdb_id')->getData());
+            $movie = Movie::generateByTmdbMovie($t_movie);
+            $tm = $em->getRepository('g5MovieBundle:Movie')->findBy(array(
+                'tmdb_id' => $movie->getTmdbId()
+            ));
+            if ($tm) {
+                return $this->render('::alert.html.twig', array(
+                    'alert' => array(
+                        'type'  => 'alert-info',
+                        'head' => 'Info!',
+                        'msg'   => 'Movie already exists.'
+                    )
+                ));
+            }
+            $em->persist($movie);
+            $em->flush();
+            return $this->render('::alert.html.twig', array(
+                'alert' => array(
+                    'type'  => 'alert-success',
+                    'head' => 'Well done!',
+                    'msg'   => 'Movie saved successfully.'
+                )
+            ));
+        } else {
+            return $this->render('::alert.html.twig', array(
+                'alert' => array(
+                    'type'  => 'alert-error',
+                    'head' => 'Bad Request!',
+                    'msg'   => 'This Request was not allowed.'
+                )
+            ));
+        }
     }
 }

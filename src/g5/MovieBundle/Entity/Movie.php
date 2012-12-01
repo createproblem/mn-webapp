@@ -209,4 +209,22 @@ class Movie
     {
         return $this->label;
     }
+    
+    /**
+     * Generates a Movie entity by a Tmdb search result
+     * 
+     * @param \StdClass $movie  The Tmdb Movie result as \StdClass object
+     * @return Movie
+     */
+    public static function generateByTmdbMovie($movie)
+    {
+        $t_movie = new self();
+        $t_movie->setTmdbId($movie->id);
+        $t_movie->setName($movie->original_title);
+        $t_movie->setRelease(new \DateTime($movie->release_date));
+        $t_movie->setOverview($movie->overview);
+        $t_movie->setBackdropPath($movie->poster_path);
+        
+        return $t_movie;
+    }
 }
