@@ -2,7 +2,7 @@
 {% for movie in movies %}
 <div class="media" id="movie{{ loop.index }}" style="display: none;">
     <a class="pull-left" href="#">
-        <img class="media-object" src="{{ movie.getBackdropPath }}">
+        <img class="media-object" src="{{ imgUrl}}{{ movie.getBackdropPath }}">
     </a>
     <div class="media-body">
         <h4 class="media-heading">{{ movie.getName }} </h4>

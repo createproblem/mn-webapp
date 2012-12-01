@@ -60,7 +60,7 @@ class DefaultController extends Controller
                     $movie->setName($t_movie->original_title);
                     $movie->setTmdbId($t_movie->id);
                     $movie->setRelease(new \DateTime($t_movie->release_date));
-                    $movie->setBackdropPath($tmdb->getImageUrl($t_movie->poster_path));
+                    $movie->setBackdropPath($t_movie->poster_path);
                     $movieData = $tmdb->getMovieData($movie->getTmdbId());
                     $movie->setOverview($movieData->overview);
                     $movies[] = $movie;
@@ -73,11 +73,13 @@ class DefaultController extends Controller
                 
                 $jsonData = $serializer->serialize($movies, 'json');
                 //var_dump($jsonData);
+                $tmdb = $this->get('tmdb');
                 return $this->render('g5MovieBundle:Default:searchResult.html.twig', array(
                     'movies'    => $movies,
                     'results'   => count($movies),
                     'form'      => $form->createView(),
-                    'jsont'      => $jsonData
+                    'jsont'     => $jsonData,
+                    'imgUrl'   => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
                 ));
             }
             return new Response('Bad');
@@ -183,6 +185,8 @@ class DefaultController extends Controller
             $t_movie = $tmdb->getMovieData($form->get('tmdb_id')->getData());
             //var_dump($form->get('tmdb_id')->getData());
             $movie = Movie::generateByTmdbMovie($t_movie);
+            $label = $em->getRepository('g5MovieBundle:Label')->find(1);
+            $movie->addLabel($label);
             $tm = $em->getRepository('g5MovieBundle:Movie')->findBy(array(
                 'tmdb_id' => $movie->getTmdbId()
             ));

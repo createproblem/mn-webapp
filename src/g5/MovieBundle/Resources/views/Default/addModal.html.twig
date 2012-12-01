@@ -15,7 +15,8 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     <script type="text/javascript">
         function loadAddMovieForm()
-        {   $('#addMovieContent').html("Loading...");
+        {   
+            $('#addMovieContent').html("Loading...");
             $.get("{{ path('_movie_add') }}", null, function(response) {
                 $('#addMovieContent').html("");
                 $('#addMovieContent').append(response); 
