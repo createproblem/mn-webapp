@@ -3,7 +3,7 @@
     <fieldset>
         <label>Label name</label>
             {{ form_widget(form.name) }}
-        <label class="checkbox">{{ form_widget(form.color) }} <span class="label label-warning">Label name</span> </label>
+        <label class="checkbox">{{ form_widget(form.color) }} <span class="label label-warning">Color</span> </label>
         {{ form_rest(form) }}
         <input type="hidden" name="movieObjectId" value="{{ movieObjectId }}" />
     </fieldset>

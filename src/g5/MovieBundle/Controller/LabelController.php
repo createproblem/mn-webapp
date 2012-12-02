@@ -25,8 +25,15 @@ class LabelController extends Controller
             if ($form->isValid()) {
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 // workaround to avoid wrong form handling
-                $label = $form->getData();
-                $label->setColor($form->get('color')->getViewData());
+                $newLabel = $form->getData();
+                $newLabel->setColor($form->get('color')->getViewData());
+                $exiLabel = $dm->getRepository('g5MovieBundle:Labelm')->findOneByName($newLabel->getName());
+                if($exiLabel) {
+                    $exiLabel->setColor($newLabel->getColor());
+                    $label = $exiLabel;
+                } else {
+                    $label = $newLabel;
+                }
                 $dm->persist($label);
                 $movieObjectId = (int)$this->getRequest()->request->get('movieObjectId');
                 $movie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId($movieObjectId);

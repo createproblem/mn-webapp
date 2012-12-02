@@ -13,9 +13,12 @@
             <div class="media-body">
                 <h4 class="media-heading">{{ movie.getName }}</h4>
                 <div>Release: {{ movie.getRelease | date('Y') }}</div>
-                {% for label in movie.getLabels %}
-                    <span class="label {{ label.getColor }}">{{ label.getName }}</span>
-                {% endfor %}
+                <div>
+                    {% for label in movie.getLabels %}
+                        <span class="label {{ label.getColor }}">{{ label.getName }}</span>
+                    {% endfor %}
+                </div>
+                <a id="addLabelModalButton" onclick="openAddLabelModal($(this).data('id')); return false" data-toggle="modal" data-id="{{ movie.getTmdbId }}" href="#addLbabelModal"><i class="icon-tag"></i> <small>Add Label</small></a>
                 <br />
                 {{ movie.getOverview }}
             </div>
@@ -38,4 +41,5 @@
         {% endif %}
     </ul>
 </div>
+{% include 'g5MovieBundle:Label:addModal.html.twig' %}
 {% endblock body %}

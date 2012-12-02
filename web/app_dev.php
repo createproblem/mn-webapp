@@ -1,5 +1,5 @@
 <?php
-
+ini_set("error_reporting", E_ALL & ~E_DEPRECATED);
 use Symfony\Component\HttpFoundation\Request;
 
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line

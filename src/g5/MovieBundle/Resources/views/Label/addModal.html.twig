@@ -1,0 +1,24 @@
+{# /src/g5/MovieBundle/Resources/views/Label/addModal.html.twig #}
+<div id="addLbabelModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addLbabelModal" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Add Label</h3>
+    </div>
+    <div id="addLabelContent" class="modal-body"></div>
+    <div class="modal-footer">
+        <a href="#" class="btn">Close</a>
+        <a href="#" class="btn btn-primary" onclick="addLabel(); return false">Save</a>
+    </div>
+</div>
+{% javascripts '@g5MovieBundle/Resources/public/js/movie.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+<script type="text/javascript">
+    function openAddLabelModal(tmdbId)
+    {
+        $.get("/label/add/"+tmdbId, null, function(response) {
+            $("#addLabelContent").html("");
+            $("#addLabelContent").append(response);
+        });
+    }
+</script>
+{% endjavascripts %}
