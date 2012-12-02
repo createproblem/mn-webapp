@@ -1,0 +1,14 @@
+{# /src/g5/MovieBundle/Resources/views/Label/add.html.twig #}
+<form id="addLabelForm">
+    <fieldset>
+        <label>Label name</label>
+            {{ form_widget(form.name) }}
+        <label class="checkbox">{{ form_widget(form.color) }} <span class="label label-warning">Label name</span> </label>
+        {{ form_rest(form) }}
+        <input type="hidden" name="movieObjectId" value="{{ movieObjectId }}" />
+    </fieldset>
+</form>
+<script type="text/javascript">
+
+</script>
+

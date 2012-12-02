@@ -14,10 +14,15 @@ _movie_add:
 _movie_save_tmdb:
     pattern: /save
     defaults: { _controller: g5MovieBundle:Default:saveTmdb }
-    
-_movie_label:
+
+_movie_label_index:
     pattern: /label
-    defaults: { _controller: g5MovieBundle:Default:label }
+    defaults: { _controller: g5MovieBundle:Label:index }    
+    
+_movie_label_add:
+    pattern: /label/add/{id}
+    defaults: { _controller: g5MovieBundle:Label:add, id: 0 }
+    requirements: { id: \d+ }
 
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"

@@ -7,6 +7,9 @@ g5\MovieBundle\Document\Labelm:
         name:
             type: string
             length: 25
+        color:
+            type: string
+            lenght: 25
     referenceMany:
         movies:
             targetDocument: Moviem

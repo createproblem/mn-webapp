@@ -60,7 +60,7 @@ class DefaultController extends Controller
         $max = round($count / $limit);
         $mid = round($max / 2);
         $next = ($page != $max);
-        
+
         return $this->render('g5MovieBundle:Default:index.html.twig', array(
             'movies'    => $movies,
             'max'       => $max,
@@ -259,6 +259,7 @@ class DefaultController extends Controller
         $dm = $this->get('doctrine_mongodb')->getManager();
         $label = new Labelm();
         $label->setName('Horror');
+        $label->setColor('label-important');
         $dm->persist($label);
         foreach ($importData as $tdata) {
             $data = str_getcsv($tdata);            

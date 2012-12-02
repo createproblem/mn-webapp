@@ -18,11 +18,6 @@ class Labelm
      * @var string $name
      */
     protected $name;
-    
-    /**
-     * @var string $name
-     */
-    protected $color;
 
     /**
      * @var g5\MovieBundle\Document\Moviem
@@ -85,7 +80,12 @@ class Labelm
     {
         return $this->movies;
     }
-  
+    /**
+     * @var string $color
+     */
+    protected $color;
+
+
     /**
      * Set color
      *
