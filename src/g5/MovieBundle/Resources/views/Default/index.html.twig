@@ -15,7 +15,9 @@
                 <div>Release: {{ movie.getRelease | date('Y') }}</div>
                 <div>
                     {% for label in movie.getLabels %}
-                        <span class="label {{ label.getColor }}">{{ label.getName }}</span>
+                        <span class="label {{ label.getColor }}"><button style="line-height: 14px;" class="close">&nbsp;&VerticalSeparator;&times;</button>
+                        {{ label.getName }}
+                        </span>
                     {% endfor %}
                 </div>
                 <a id="addLabelModalButton" onclick="openAddLabelModal($(this).data('id')); return false" data-toggle="modal" data-id="{{ movie.getTmdbId }}" href="#addLbabelModal"><i class="icon-tag"></i> <small>Add Label</small></a>

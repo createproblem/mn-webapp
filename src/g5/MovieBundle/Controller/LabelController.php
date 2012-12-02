@@ -33,8 +33,8 @@ class LabelController extends Controller
                     $label = $exiLabel;
                 } else {
                     $label = $newLabel;
+                    $dm->persist($label);
                 }
-                $dm->persist($label);
                 $movieObjectId = (int)$this->getRequest()->request->get('movieObjectId');
                 $movie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId($movieObjectId);
                 if ($movie) {
