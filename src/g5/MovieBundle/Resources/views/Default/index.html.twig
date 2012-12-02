@@ -13,7 +13,7 @@
             <div class="media-body">
                 <h4 class="media-heading">{{ movie.getName }}</h4>
                 <div>Release: {{ movie.getRelease | date('Y') }}</div>
-                <div>Label: {{ movie.getLabel[0].getName }}</div>
+                <div class="label label-important">{{ movie.getLabels[0].getName }}</div>
                 <br />
                 {{ movie.getOverview }}
             </div>

@@ -1,0 +1,12 @@
+# src/g5/MovieBundle/Resources/config/doctrine/Labelm.mongodb.yml
+g5\MovieBundle\Document\Labelm:
+    type: document
+    fields:
+        id:
+            id:  true
+        name:
+            type: string
+            length: 25
+    referenceMany:
+        movies:
+            targetDocument: Moviem

@@ -14,6 +14,8 @@ class Tmdb
     const POSTER_SIZE_w154  = 'w154';
     const POSTER_SIZE_w185  = 'w185';
     const POSTER_SIZE_w92   = 'w92';
+    const POSTER_SIZE_w500  = 'w500';
+    const POSTER_SIZE_w342  = 'w342';
     
     private $_apiKey;
     private $_lastUrl;

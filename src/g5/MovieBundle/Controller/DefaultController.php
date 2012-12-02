@@ -1,6 +1,7 @@
 <?php
 // src/g5/MovieBundle/Controller/DefaultController.php
 namespace g5\MovieBundle\Controller;
+ini_set("error_reporting", E_ALL & ~E_DEPRECATED);
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,8 @@ use g5\MovieBundle\Form\Type\MovieType;
 use g5\MovieBundle\Entity\Movie;
 use g5\MovieBundle\Entity\Label;
 use g5\MovieBundle\Tmdb;
+use g5\MovieBundle\Document\Moviem;
+use g5\MovieBundle\Document\Labelm;
 
 class DefaultController extends Controller
 {
@@ -40,6 +43,32 @@ class DefaultController extends Controller
             'current'   => $page,
             'next'      => $next,
             'imgUrl'  => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
+        ));
+    }
+    
+    public function index2Action($page)
+    {
+        $t_page = $page - 1;
+        $limit = 20;
+        $offset = $t_page * $limit;
+        
+        $tmdb = $this->get('tmdb');
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $movies = $dm->getRepository('g5MovieBundle:Moviem')->findAll($offset, $limit);
+        
+        $count = $dm->getRepository('g5MovieBundle:Moviem')->count();
+        $max = round($count / $limit);
+        $mid = round($max / 2);
+        $next = ($page != $max);
+        
+        return $this->render('g5MovieBundle:Default:index.html.twig', array(
+            'movies'    => $movies,
+            'max'       => $max,
+            'mid'       => $mid,
+            'current'   => $page,
+            'next'      => $next,
+            //'imgUrl'    => 'http://cf2.imgobject.com/t/p/w154',
+            'imgUrl'    => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
         ));
     }
     
@@ -217,5 +246,53 @@ class DefaultController extends Controller
                 )
             ));
         }
+    }
+    
+    public function import2Action()
+    {
+        $fh = fopen('movies.csv', 'r');
+        $importData = array();
+        while (($buffer = fgets($fh, 1024)) !== false) {
+            $importData[] = $buffer;
+        }
+        fclose($fh);
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $label = new Labelm();
+        $label->setName('Horror');
+        $dm->persist($label);
+        foreach ($importData as $tdata) {
+            $data = str_getcsv($tdata);            
+            $movie = new Moviem();
+            $movie->setTmdbId((int)$data[1]);
+            $movie->setName($data[2]);
+            $movie->setRelease(new \DateTime($data[3]));
+            $movie->setBackdropPath($data[4]);
+            $movie->setOverview($data[5]);
+            $movie->addLabels($label);
+            $tmovie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId($movie->getTmdbId());
+            
+            if (!$tmovie) {
+                $dm->persist($movie);
+                $label->addMovies($movie);
+            }
+        }
+        $dm->flush();
+        
+        return new Response('OK');
+    }
+    
+    public function labelAction()
+    {
+        $dm = $this->get('doctrine_mongodb')->getManager();
+        $movie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId(550);
+        $movie2 = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId(1562);
+        $movie3 = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId(214);
+        $tmdb = $this->get('tmdb');
+        return $this->render('g5MovieBundle:Default:label.html.twig', array(
+            'movie' => $movie,
+            'movie2' => $movie2,
+            'movie3' => $movie3,
+            'imgUrl'    => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w185),
+        ));
     }
 }
