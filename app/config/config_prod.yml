@@ -1,5 +1,10 @@
 imports:
     - { resource: config.yml }
+    
+services:
+    tmdb:
+        class:  g5\MovieBundle\Tmdb
+        arguments: ["%tmdb_api_key%"]
 
 #doctrine:
 #    orm:

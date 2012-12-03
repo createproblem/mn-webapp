@@ -11,7 +11,7 @@
         <div class="media">{{ movie.getOverview }}</div>
     </div>
 </div>
-<form id="movieForm{{ loop.index }}" action="{{ path('_movie_save_tmdb') }}" method="post" {{ form_enctype(form) }}>
+<form id="movieForm{{ loop.index }}" action="{{ path('movie_save_tmdb') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
 </form>
 {% endfor %}

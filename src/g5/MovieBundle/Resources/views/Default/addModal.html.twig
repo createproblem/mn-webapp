@@ -17,7 +17,7 @@
         function loadAddMovieForm()
         {   
             $('#addMovieContent').html("Loading...");
-            $.get("{{ path('_movie_add') }}", null, function(response) {
+            $.get("{{ path('movie_add') }}", null, function(response) {
                 $('#addMovieContent').html("");
                 $('#addMovieContent').append(response); 
             });

@@ -11,7 +11,7 @@
     function sendMovieSearchForm()
     {
         $("#movieSearchResult").html("Loading...");
-        $.post("{{ path('_movie_add') }}", $("#movieSearchForm").serialize(), function(response) {
+        $.post("{{ path('movie_add') }}", $("#movieSearchForm").serialize(), function(response) {
             $("#movieSearchResult").html("");
             $("#movieSearchResult").append(response);
         });
