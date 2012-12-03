@@ -9,8 +9,17 @@ class LabelType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text');
-        $builder->add('color', 'checkbox', array('value' => 'label-warning', 'required' => true));
+        $builder->add('name', 'text', array('required'  => true));
+        $builder->add('color', 'choice', array(
+            'choices'   => array(
+                'label-success'     => 'Green',
+                'label-warning'     => 'Orange',
+                'label-important'   => 'Red',
+                'label-info'        => 'Blue',
+                'label-inverse'     => 'Black'   
+             ),
+            'required'  => true
+        ));
     }
     
     public function getDefaultOptions(array $options)

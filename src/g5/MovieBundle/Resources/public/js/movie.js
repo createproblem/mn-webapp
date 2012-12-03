@@ -24,6 +24,7 @@ function addLabel()
 {
     var data = $("#addLabelForm").serialize();
     $.post("/label/add", data, function(response) {
-        console.log(response);
+        $('#addLabelContent').html("");
+        $('#addLabelContent').append(response); 
     });
 }

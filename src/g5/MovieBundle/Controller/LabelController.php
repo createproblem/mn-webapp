@@ -26,7 +26,7 @@ class LabelController extends Controller
                 $dm = $this->get('doctrine_mongodb')->getManager();
                 // workaround to avoid wrong form handling
                 $newLabel = $form->getData();
-                $newLabel->setColor($form->get('color')->getViewData());
+                //$newLabel->setColor($form->get('color')->getViewData());
                 $exiLabel = $dm->getRepository('g5MovieBundle:Labelm')->findOneByName($newLabel->getName());
                 if($exiLabel) {
                     $exiLabel->setColor($newLabel->getColor());
@@ -39,14 +39,30 @@ class LabelController extends Controller
                 $movie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId($movieObjectId);
                 if ($movie) {
                     $movie->addLabels($label);
-                    var_dump('linked');
+                    //var_dump('linked');
                     //$dm->persist($movie);
                     $label->addMovies($movie);
                 }
                 $dm->flush();
-                return new Response('OK');
+                return $this->render('::alert.html.twig', array(
+                    'alert' => array(
+                        'head' => 'Well done!',
+                        'type' => 'alert-success',
+                        'msg'  => 'Label added and linked.'
+                    )
+                ));
             }
-            return new Response('FAIL');
+            /*return $this->render('::alert.html.twig', array(
+                'alert' => array(
+                    'head' => 'Well done!',
+                    'type' => 'alert-error',
+                    'msg'  => 'Label added and linked.'
+                )
+            ));*/
+            return $this->render('g5MovieBundle:Label:add.html.twig', array(
+            'form' => $form->createView(),
+            'movieObjectId' => $id
+        ));
         }
             
         return $this->render('g5MovieBundle:Label:add.html.twig', array(

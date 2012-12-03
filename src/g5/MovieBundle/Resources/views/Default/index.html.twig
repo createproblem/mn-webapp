@@ -15,7 +15,7 @@
                 <div>Release: {{ movie.getRelease | date('Y') }}</div>
                 <div>
                     {% for label in movie.getLabels %}
-                        <span class="label {{ label.getColor }}"><button style="line-height: 14px;" class="close">&nbsp;&VerticalSeparator;&times;</button>
+                        <span class="label {{ label.getColor }}"><span class="close">&VerticalSeparator;&times;</span>
                         {{ label.getName }}
                         </span>
                     {% endfor %}
@@ -44,4 +44,8 @@
     </ul>
 </div>
 {% include 'g5MovieBundle:Label:addModal.html.twig' %}
+{% stylesheets '@g5MovieBundle/Resources/public/css/movie.css' %}
+<link href="{{ asset_url }}" type="text/css" rel="stylesheet" />
+{% endstylesheets %}
 {% endblock body %}
+
