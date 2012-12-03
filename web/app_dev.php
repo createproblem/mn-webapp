@@ -1,7 +1,7 @@
 <?php
 ini_set("error_reporting", E_ALL & ~E_DEPRECATED);
 use Symfony\Component\HttpFoundation\Request;
-
+umask(0002);
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
 // read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
 //umask(0000);
