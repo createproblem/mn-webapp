@@ -15,7 +15,7 @@
 <script type="text/javascript">
     function openAddLabelModal(tmdbId)
     {
-        $.get("/label/add/"+tmdbId, null, function(response) {
+        $.get("/label/add/"+tmdbId, function(response) {
             $("#addLabelContent").html("");
             $("#addLabelContent").append(response);
         });
