@@ -1,29 +1,3 @@
-_movie_import:
-    pattern:  /import
-    defaults: { _controller: g5MovieBundle:Default:import2 }
-
-_movie_profile:
-    pattern:	/{page}
-    defaults:	{ _controller: g5MovieBundle:Default:index2, page: 1 }
-    requirements: { page: \d+ }
-    
-_movie_add:
-    pattern:  /add
-    defaults: { _controller: g5MovieBundle:Default:add }
-    
-_movie_save_tmdb:
-    pattern: /save
-    defaults: { _controller: g5MovieBundle:Default:saveTmdb }
-
-_movie_label_index:
-    pattern: /label
-    defaults: { _controller: g5MovieBundle:Label:index }    
-    
-_movie_label_add:
-    pattern: /label/add/{id}
-    defaults: { _controller: g5MovieBundle:Label:add, id: 0 }
-    requirements: { id: \d+ }
-
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
     prefix:   /_wdt

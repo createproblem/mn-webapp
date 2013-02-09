@@ -1,6 +1,6 @@
 imports:
     - { resource: config.yml }
-    
+
 services:
     tmdb:
         class:  g5\MovieBundle\Tmdb

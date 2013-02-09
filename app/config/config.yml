@@ -52,13 +52,13 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
-        
+
 doctrine_mongodb:
     connections:
         default:
-            server: mongodb://localhost:27017
+            server: "%database_host%"
             options: {}
-    default_database: test_database
+    default_database: "%database_name%"
     document_managers:
         default:
             auto_mapping: true
