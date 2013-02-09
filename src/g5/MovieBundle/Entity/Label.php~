@@ -1,0 +1,100 @@
+<?php
+
+namespace g5\MovieBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * g5\MovieBundle\Entity\Label
+ */
+class Label
+{
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+    /**
+     * @var string $name
+     */
+    private $name;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    private $movies;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Label
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Add movies
+     *
+     * @param g5\MovieBundle\Entity\movie $movies
+     * @return Label
+     */
+    public function addMovie(\g5\MovieBundle\Entity\movie $movies)
+    {
+        $this->movies[] = $movies;
+    
+        return $this;
+    }
+
+    /**
+     * Remove movies
+     *
+     * @param g5\MovieBundle\Entity\movie $movies
+     */
+    public function removeMovie(\g5\MovieBundle\Entity\movie $movies)
+    {
+        $this->movies->removeElement($movies);
+    }
+
+    /**
+     * Get movies
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getMovies()
+    {
+        return $this->movies;
+    }
+}

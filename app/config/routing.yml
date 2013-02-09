@@ -1,0 +1,29 @@
+# Internal routing configuration to handle ESI
+#_internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal
+movie_import:
+    pattern:  /import
+    defaults: { _controller: g5MovieBundle:Default:import2 }
+
+movie_profile:
+    pattern:	/{page}
+    defaults:	{ _controller: g5MovieBundle:Default:index2, page: 1 }
+    requirements: { page: \d+ }
+    
+movie_add:
+    pattern:  /add
+    defaults: { _controller: g5MovieBundle:Default:add }
+    
+movie_save_tmdb:
+    pattern: /save
+    defaults: { _controller: g5MovieBundle:Default:saveTmdb }
+
+movie_label_index:
+    pattern: /label
+    defaults: { _controller: g5MovieBundle:Label:index }    
+    
+movie_label_add:
+    pattern: /label/add/{id}
+    defaults: { _controller: g5MovieBundle:Label:add, id: 0 }
+    requirements: { id: \d+ }

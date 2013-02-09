@@ -1,0 +1,26 @@
+{# /src/g5/MovieBundle/Resources/views/Default/addModal.html.twig #}
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h3 id="myModalLabel">Add new movie</h3>
+    </div>
+    <div id="addMovieContent" class="modal-body"></div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button type=submit" id="addMovieButton" class="btn btn-primary disabled">Add Movie</button>
+    </div>
+</div>
+
+{% javascripts '@g5MovieBundle/Resources/public/js/movie.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script type="text/javascript">
+        function loadAddMovieForm()
+        {   
+            $('#addMovieContent').html("Loading...");
+            $.get("{{ path('movie_add') }}", null, function(response) {
+                $('#addMovieContent').html("");
+                $('#addMovieContent').append(response); 
+            });
+        }
+    </script>
+{% endjavascripts %}

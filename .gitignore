@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #################
 ## Eclipse
 #################
@@ -161,3 +162,15 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+=======
+/web/bundles/
+/web/js/
+/web/css/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.yml
+/nbproject/
+composer.phar
+>>>>>>> 566ee2a328c258e216f81494db175f53f9172696

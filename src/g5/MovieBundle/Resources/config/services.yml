@@ -1,0 +1,7 @@
+parameters:
+#    g5_movie.example.class: g5\MovieBundle\Example
+
+services:
+#    g5_movie.example:
+#        class: %g5_movie.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
