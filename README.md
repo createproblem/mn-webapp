@@ -31,6 +31,10 @@ The following package list is necessary to run g5webapp.
 
     The Mongo DB itself is needed and the [Mongo DB driver][5] for PHP is also necessary.
 
+3) Configuration
+----------------
+Add `/_configurator` in your browsers URL
+
 Enjoy!
 
 [1]:  http://www.g5network.org/
