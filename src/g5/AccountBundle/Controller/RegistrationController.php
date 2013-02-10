@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use g5\AccountBundle\Form\Type\RegistrationType;
 use g5\AccountBundle\Form\Model\Registration;
+use g5\AccountBundle\Document\User;
 
 class RegistrationController extends Controller
 {
@@ -31,11 +32,16 @@ class RegistrationController extends Controller
         if ($form->isValid()) {
             $registration = $form->getData();
 
-            if (!$userRepository->isUnique($registration->getUser())) {
-                return $this->render('g5AccountBundle:Registration:index.html.twig', array(
-                    'form' => $form->createView()
-                ));
-            }
+            // if (!$userRepository->isUnique($registration->getUser())) {
+            //     return $this->render('g5AccountBundle:Registration:index.html.twig', array(
+            //         'form' => $form->createView()
+            //     ));
+            // }
+            $user = $registration->getUser();
+            $validator = $this->get('validator');
+            $errors = $validator->validate($user);
+            var_dump(count($errors));
+            die();
 
             $dm->persist($registration->getUser());
             $dm->flush();
