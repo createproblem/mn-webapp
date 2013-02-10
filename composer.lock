@@ -1,5 +1,5 @@
 {
-    "hash": "1de4c916c6ec79e02a8ebbc27c61c3a9",
+    "hash": "9fbefcf21b195fa35830eb177b6ca710",
     "packages": [
         {
             "name": "doctrine/common",
@@ -476,76 +476,6 @@
             ]
         },
         {
-            "name": "friendsofsymfony/user-bundle",
-            "version": "dev-master",
-            "target-dir": "FOS/UserBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/FriendsOfSymfony/FOSUserBundle",
-                "reference": "df0cab6237206a53030b6970a5b5580d4b8fa483"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/df0cab6237206a53030b6970a5b5580d4b8fa483",
-                "reference": "df0cab6237206a53030b6970a5b5580d4b8fa483",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/framework-bundle": ">=2.1,<2.3-dev",
-                "symfony/security-bundle": ">=2.1,<2.3-dev"
-            },
-            "require-dev": {
-                "doctrine/doctrine-bundle": "*",
-                "swiftmailer/swiftmailer": "*",
-                "symfony/validator": "2.1.*",
-                "symfony/yaml": "2.1.*",
-                "twig/twig": "*",
-                "willdurand/propel-typehintable-behavior": "dev-master"
-            },
-            "suggest": {
-                "doctrine/couchdb-odm-bundle": "*",
-                "doctrine/doctrine-bundle": "*",
-                "doctrine/mongodb-odm-bundle": "*"
-            },
-            "time": "2013-01-31 20:47:01",
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "FOS\\UserBundle": ""
-                }
-            },
-            "notification-url": "http://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christophe Coevoet",
-                    "email": "stof@notk.org"
-                },
-                {
-                    "name": "Thibault Duplessis",
-                    "email": "thibault.duplessis@gmail.com",
-                    "homepage": "http://ornicar.github.com"
-                },
-                {
-                    "name": "FriendsOfSymfony Community",
-                    "homepage": "https://github.com/friendsofsymfony/FOSUserBundle/contributors"
-                }
-            ],
-            "description": "Symfony FOSUserBundle",
-            "homepage": "http://friendsofsymfony.github.com",
-            "keywords": [
-                "User management"
-            ]
-        },
-        {
             "name": "jdorn/sql-formatter",
             "version": "dev-master",
             "source": {
@@ -850,12 +780,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/kriswallsmith/assetic.git",
-                "reference": "faf3b245977d8bc06c9da4710dbcad37756993a9"
+                "reference": "v1.1.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/faf3b245977d8bc06c9da4710dbcad37756993a9",
-                "reference": "faf3b245977d8bc06c9da4710dbcad37756993a9",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/v1.1.0-alpha2",
+                "reference": "v1.1.0-alpha2",
                 "shasum": ""
             },
             "require": {

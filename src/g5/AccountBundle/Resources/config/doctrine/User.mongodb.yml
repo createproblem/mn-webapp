@@ -1,0 +1,19 @@
+# src/g5/AccountBundle/Resources/config/doctrine/User.mongodb.yml
+
+g5\AccountBundle\Document\User:
+    type: document
+    fields:
+        id:
+            id: true
+        username:
+            type: string
+            length: 25
+        email:
+            type: string
+            length: 255
+        password:
+            type: string
+            length: 255
+        salt:
+            type: string
+            length: 255

@@ -1,0 +1,7 @@
+parameters:
+#    g5_account.example.class: g5\AccountBundle\Example
+
+services:
+#    g5_account.example:
+#        class: %g5_account.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

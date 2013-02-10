@@ -1,7 +1,0 @@
-parameters:
-#    g5_user.example.class: g5\UserBundle\Example
-
-services:
-#    g5_user.example:
-#        class: %g5_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
