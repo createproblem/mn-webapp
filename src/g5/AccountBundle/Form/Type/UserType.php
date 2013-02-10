@@ -4,7 +4,7 @@
 namespace g5\AccountBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Form for user creation
@@ -14,13 +14,14 @@ class UserType extends AbstractType
     /**
      * Build the form to create users
      *
-     * @param  FormBuilder $builder [description]
+     * @param  FormBuilderInterface $builder [description]
      * @param  array       $options [description]
      */
-    public function buildForm(FormBuilder $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('username', 'text');
         $builder->add('email', 'email');
-        $builder->add('plainPassword', 'repeated', array(
+        $builder->add('password', 'repeated', array(
             'first_name'    => 'password',
             'second_name'   => 'confirm',
             'type'          => 'password'

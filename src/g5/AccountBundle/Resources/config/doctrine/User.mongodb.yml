@@ -2,15 +2,20 @@
 
 g5\AccountBundle\Document\User:
     type: document
+    repositoryClass: g5\AccountBundle\Repositroy\UserRepository
     fields:
         id:
             id: true
         username:
             type: string
             length: 25
+            index:
+                unique: true
         email:
             type: string
             length: 255
+            index:
+                unique: true
         password:
             type: string
             length: 255

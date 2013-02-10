@@ -33,7 +33,11 @@ The following package list is necessary to run g5webapp.
 
 3) Configuration
 ----------------
-Add `/_configurator` in your browsers URL
+Add `/_configurator` in your browsers URL. Now create the database structure with the following command:
+
+    php app/console doctrine:mongodb:schema:create --index
+
+Create a new user to enter the secured area.
 
 Enjoy!
 

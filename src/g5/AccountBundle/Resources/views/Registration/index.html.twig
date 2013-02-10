@@ -3,4 +3,12 @@
 {% extends '::base.html.twig' %}
 {% block title %}Account Registration{% endblock %}
 {% block body %}
+<div class="row-fluid">
+    <div class="span5">
+        <form action="{{ path('g5_account_create')}}" method="post" {{ form_enctype(form) }}>
+            {{ form_widget(form) }}
+            <input type="submit" />
+        </form>
+    </div>
+</div>
 {% endblock %}
