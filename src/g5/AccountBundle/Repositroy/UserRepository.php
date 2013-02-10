@@ -23,6 +23,14 @@ class UserRepository extends DocumentRepository
      */
     public function isUnique(User $user)
     {
-        return false;
+        $q = $this->createQueryBuilder()
+            ->limit(1);
+
+        $q->addOr($q->expr()->field('username')->equals($user->getUsername()));
+        $q->addOr($q->expr()->field('email')->equals($user->getEmail()));
+
+        $c = $q->getQuery()->execute()->count();
+
+        return $c === 0 ? true : false;
     }
 }

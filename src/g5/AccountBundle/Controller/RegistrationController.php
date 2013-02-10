@@ -23,12 +23,19 @@ class RegistrationController extends Controller
     public function createAction()
     {
         $dm = $this->get('doctrine_mongodb')->getManager();
+        $userRepository = $dm->getRepository('g5AccountBundle:User');
 
         $form = $this->createForm(new RegistrationType(), new Registration());
         $form->bindRequest($this->getRequest());
 
         if ($form->isValid()) {
             $registration = $form->getData();
+
+            if (!$userRepository->isUnique($registration->getUser())) {
+                return $this->render('g5AccountBundle:Registration:index.html.twig', array(
+                    'form' => $form->createView()
+                ));
+            }
 
             $dm->persist($registration->getUser());
             $dm->flush();
