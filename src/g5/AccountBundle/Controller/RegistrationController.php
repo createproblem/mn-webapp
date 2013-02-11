@@ -17,7 +17,8 @@ class RegistrationController extends Controller
         $form = $this->createForm(new RegistrationType(), new Registration());
 
         return $this->render('g5AccountBundle:Registration:index.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'errors' => array()
         ));
     }
 
@@ -32,16 +33,14 @@ class RegistrationController extends Controller
         if ($form->isValid()) {
             $registration = $form->getData();
 
-            // if (!$userRepository->isUnique($registration->getUser())) {
-            //     return $this->render('g5AccountBundle:Registration:index.html.twig', array(
-            //         'form' => $form->createView()
-            //     ));
-            // }
-            $user = $registration->getUser();
             $validator = $this->get('validator');
-            $errors = $validator->validate($user);
-            var_dump(count($errors));
-            die();
+            $errors = $validator->validate($registration->getUser());
+            if (count($errors) > 0) {
+                return $this->render('g5AccountBundle:Registration:index.html.twig', array(
+                    'form' => $form->createView(),
+                    'errors' => $errors
+                ));
+            }
 
             $dm->persist($registration->getUser());
             $dm->flush();
@@ -49,8 +48,10 @@ class RegistrationController extends Controller
             return $this->redirect('/');
         }
 
+        // form isn't valid
         return $this->render('g5AccountBundle:Registration:index.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'errors' => array()
         ));
     }
 }
