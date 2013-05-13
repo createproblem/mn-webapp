@@ -1,0 +1,23 @@
+# src/g5/MovieBundle/Resources/config/doctrine/Moviem.mongodb.yml
+g5\MovieBundle\Document\Moviem:
+    type: document
+    repositoryClass: g5\MovieBundle\Repository\MoviemRepository
+    fields:
+        id:
+            id:  true
+        tmdb_id:
+            type: int
+        name:
+            type: string
+            length: 100
+        release:
+            type: date
+        backdrop_path:
+            type: string
+            length: 255
+        overview:
+            type: string
+    referenceMany:
+        labels:
+            targetDocument: Labelm
+    

@@ -1,0 +1,19 @@
+{# /src/g5/MovieBundle/Resources/views/Default/label.html.twig #}
+{% extends '::base.html.twig' %}
+{% block body %}
+<div id="myCarousel" class="carousel slide span11">
+    <!-- Carousel items -->
+    <div class="carousel-inner">
+        <div class="active item">
+            <div class="row">
+            <img class="offset1" src="{{ imgUrl}}{{ movie.getBackdropPath }}" />
+            <img class="offset1" src="{{ imgUrl}}{{ movie2.getBackdropPath }}" />
+            <img class="offset1" src="{{ imgUrl}}{{ movie3.getBackdropPath }}" />
+            </div>
+        </div>
+    </div>
+    <!-- Carousel nav -->
+    <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+    <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>
+{% endblock body %}

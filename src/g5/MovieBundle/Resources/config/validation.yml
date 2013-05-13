@@ -1,0 +1,5 @@
+# src/g5/MovieBundle/Resources/config/validation.yml
+g5\MovieBundle\Document\Labelm:
+    properties:
+        name:
+            - NotBlank: ~

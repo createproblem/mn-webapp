@@ -1,0 +1,35 @@
+# src/g5/MovieBundle/Resources/config/doctrine/Movie.org.yml
+g5\MovieBundle\Entity\Movie:
+    type: entity
+    repositoryClass: g5\MovieBundle\Entity\MovieRepository
+    table: movies
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        tmdb_id:
+            type: integer
+            unique: true
+        name:
+            type: string
+            length: 100
+        release:
+            type: datetime
+        backdrop_path:
+            type: string
+            length: 255
+        overview:
+            type: text
+    manyToMany:
+        label:
+            targetEntity: Label
+            inversedBy: movies
+            joinTable:
+                name: movies_labels
+                joinColumns:
+                    movie_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    label_id:
+                        referencedColumnName: id
