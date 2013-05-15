@@ -1,7 +1,6 @@
 language: php
 
 php:
-    - 5.4.11
     - 5.4
     - 5.5
 
