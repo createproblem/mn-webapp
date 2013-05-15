@@ -6,10 +6,10 @@
 /web/js/
 /web/css/
 /app/bootstrap*
+/app/config/parameters.yml
 /app/cache/*
 /app/logs/*
 /vendor/
-/app/config/parameters.yml
 /nbproject/
 composer.phar
 *~
