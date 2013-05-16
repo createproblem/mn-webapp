@@ -13,6 +13,7 @@ services: mongodb
 
 before_script:
     - phpenv config-add php_test.ini
+    - pecl install -f mongo-1.3.7
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - composer install --prefer-source --dev
     - php app/console doctrine:mongodb:schema:create --index
