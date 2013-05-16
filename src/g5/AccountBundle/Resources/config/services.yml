@@ -2,6 +2,17 @@ parameters:
 #    g5_account.example.class: g5\AccountBundle\Example
 
 services:
+    g5.registration.form.type:
+        class: g5\AccountBundle\Form\Type\RegistrationFormType
+        tags:
+            - { name: form.type, alias: g5_registration_form_type }
+
+    g5.registration.form.handler:
+        class: g5\AccountBundle\Form\Handler\RegistrationFormHandler
+        scope: request
+        public: flase
+        arguments: ["@fos_user.registration.form", "@request", "@fos_user.user_manager", "@fos_user.mailer", "@fos_user.util.token_generator", "@fos_user.group_manager.default"]
+
 #    g5_account.example:
 #        class: %g5_account.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

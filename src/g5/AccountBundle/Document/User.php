@@ -2,43 +2,38 @@
 
 namespace g5\AccountBundle\Document;
 
+use FOS\UserBundle\Document\User as BaseUser;
 
 
 /**
  * g5\AccountBundle\Document\User
  */
-class User
+class User extends BaseUser
 {
     /**
-     * @var MongoId $id
+     * @var $id
      */
     protected $id;
 
     /**
-     * @var string $username
+     * @var $termsOfService
      */
-    protected $username;
+    protected $termsOfService;
 
     /**
-     * @var string $email
+     * @var g5\AccountBundle\Document\Group
      */
-    protected $email;
+    protected $groups = array();
 
-    /**
-     * @var string $password
-     */
-    protected $password;
-
-    /**
-     * @var string $salt
-     */
-    protected $salt;
-
+    public function __construct()
+    {
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return id $id
+     * @return int_id $id
      */
     public function getId()
     {
@@ -46,90 +41,52 @@ class User
     }
 
     /**
-     * Set username
+     * Add groups
      *
-     * @param string $username
-     * @return \User
+     * @param g5\AccountBundle\Document\Group $groups
      */
-    public function setUsername($username)
+    public function addGroup(\FOS\UserBundle\Model\GroupInterface $groups)
     {
-        $this->username = $username;
-        return $this;
+        $this->groups[] = $groups;
     }
 
     /**
-     * Get username
-     *
-     * @return string $username
-     */
-    public function getUsername()
+    * Remove groups
+    *
+    * @param <variableType$groups
+    */
+    public function removeGroup(\FOS\UserBundle\Model\GroupInterface $groups)
     {
-        return $this->username;
+        $this->groups->removeElement($groups);
     }
 
     /**
-     * Set email
+     * Get groups
      *
-     * @param string $email
-     * @return \User
+     * @return Doctrine\Common\Collections\Collection $groups
      */
-    public function setEmail($email)
+    public function getGroups()
     {
-        $this->email = $email;
-        return $this;
+        return $this->groups;
     }
 
     /**
-     * Get email
+     * Set termsOfService
      *
-     * @return string $email
+     * @param boolean $termsOfService
      */
-    public function getEmail()
+    public function setTermsOfService($termsOfService)
     {
-        return $this->email;
+        $this->termsOfService = $termsOfService;
     }
 
     /**
-     * Set password
+     * Get termsOfService
      *
-     * @param string $password
-     * @return \User
+     * @return boolean $termsOfService
      */
-    public function setPassword($password)
+    public function getTermsOfService()
     {
-        $this->password = $password;
-        return $this;
-    }
-
-    /**
-     * Get password
-     *
-     * @return string $password
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     * @return \User
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-        return $this;
-    }
-
-    /**
-     * Get salt
-     *
-     * @return string $salt
-     */
-    public function getSalt()
-    {
-        return $this->salt;
+        return $this->termsOfService;
     }
 }

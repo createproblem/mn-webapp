@@ -1,6 +1,7 @@
 language: php
 
 php:
+    - 5.3
     - 5.4
     - 5.5
 
@@ -13,5 +14,6 @@ services: mongodb
 before_script:
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - composer install --prefer-source --dev
+    - php app/console doctrine:mongodb:schema:create --index
 
 script: phpunit -c app

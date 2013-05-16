@@ -4,14 +4,28 @@ namespace g5\AccountBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class RegistrationControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testRegister()
     {
         $client = static::createClient();
+        $client->followRedirects();
 
-        $crawler = $client->request('GET', '/account/registration');
+        $crawler = $client->request('GET', '/register/');
 
-        $this->assertTrue($crawler->filter('html:contains("Accept my terms.")')->count() > 0);
+        $buttonCrawlerNode = $crawler->selectButton('registration.submit');
+
+        $form = $buttonCrawlerNode->form();
+
+        $form['fos_user_registration_form[username]'] = 'Test';
+        $form['fos_user_registration_form[email]'] = 'test@example.org';
+        $form['fos_user_registration_form[plainPassword][password]'] = 'test';
+        $form['fos_user_registration_form[plainPassword][confirm_password]'] = 'test';
+        $form['fos_user_registration_form[termsOfService]']->tick();
+
+        $crawler = $client->submit($form);
+
+        $this->assertTrue($crawler->filter('html:contains("registration.flash.user_created")')->count() > 0);
     }
 }
+
