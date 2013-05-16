@@ -1,7 +1,7 @@
 parameters:
     database_driver:   pdo_sqlite
-    database_host:     mongodb://localhost:27017
-    database_port:     ~
+    database_host:     localhost
+    database_port:     27017
     database_name:     mndb
     database_user:     ~
     database_password: ~
@@ -15,4 +15,4 @@ parameters:
     locale:            en
     secret:            c9f701ef4542e7caf82379d4c82a4ab6
 
-    tmdb_api_key:      280b6c5e0a196cab61823305d553390a
+    tmdb_api_key:      ~

@@ -1,7 +1,7 @@
 parameters:
     database_driver:   pdo_sqlite
-    database_host:     mongodb://localhost:27017
-    database_port:     ~
+    database_host:     localhost
+    database_port:     27017
     database_name:     mndb
     database_user:     ~
     database_password: ~
