@@ -14,7 +14,7 @@ class RegistrationControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/account/register/');
 
-        $buttonCrawlerNode = $crawler->selectButton('registration.submit');
+        $buttonCrawlerNode = $crawler->selectButton('Register');
 
         $form = $buttonCrawlerNode->form();
 
@@ -26,7 +26,7 @@ class RegistrationControllerTest extends WebTestCase
 
         $crawler = $client->submit($form);
 
-        $this->assertTrue($crawler->filter('html:contains("registration.flash.user_created")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("The user has been created successfully")')->count() > 0);
     }
 }
 
