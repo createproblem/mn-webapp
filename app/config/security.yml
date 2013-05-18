@@ -25,16 +25,17 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
-                login_path: /login
-                check_path: /login_check
-            logout: true
+                login_path: /account/login
+                check_path: /account/login_check
+            logout:
+                path: /account/logout
             anonymous: true
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }

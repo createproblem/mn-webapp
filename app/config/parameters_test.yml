@@ -2,7 +2,7 @@ parameters:
     database_driver:   pdo_sqlite
     database_host:     localhost
     database_port:     27017
-    database_name:     mndb
+    database_name:     mn_test
     database_user:     ~
     database_password: ~
     database_path:     ~
