@@ -1,5 +1,5 @@
 g5_movie_add:
-    pattern: /add
+    pattern: /add/{tmdbId}
     defaults: { _controller: g5MovieBundle:Movie:add }
     options:
         expose: true
@@ -7,16 +7,11 @@ g5_movie_add:
 g5_movie_search:
     pattern:  /search
     defaults: { _controller: g5MovieBundle:Movie:search }
-
-g5_movie_lookup:
-    pattern:  /lookup
-    defaults: { _controller: g5MovieBundle:Search:lookup }
-    methods:  [ "POST" ]
     options:
         expose: true
 
 g5_movie_loadmeta:
-    pattern: /loadmeta/{tmdbid}
-    defaults: { _controller: g5MovieBundle:Search:loadmeta }
+    pattern: /loadmeta/{tmdbId}
+    defaults: { _controller: g5MovieBundle:Movie:loadmeta }
     options:
         expose: true

@@ -15,4 +15,4 @@ parameters:
     locale:            en
     secret:            c9f701ef4542e7caf82379d4c82a4ab6
 
-    tmdb_api_key:      ~
+    tmdb_api_key:      280b6c5e0a196cab61823305d553390a

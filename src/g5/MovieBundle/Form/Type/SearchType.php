@@ -12,6 +12,7 @@ class SearchType extends AbstractType
     {
         $builder->add('search', 'text', array(
             'attr' => array('placeholder' => 'Movie Title'),
+            'required' => true,
         ));
     }
 
