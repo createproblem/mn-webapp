@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "cd9f7cc37241c67f8379488bb727bb3b",
+    "hash": "734b293390381a8eb291fc7df88595e6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -842,7 +842,7 @@
                     "FOS\\JsRoutingBundle": ""
                 }
             },
-            "notification-url": "http://packagist.org/downloads/",
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],

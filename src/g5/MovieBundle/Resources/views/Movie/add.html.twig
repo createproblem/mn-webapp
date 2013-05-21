@@ -3,7 +3,19 @@
 {% block body %}
 <div class="row-fluid">
     <div class="span5">
-        {{ render(controller('g5MovieBundle:Search:search')) }}
+        <form id="formSearch" class="form-inline" action="{{ path('g5_movie_add') }}" method="post">
+            {{ form_errors(form) }}
+            {{ form_widget(form.search) }}
+            {{ form_rest(form) }}
+            <button id="btnSearch" class="btn btn-primary">Search</button>
+        </form>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5MovieBundle/Resources/public/js/search.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

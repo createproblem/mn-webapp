@@ -6,7 +6,7 @@ g5_movie_add:
 
 g5_movie_search:
     pattern:  /search
-    defaults: { _controller: g5MovieBundle:Search:search }
+    defaults: { _controller: g5MovieBundle:Movie:search }
 
 g5_movie_lookup:
     pattern:  /lookup
