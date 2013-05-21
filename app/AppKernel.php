@@ -21,8 +21,10 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new g5\HomeBundle\g5HomeBundle(),
             new g5\AccountBundle\g5AccountBundle(),
+            new g5\MovieBundle\g5MovieBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

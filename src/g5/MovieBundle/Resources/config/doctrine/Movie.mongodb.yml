@@ -1,0 +1,10 @@
+# /src/g5/MovieBundle/Resources/config/doctrine/Movie.mongodb.yml
+g5\MovieBundle\Document\Movie:
+    type: document
+    fields:
+        id:
+            id: true
+        name:
+            type: string
+        meta:
+            type: hash

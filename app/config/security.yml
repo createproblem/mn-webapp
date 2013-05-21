@@ -37,5 +37,6 @@ security:
     access_control:
         - { path: ^/account/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/movie/, role: ROLE_USER }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
