@@ -1,0 +1,19 @@
+# /src/g5/MovieBundle/Resources/config/doctrine/Movie.orm.yml
+g5\MovieBundle\Entity\Movie:
+    type: entity
+    table: movie
+    id:
+        id:
+            type: integer
+            generator: { strategy: auto }
+    fields:
+        tmdbid:
+            type: integer
+        title:
+            type: string
+        overview:
+            type: text
+        cover_url:
+            type: string
+        release_date:
+            type: date

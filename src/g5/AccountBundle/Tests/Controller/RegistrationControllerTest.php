@@ -20,9 +20,9 @@ class RegistrationControllerTest extends WebTestCase
 
         $form['fos_user_registration_form[username]'] = $time;
         $form['fos_user_registration_form[email]'] = $time.'@example.org';
-        $form['fos_user_registration_form[plainPassword][password]'] = $time;
-        $form['fos_user_registration_form[plainPassword][confirm_password]'] = $time;
-        $form['fos_user_registration_form[termsOfService]']->tick();
+        $form['fos_user_registration_form[plainPassword][first]'] = $time;
+        $form['fos_user_registration_form[plainPassword][second]'] = $time;
+        // $form['fos_user_registration_form[termsOfService]']->tick();
 
         $crawler = $client->submit($form);
 

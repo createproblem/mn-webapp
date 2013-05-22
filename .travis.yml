@@ -9,13 +9,14 @@ matrix:
     allow_failures:
         - php: 5.5
 
-services: mongodb
+# services: mongodb
 
 before_script:
-    - phpenv config-add php_test.ini
-    - pecl install -f mongo-1.3.7
+    # - phpenv config-add php_test.ini
+    # - pecl install -f mongo-1.3.7
+    - mysql -e 'create database mn_test;'
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - composer install --prefer-source --dev
-    - php app/console doctrine:mongodb:schema:create --index
+    - php app/console doctrine:schema:create
 
 script: phpunit -c app

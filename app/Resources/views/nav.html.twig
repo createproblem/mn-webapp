@@ -10,7 +10,9 @@
             <a href="{{ path('g5_home_homepage') }}" class="brand"><small>Movie Nightmare</small></a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <!-- <li class="active"><a href="#">Home</a></li> -->
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <li class="active"><a href="{{ path('g5_movie_index') }}">Movies</a></li>
+                    {% endif %}
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">Account <b class="caret"></b></a>
                         <ul class="dropdown-menu">

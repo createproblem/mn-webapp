@@ -17,6 +17,10 @@ class Tmdb
     const POSTER_SIZE_w500  = 'w500';
     const POSTER_SIZE_w342  = 'w342';
 
+    const DATA_TITLE = 'original_title';
+    const DATA_OVERVIEW = 'overview';
+    const DATA_COVER_URL = 'poster_path';
+
     private $_apiKey;
     private $_lastUrl;
 

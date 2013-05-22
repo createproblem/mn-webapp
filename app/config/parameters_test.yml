@@ -1,9 +1,9 @@
 parameters:
-    database_driver:   pdo_sqlite
+    database_driver:   pdo_mysql
     database_host:     localhost
-    database_port:     27017
+    database_port:     3306
     database_name:     mn_test
-    database_user:     ~
+    database_user:     root
     database_password: ~
     database_path:     ~
 

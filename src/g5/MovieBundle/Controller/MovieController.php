@@ -7,20 +7,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use g5\MovieBundle\Form\Type\SearchType;
-use g5\MovieBundle\Document\Movie;
+use g5\MovieBundle\Entity\Movie;
 use g5\MovieBundle\Tmdb;
 
 class MovieController extends Controller
 {
+    public function indexAction()
+    {
+        return $this->render('g5MovieBundle:Movie:index.html.twig');
+    }
+
     /**
      * Adds a Movie
      */
-    public function addAction()
+    public function addAction($tmdbId)
     {
+        $em = $this->getDoctrine()->getManager();
         $moviemanager = $this->get('g5.movie.movie_manager');
 
-        $movie = $moviemanager->createMovie(550);
-        $movie->setTmdbid(550);
+        $movie = $moviemanager->createMovie($tmdbId);
+        $em->persist($movie);
+        $em->flush();
 
         return new JsonResponse($movie->getTmdbid());
     }

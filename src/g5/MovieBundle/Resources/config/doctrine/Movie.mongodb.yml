@@ -6,7 +6,11 @@ g5\MovieBundle\Document\Movie:
             id: true
         tmdbid:
             type: int
-        name:
+        title:
             type: string
-        meta:
-            type: hash
+        overview:
+            type: string
+        cover_url:
+            type: string
+        release_date:
+            type: date

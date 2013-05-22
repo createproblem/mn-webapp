@@ -15,9 +15,19 @@ class Movie
     protected $id;
 
     /**
+     * @var int $tmdbid
+     */
+    protected $tmdbid;
+
+    /**
      * @var string $name
      */
     protected $name;
+
+    /**
+     * @var string $overview
+     */
+    protected $overview;
 
     /**
      * @var hash $meta
@@ -33,6 +43,28 @@ class Movie
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set tmdbid
+     *
+     * @param int $tmdbid
+     * @return self
+     */
+    public function setTmdbid($tmdbid)
+    {
+        $this->tmdbid = $tmdbid;
+        return $this;
+    }
+
+    /**
+     * Get tmdbid
+     *
+     * @return int $tmdbid
+     */
+    public function getTmdbid()
+    {
+        return $this->tmdbid;
     }
 
     /**
@@ -58,6 +90,28 @@ class Movie
     }
 
     /**
+     * Set overview
+     *
+     * @param string $overview
+     * @return self
+     */
+    public function setOverview($overview)
+    {
+        $this->overview = $overview;
+        return $this;
+    }
+
+    /**
+     * Get overview
+     *
+     * @return string $overview
+     */
+    public function getOverview()
+    {
+        return $this->overview;
+    }
+
+    /**
      * Set meta
      *
      * @param hash $meta
@@ -79,30 +133,111 @@ class Movie
         return $this->meta;
     }
     /**
-     * @var int $tmdbid
+     * @var string $title
      */
-    protected $tmdbid;
+    protected $title;
 
 
     /**
-     * Set tmdbid
+     * Set title
      *
-     * @param int $tmdbid
+     * @param string $title
      * @return self
      */
-    public function setTmdbid($tmdbid)
+    public function setTitle($title)
     {
-        $this->tmdbid = $tmdbid;
+        $this->title = $title;
         return $this;
     }
 
     /**
-     * Get tmdbid
+     * Get title
      *
-     * @return int $tmdbid
+     * @return string $title
      */
-    public function getTmdbid()
+    public function getTitle()
     {
-        return $this->tmdbid;
+        return $this->title;
+    }
+    /**
+     * @var string $cover
+     */
+    protected $cover;
+
+
+    /**
+     * Set cover
+     *
+     * @param string $cover
+     * @return self
+     */
+    public function setCover($cover)
+    {
+        $this->cover = $cover;
+        return $this;
+    }
+
+    /**
+     * Get cover
+     *
+     * @return string $cover
+     */
+    public function getCover()
+    {
+        return $this->cover;
+    }
+    /**
+     * @var string $cover_url
+     */
+    protected $cover_url;
+
+    /**
+     * @var date $release_date
+     */
+    protected $release_date;
+
+
+    /**
+     * Set cover_url
+     *
+     * @param string $coverUrl
+     * @return self
+     */
+    public function setCoverUrl($coverUrl)
+    {
+        $this->cover_url = $coverUrl;
+        return $this;
+    }
+
+    /**
+     * Get cover_url
+     *
+     * @return string $coverUrl
+     */
+    public function getCoverUrl()
+    {
+        return $this->cover_url;
+    }
+
+    /**
+     * Set release_date
+     *
+     * @param date $releaseDate
+     * @return self
+     */
+    public function setReleaseDate($releaseDate)
+    {
+        $this->release_date = $releaseDate;
+        return $this;
+    }
+
+    /**
+     * Get release_date
+     *
+     * @return date $releaseDate
+     */
+    public function getReleaseDate()
+    {
+        return $this->release_date;
     }
 }
