@@ -4,6 +4,8 @@ g5\MovieBundle\Document\Movie:
     fields:
         id:
             id: true
+        tmdbid:
+            type: int
         name:
             type: string
         meta:

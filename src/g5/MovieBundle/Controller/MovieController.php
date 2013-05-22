@@ -12,11 +12,22 @@ use g5\MovieBundle\Tmdb;
 
 class MovieController extends Controller
 {
+    /**
+     * Adds a Movie
+     */
     public function addAction()
     {
-        return new JsonResponse("test");
+        $moviemanager = $this->get('g5.movie.movie_manager');
+
+        $movie = $moviemanager->createMovie(550);
+        $movie->setTmdbid(550);
+
+        return new JsonResponse($movie->getTmdbid());
     }
 
+    /**
+     * Search for Movie in the tmdb db
+     */
     public function searchAction()
     {
         $tmdb = $this->get('g5.movie.tmdb_api');
@@ -48,6 +59,11 @@ class MovieController extends Controller
         }
     }
 
+    /**
+     * Load Movie details
+     *
+     * @param  int $tmdbId
+     */
     public function loadmetaAction($tmdbId)
     {
         $tmdb = $this->get('g5.movie.tmdb_api');

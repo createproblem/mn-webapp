@@ -5,6 +5,11 @@ services:
     g5.movie.tmdb_api:
         class: g5\MovieBundle\Tmdb
         arguments: [%tmdb_api_key%]
+
+    g5.movie.movie_manager:
+        class: g5\MovieBundle\Service\MovieManager
+        arguments: [@g5.movie.tmdb_api]
+
 #    g5_movie.example:
 #        class: %g5_movie.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

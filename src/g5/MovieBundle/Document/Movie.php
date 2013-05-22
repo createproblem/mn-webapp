@@ -78,4 +78,31 @@ class Movie
     {
         return $this->meta;
     }
+    /**
+     * @var int $tmdbid
+     */
+    protected $tmdbid;
+
+
+    /**
+     * Set tmdbid
+     *
+     * @param int $tmdbid
+     * @return self
+     */
+    public function setTmdbid($tmdbid)
+    {
+        $this->tmdbid = $tmdbid;
+        return $this;
+    }
+
+    /**
+     * Get tmdbid
+     *
+     * @return int $tmdbid
+     */
+    public function getTmdbid()
+    {
+        return $this->tmdbid;
+    }
 }
