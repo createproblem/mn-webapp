@@ -55,7 +55,7 @@ class MovieController extends Controller
                 'imgUrl' => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w185),
             ));
         } else {
-            return $this->createNotFoundException();
+            throw $this->createNotFoundException('Empty search not allowed');
         }
     }
 

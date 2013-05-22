@@ -35,10 +35,13 @@ class MovieControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter("button[id=btnSearch]")->count());
 
         $form = $crawler->selectButton('btnSearch')->form();
-        $form['g5_movie_search[search]'] = "Fight Club";
 
+        $form['g5_movie_search[search]'] = "";
         $crawler = $this->client->submit($form);
+        $this->assertTrue($this->client->getResponse()->isNotFound());
 
+        $form['g5_movie_search[search]'] = "Fight Club";
+        $crawler = $this->client->submit($form);
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
