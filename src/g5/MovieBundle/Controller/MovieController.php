@@ -5,6 +5,7 @@ namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 use g5\MovieBundle\Form\Type\SearchType;
 use g5\MovieBundle\Entity\Movie;
@@ -14,7 +15,14 @@ class MovieController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('g5MovieBundle:Movie:index.html.twig');
+        $user = $this->getUser();
+
+        $movies = $user->getMovies();
+        // print_r($movies);
+
+        return $this->render('g5MovieBundle:Movie:index.html.twig', array(
+            'movies' => $movies,
+        ));
     }
 
     /**
@@ -24,8 +32,22 @@ class MovieController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $moviemanager = $this->get('g5.movie.movie_manager');
+        $validator = $this->get('validator');
+        $user = $this->getUser();
 
         $movie = $moviemanager->createMovie($tmdbId);
+        $movie->setUserId($user->getId());
+
+
+        $errors = $validator->validate($movie);
+        if (count($errors) > 0) {
+            $messages = array();
+            foreach ($errors as $error) {
+                $messages[] = $error->getMessage();
+            }
+            return new JsonResponse($messages);
+        }
+        $movie->setUser($user);
         $em->persist($movie);
         $em->flush();
 

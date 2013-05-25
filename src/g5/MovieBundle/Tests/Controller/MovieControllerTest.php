@@ -12,18 +12,18 @@ class MovieControllerTest extends WebTestCase
 {
     private $client = null;
 
-    public function testAdd()
-    {
-        $this->login();
+    // public function testAdd()
+    // {
+    //     $this->login();
 
-        $crawler = $this->client->request('GET', '/movie/add/550');
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
+    //     $crawler = $this->client->request('GET', '/movie/add/550');
+    //     $this->assertTrue($this->client->getResponse()->isSuccessful());
 
-        $content = $this->client->getResponse()->getContent();
-        $content = json_decode($content);
+    //     $content = $this->client->getResponse()->getContent();
+    //     $content = json_decode($content);
 
-        $this->assertEquals(550, $content);
-    }
+    //     $this->assertEquals(550, $content);
+    // }
 
     public function testSearch()
     {
