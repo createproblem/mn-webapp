@@ -6,3 +6,8 @@ g5\AccountBundle\Entity\User:
         id:
             type: integer
             generator: { strategy: auto }
+
+    oneToMany:
+        movies:
+            targetEntity: g5\MovieBundle\Entity\Movie
+            mappedBy: user

@@ -12,12 +12,12 @@ class Movie
     /**
      * @var integer
      */
-    private $id;
+    private $tmdb_id;
 
     /**
      * @var integer
      */
-    private $tmdbid;
+    private $user_id;
 
     /**
      * @var string
@@ -39,38 +39,56 @@ class Movie
      */
     private $release_date;
 
-
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var \g5\AccountBundle\Entity\User
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $user;
+
 
     /**
-     * Set tmdbid
+     * Set tmdb_id
      *
-     * @param integer $tmdbid
+     * @param integer $tmdbId
      * @return Movie
      */
-    public function setTmdbid($tmdbid)
+    public function setTmdbId($tmdbId)
     {
-        $this->tmdbid = $tmdbid;
+        $this->tmdb_id = $tmdbId;
 
         return $this;
     }
 
     /**
-     * Get tmdbid
+     * Get tmdb_id
      *
      * @return integer 
      */
-    public function getTmdbid()
+    public function getTmdbId()
     {
-        return $this->tmdbid;
+        return $this->tmdb_id;
+    }
+
+    /**
+     * Set user_id
+     *
+     * @param integer $userId
+     * @return Movie
+     */
+    public function setUserId($userId)
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get user_id
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 
     /**
@@ -163,5 +181,28 @@ class Movie
     public function getReleaseDate()
     {
         return $this->release_date;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \g5\AccountBundle\Entity\User $user
+     * @return Movie
+     */
+    public function setUser(\g5\AccountBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \g5\AccountBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

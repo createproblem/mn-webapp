@@ -3,12 +3,12 @@ g5\MovieBundle\Entity\Movie:
     type: entity
     table: movie
     id:
-        id:
+        tmdb_id:
             type: integer
-            generator: { strategy: auto }
+        user_id:
+            type: integer
+
     fields:
-        tmdbid:
-            type: integer
         title:
             type: string
         overview:
@@ -17,3 +17,11 @@ g5\MovieBundle\Entity\Movie:
             type: string
         release_date:
             type: date
+
+    manyToOne:
+        user:
+            targetEntity: g5\AccountBundle\Entity\User
+            inversedBy: movies
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
