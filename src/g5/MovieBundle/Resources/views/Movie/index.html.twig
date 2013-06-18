@@ -1,0 +1,9 @@
+{# /src/g5/MovieBundle/Resources/views/Movie/index.html.twig #}
+{% extends '::base.html.twig' %}
+{% block body %}
+Dump:<br>
+{#{ dump(movies) }#}
+{% for movie in movies %}
+    {{ movie.getTmdbId() }}<br>
+{% endfor %}
+{% endblock %}

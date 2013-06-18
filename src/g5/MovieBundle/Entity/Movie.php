@@ -5,62 +5,45 @@ namespace g5\MovieBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * g5\MovieBundle\Entity\Movie
+ * Movie
  */
 class Movie
 {
     /**
-     * @var integer $id
-     */
-    private $id;
-
-    /**
-     * @var integer $tmdb_id
+     * @var integer
      */
     private $tmdb_id;
 
     /**
-     * @var string $name
+     * @var integer
      */
-    private $name;
+    private $user_id;
 
     /**
-     * @var \DateTime $release
+     * @var string
      */
-    private $release;
+    private $title;
 
     /**
-     * @var string $backdrop_path
-     */
-    private $backdrop_path;
-
-    /**
-     * @var string $overview
+     * @var string
      */
     private $overview;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
      */
-    private $label;
+    private $cover_url;
 
     /**
-     * Constructor
+     * @var \DateTime
      */
-    public function __construct()
-    {
-        $this->label = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+    private $release_date;
+
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var \g5\AccountBundle\Entity\User
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $user;
+
 
     /**
      * Set tmdb_id
@@ -71,7 +54,7 @@ class Movie
     public function setTmdbId($tmdbId)
     {
         $this->tmdb_id = $tmdbId;
-    
+
         return $this;
     }
 
@@ -86,72 +69,49 @@ class Movie
     }
 
     /**
-     * Set name
+     * Set user_id
      *
-     * @param string $name
+     * @param integer $userId
      * @return Movie
      */
-    public function setName($name)
+    public function setUserId($userId)
     {
-        $this->name = $name;
-    
+        $this->user_id = $userId;
+
         return $this;
     }
 
     /**
-     * Get name
+     * Get user_id
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Movie
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
      *
      * @return string 
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
-    }
-
-    /**
-     * Set release
-     *
-     * @param \DateTime $release
-     * @return Movie
-     */
-    public function setRelease($release)
-    {
-        $this->release = $release;
-    
-        return $this;
-    }
-
-    /**
-     * Get release
-     *
-     * @return \DateTime 
-     */
-    public function getRelease()
-    {
-        return $this->release;
-    }
-
-    /**
-     * Set backdrop_path
-     *
-     * @param string $backdropPath
-     * @return Movie
-     */
-    public function setBackdropPath($backdropPath)
-    {
-        $this->backdrop_path = $backdropPath;
-    
-        return $this;
-    }
-
-    /**
-     * Get backdrop_path
-     *
-     * @return string 
-     */
-    public function getBackdropPath()
-    {
-        return $this->backdrop_path;
+        return $this->title;
     }
 
     /**
@@ -163,7 +123,7 @@ class Movie
     public function setOverview($overview)
     {
         $this->overview = $overview;
-    
+
         return $this;
     }
 
@@ -178,53 +138,86 @@ class Movie
     }
 
     /**
-     * Add label
+     * Set cover_url
      *
-     * @param g5\MovieBundle\Entity\Label $label
+     * @param string $coverUrl
      * @return Movie
      */
-    public function addLabel(\g5\MovieBundle\Entity\Label $label)
+    public function setCoverUrl($coverUrl)
     {
-        $this->label[] = $label;
-    
+        $this->cover_url = $coverUrl;
+
         return $this;
     }
 
     /**
-     * Remove label
+     * Get cover_url
      *
-     * @param g5\MovieBundle\Entity\Label $label
+     * @return string 
      */
-    public function removeLabel(\g5\MovieBundle\Entity\Label $label)
+    public function getCoverUrl()
     {
-        $this->label->removeElement($label);
+        return $this->cover_url;
     }
 
     /**
-     * Get label
+     * Set release_date
      *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-    
-    /**
-     * Generates a Movie entity by a Tmdb search result
-     * 
-     * @param \StdClass $movie  The Tmdb Movie result as \StdClass object
+     * @param \DateTime $releaseDate
      * @return Movie
      */
-    public static function generateByTmdbMovie($movie)
+    public function setReleaseDate($releaseDate)
     {
-        $t_movie = new self();
-        $t_movie->setTmdbId($movie->id);
-        $t_movie->setName($movie->original_title);
-        $t_movie->setRelease(new \DateTime($movie->release_date));
-        $t_movie->setOverview($movie->overview);
-        $t_movie->setBackdropPath($movie->poster_path);
-        
-        return $t_movie;
+        $this->release_date = $releaseDate;
+
+        return $this;
+    }
+
+    /**
+     * Get release_date
+     *
+     * @return \DateTime 
+     */
+    public function getReleaseDate()
+    {
+        return $this->release_date;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \g5\AccountBundle\Entity\User $user
+     * @return Movie
+     */
+    public function setUser(\g5\AccountBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \g5\AccountBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    /**
+     * @var integer
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }
