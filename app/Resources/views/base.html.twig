@@ -3,50 +3,45 @@
 <head>
     <meta charset="UTF-8" />
     <title>{% block title %}{% endblock %}</title>
-    <script src="http://code.jquery.com/jquery.min.js"></script>
-    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap.js"></script>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    {% javascripts '@g5HomeBundle/Resources/public/js/bootstrap.min.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% stylesheets
+        'bundles/g5home/css/bootstrap.min.css'
+        'bundles/g5home/css/global.css'
+        filter="cssrewrite"
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
     <style type="text/css">
         body {
             padding-top: 60px;
             padding-bottom: 40px;
         }
     </style>
-	<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar" type="button">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="{{ path('g5_home_homepage') }}" class="brand"><small>Movie Nightmare</small></a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Account <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Login</a></li>
-                                <li><a href="{{ path('g5_account_registration') }}">Register</a></li>
-                                <li class="divider"></li>
-                                <li class="nav-header">Profile</li>
-                                <li><a href="#">Settings</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
+{% include '::nav.html.twig' %}
+<div class="container-fluid">
+    {% include '::flash.html.twig' %}
     {% block body %}{% endblock %}
+    <div id="loadingInfo" style="display: none;">
+        <img src="{{ asset('bundles/g5home/img/ajax-loader.gif') }}" alt="Loading...">
     </div>
+    {% include '::footer.html.twig' %}
+</div>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+{% javascripts '@g5HomeBundle/Resources/public/js/global.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 {% block javascripts %}{% endblock %}
 </body>
 </html>

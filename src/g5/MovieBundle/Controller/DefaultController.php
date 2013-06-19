@@ -23,9 +23,9 @@ class DefaultController extends Controller
         $t_page = $page - 1;
         $limit = 20;
         $offset = $t_page * $limit;
-        
+
         $tmdb = $this->get('tmdb');
-        
+
         $mr = $this->getDoctrine()->getManager()->getRepository('g5MovieBundle:Movie');
         $movies = $mr->findBy(array(), array('name' => 'ASC'), $limit, $offset);
         if (!$movies) {
@@ -35,7 +35,7 @@ class DefaultController extends Controller
         $max = round($count / $limit);
         $mid = round($max / 2);
         $next = ($page != $max);
-        
+
         return $this->render('g5MovieBundle:Default:index.html.twig', array(
             'movies'    => $movies,
             'max'       => $max,
@@ -45,17 +45,17 @@ class DefaultController extends Controller
             'imgUrl'  => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
         ));
     }
-    
+
     public function index2Action($page)
     {
         $t_page = $page - 1;
         $limit = 20;
         $offset = $t_page * $limit;
-        
+
         $tmdb = $this->get('tmdb');
         $dm = $this->get('doctrine_mongodb')->getManager();
         $movies = $dm->getRepository('g5MovieBundle:Moviem')->findAll($offset, $limit);
-        
+
         $count = $dm->getRepository('g5MovieBundle:Moviem')->count();
         $max = round($count / $limit);
         $mid = round($max / 2);
@@ -71,13 +71,13 @@ class DefaultController extends Controller
             'imgUrl'    => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w154),
         ));
     }
-    
+
     public function addAction()
     {
         if (!$this->getRequest()->isXmlHttpRequest()) {
             throw $this->createNotFoundException();
         }
-        
+
         if ($this->getRequest()->isMethod('POST')) {
             $query = trim($this->getRequest()->get('searchMovie'));
             $tmdb = $this->get('tmdb');
@@ -94,12 +94,12 @@ class DefaultController extends Controller
                     $movie->setOverview($movieData->overview);
                     $movies[] = $movie;
                 }
-                
+
                 $form = $this->createForm(new MovieType());
                 $serializer = new Serializer(array(new GetSetMethodNormalizer()), array(
                     'json'  => new JsonEncoder()
                 ));
-                
+
                 $jsonData = $serializer->serialize($movies, 'json');
                 //var_dump($jsonData);
                 $tmdb = $this->get('tmdb');
@@ -113,10 +113,10 @@ class DefaultController extends Controller
             }
             return new Response('Bad');
         }
-        
+
         return $this->render('g5MovieBundle:Default:add.html.twig');
     }
-    
+
     public function importAction()
     {
         /*$em = $this->getDoctrine()->getManager();
@@ -126,7 +126,7 @@ class DefaultController extends Controller
         $em->persist($movie);
         $em->flush();
         die();*/
-         \set_time_limit(0); 
+         \set_time_limit(0);
         $fh = fopen('horror.txt', 'r');
         $files = array();
         $movienames = array();
@@ -141,7 +141,7 @@ class DefaultController extends Controller
             $tpath = str_replace($ignore, '', $files[$i]);
             $tpath = str_replace('\\', '/', $tpath);
             $tpath = substr($tpath, 1);
-                 
+
             $filename = pathinfo($tpath, PATHINFO_FILENAME);
             $ext = pathinfo($tpath, PATHINFO_EXTENSION);
             if (empty($ext)) {
@@ -164,7 +164,7 @@ class DefaultController extends Controller
                 'name'  => trim($filenameParts[0])
             );
         }
-       
+
         $em = $this->getDoctrine()->getManager();
         $tmdb = $this->get('tmdb');
         $categories = array();
@@ -203,7 +203,7 @@ class DefaultController extends Controller
         $em->flush();
         return new Response('OK');
     }
-    
+
     public function saveTmdbAction()
     {
         $form = $this->createForm(new MovieType());
@@ -247,7 +247,7 @@ class DefaultController extends Controller
             ));
         }
     }
-    
+
     public function import2Action()
     {
         $fh = fopen('movies.csv', 'r');
@@ -262,7 +262,7 @@ class DefaultController extends Controller
         $label->setColor('label-important');
         $dm->persist($label);
         foreach ($importData as $tdata) {
-            $data = str_getcsv($tdata);            
+            $data = str_getcsv($tdata);
             $movie = new Moviem();
             $movie->setTmdbId((int)$data[1]);
             $movie->setName($data[2]);
@@ -271,17 +271,17 @@ class DefaultController extends Controller
             $movie->setOverview($data[5]);
             $movie->addLabels($label);
             $tmovie = $dm->getRepository('g5MovieBundle:Moviem')->findByTmdbId($movie->getTmdbId());
-            
+
             if (!$tmovie) {
                 $dm->persist($movie);
                 $label->addMovies($movie);
             }
         }
         $dm->flush();
-        
+
         return new Response('OK');
     }
-    
+
     public function labelAction()
     {
         $dm = $this->get('doctrine_mongodb')->getManager();

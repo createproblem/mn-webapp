@@ -1,0 +1,28 @@
+{# /src/g5/MovieBundle/Resources/views/Search/search.html.twig #}
+<form id="formMovieSearch" class="form-inline" action="{{ path('g5_movie_lookup') }}" method="post">
+    {{ form_errors(form) }}
+    {{ form_widget(form.search) }}
+    {{ form_rest(form) }}
+    <button id="btnMovieSearch" class="btn btn-primary" type="submit">Search</button>
+</form>
+<div id="movieList" style="display: none;">
+    <div id="searchResult"></div>
+    <div class="media">
+        <a class="pull-left" href="#">
+            <img class="media-object" data-src="holder.js/64x64">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">Media heading</h4>
+            content
+        </div>
+    </div>
+    <ul class="pager">
+        <li><a id="btnPrevious" href="javascript:void(0);">Previous</a></li>
+        <li><a id="btnNext" href="javascript:void(0);">Next</a></li>
+    </ul>
+</div>
+{% block javascripts %}
+    {% javascripts '@g5MovieBundle/Resources/public/js/movieSearch.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

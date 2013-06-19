@@ -1,11 +1,1 @@
 # src/g5/AccountBundle/Resources/config/validation.yml
-
-g5\AccountBundle\Document\User:
-    constraints:
-         - Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique: email
-         - Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique: username
-    properties:
-        email:
-            - Email: ~
-        username:
-            - NotBlank: ~
