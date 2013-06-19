@@ -11,3 +11,4 @@ g5\AccountBundle\Entity\User:
         movies:
             targetEntity: g5\MovieBundle\Entity\Movie
             mappedBy: user
+            cascade: ["remove"]
