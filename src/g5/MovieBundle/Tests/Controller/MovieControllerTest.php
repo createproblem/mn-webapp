@@ -1,16 +1,40 @@
 <?php
 // /src/g5/MovieBundle/Tests/Controller/MovieControllerTest.php
 
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) gogol-medien <https://github.com/gogol-medien/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace g5\MovieBundle\Tests\Controller;
 
-use g5\AccountBundle\Tests\AccountAwareWebTestCase;
+require_once dirname(__DIR__).'/../../../../app/g5WebTestCase.php';
 
-class MovieControllerTest extends AccountAwareWebTestCase
+class MovieControllerTest extends \g5WebTestCase
 {
+    public function setUp()
+    {
+        $this->createUser(static::createClient(), 'test');
+    }
+
+    public function testIndex()
+    {
+        $client = static::createClient();
+        $this->loginAs($client, 'test');
+
+        $crawler = $client->request('GET', '/movie/');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
     public function testAdd()
     {
         $client = static::createClient();
-        $this->login($client);
+        $this->loginAs($client, 'test');
 
         $crawler = $client->request('GET', '/movie/add/550');
         $this->assertTrue($client->getResponse()->isSuccessful());
@@ -21,10 +45,30 @@ class MovieControllerTest extends AccountAwareWebTestCase
         $this->assertEquals(550, $content);
     }
 
+    public function testAddFail()
+    {
+        $client = static::createClient();
+        $this->loginAs($client, 'test');
+
+        $crawler = $client->request('GET', '/movie/add/550');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+
+        $content = $client->getResponse()->getContent();
+        $content = json_decode($content);
+
+        $this->assertEquals(550, $content);
+
+        $crawler = $client->request('GET', '/movie/add/550');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $content = $client->getResponse()->getContent();
+        $content = json_decode($content);
+        $this->assertEquals('This value is already used.', $content[0]);
+    }
+
     public function testSearch()
     {
         $client = static::createClient();
-        $this->login($client);
+        $this->loginAs($client, 'test');
 
         $crawler = $client->request('GET', '/movie/search');
 
@@ -42,32 +86,22 @@ class MovieControllerTest extends AccountAwareWebTestCase
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
-    // public function testLoadmeta()
-    // {
-    //     $this->login();
+    public function testLoadmeta()
+    {
+        $client = static::createClient();
+        $this->loginAs($client, 'test');
 
-    //     $crawler = $this->client->request('POST', '/movie/loadmeta/550');
+        $crawler = $client->request('POST', '/movie/loadmeta/550');
+        $this->assertTrue($client->getResponse()->isSuccessful());
 
-    //     $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $content = $client->getResponse()->getContent();
+        $content = json_decode($content);
 
-    //     $content = $this->client->getResponse()->getContent();
-    //     $content = json_decode($content);
+        $this->assertTrue($content instanceof \stdClass);
+    }
 
-    //     $this->assertTrue($content instanceof \stdClass);
-    // }
-
-    // private function login()
-    // {
-    //     $this->client = static::createClient();
-    //     $session = $this->client->getContainer()->get('session');
-
-    //     $firewall = 'main';
-    //     $token = new UsernamePasswordToken('admin', null, $firewall, array('ROLE_ADMIN'));
-
-    //     $session->set('_security_'.$firewall, serialize($token));
-    //     $session->save();
-
-    //     $cookie = new Cookie($session->getName(), $session->getId());
-    //     $this->client->getCookieJar()->set($cookie);
-    // }
+    public function tearDown()
+    {
+        $this->deleteUser(static::createClient(), 'test');
+    }
 }
