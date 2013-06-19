@@ -12,7 +12,7 @@ matrix:
 services: mongodb
 
 before_script:
-    - pecl install -f mongo-1.3.7
+    # - pecl install -f mongo-1.3.7
     - mysql -e 'create database mn_test;'
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - composer install --prefer-source --dev
