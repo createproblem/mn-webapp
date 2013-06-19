@@ -2,16 +2,13 @@
 
 namespace g5\AccountBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use g5\AccountBundle\Tests\AccountAwareWebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class RegistrationControllerTest extends AccountAwareWebTestCase
 {
-    public function testIndex()
+    public function testRegister()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/account/registration');
-
-        $this->assertTrue($crawler->filter('html:contains("Accept my terms.")')->count() > 0);
+        $this->addUser();
     }
 }
+

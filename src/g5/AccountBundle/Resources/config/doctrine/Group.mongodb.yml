@@ -1,0 +1,10 @@
+# /src/g5/AccountBundle/Resources/config/doctrine/Group.mongodb.yml
+
+g5\AccountBundle\Document\Group:
+    type: document
+    collection: group
+    customId: true
+    fields:
+        id:
+            id: true
+            strategy: increment

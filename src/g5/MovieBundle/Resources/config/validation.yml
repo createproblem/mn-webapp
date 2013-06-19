@@ -1,5 +1,6 @@
 # src/g5/MovieBundle/Resources/config/validation.yml
-g5\MovieBundle\Document\Labelm:
-    properties:
-        name:
-            - NotBlank: ~
+g5\MovieBundle\Entity\Movie:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            - user_id
+            - tmdb_id

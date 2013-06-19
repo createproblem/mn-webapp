@@ -1,0 +1,13 @@
+# /src/g5/AccountBundle/Resources/config/doctrine/User.orm.yml
+g5\AccountBundle\Entity\User:
+    type: entity
+    table: user
+    id:
+        id:
+            type: integer
+            generator: { strategy: auto }
+
+    oneToMany:
+        movies:
+            targetEntity: g5\MovieBundle\Entity\Movie
+            mappedBy: user
