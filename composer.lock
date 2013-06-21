@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f6167b5e10840ce35b868e0868aa6e83",
+    "hash": "0e5ab76d4bcb6ef7d1fd498b5e823d5d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -728,6 +728,49 @@
                 "User management"
             ],
             "time": "2013-05-25 12:08:24"
+        },
+        {
+            "name": "g5/tools-bundle",
+            "version": "dev-master",
+            "target-dir": "g5/ToolsBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/createproblem/g5ToolsBundle.git",
+                "reference": "1a42896d5fa16486b029a38a18289e062af1193a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/1a42896d5fa16486b029a38a18289e062af1193a",
+                "reference": "1a42896d5fa16486b029a38a18289e062af1193a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/console": ">=2.0,<3.0",
+                "symfony/framework-bundle": ">=2.0,<3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "g5\\ToolsBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "createproblem",
+                    "homepage": "https://github.com/createproblem"
+                }
+            ],
+            "description": "Tools Wrapper bundle for Symfony",
+            "homepage": "https://github.com/createproblem",
+            "keywords": [
+                "Tools Wrapper Api"
+            ],
+            "time": "2013-06-21 20:05:12"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1878,9 +1921,9 @@
 
     ],
     "minimum-stability": "alpha",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "g5/tools-bundle": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },

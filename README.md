@@ -4,7 +4,7 @@ Movie Nightmare
 Welcome to Movie Nightmare, a small mediathek platform.
 This application is a product of [G5Network][1]
 
-[![Build Status](https://travis-ci.org/createproblem/mn-webapp.png?branch=master)](https://travis-ci.org/createproblem/mn-webapp)
+[![Build Status](https://travis-ci.org/createproblem/mn-webapp.png?branch=experimental)](https://travis-ci.org/createproblem/mn-webapp)
 
 1) Installing the platform
 --------------------------
