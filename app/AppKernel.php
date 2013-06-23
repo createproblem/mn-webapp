@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new g5\HomeBundle\g5HomeBundle(),
             new g5\AccountBundle\g5AccountBundle(),
             new g5\MovieBundle\g5MovieBundle(),
+            new g5\ToolsBundle\g5ToolsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

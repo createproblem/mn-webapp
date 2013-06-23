@@ -1,0 +1,22 @@
+{% if movies|length == 0 %}
+    No movies where found under this title.
+{% else %}
+    {% for movie in movies %}
+        <div class="media">
+            {% if movie.poster_path != null %}
+                <img class="pull-left media-object" src="{{ imgUrl }}{{ movie.poster_path }}">
+            {% endif %}
+            <div class="media-body">
+                <h4 class="media-heading">{{ movie.original_title }}</h4>
+                <div>
+                    <a class="btn btn-small btnAdd" data-tmdbId="{{ movie.id }}"><i class="icon-plus"></i> Add</a>
+                    <a class="btn btn-small btnMore" data-tmdbId="{{ movie.id }}"><i class="icon-download"></i> More</a>
+                </div>
+                <br>
+                Release: {{ movie.release_date|date("Y") }}<br>
+                Tmdb-ID: {{ movie.id }}<br><br>
+                <div id="overview{{ movie.id }}"></div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
