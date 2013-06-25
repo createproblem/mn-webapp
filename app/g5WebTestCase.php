@@ -13,8 +13,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
 
+use g5\MovieBundle\Entity\Movie;
+
 abstract class g5WebTestCase extends WebTestCase
 {
+    protected function login(&$client)
+    {
+        $this->loginAs($client, 'test');
+    }
+
     protected function loginAs(&$client, $username)
     {
         $container = $client->getContainer();
@@ -65,5 +72,25 @@ abstract class g5WebTestCase extends WebTestCase
         $user = $userManager->findUserByUsername($username);
 
         $userManager->deleteUser($user);
+    }
+
+    protected function createMovie(&$client, $username)
+    {
+        $container = $client->getContainer();
+        $em = $container->get('doctrine')->getManager();
+        $userManager = $container->get('fos_user.user_manager');
+        $user = $this->loadUser($userManager, $username);
+        $movie = new Movie();
+
+        $movie->setTitle('Fight Club');
+        $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
+        $movie->setReleaseDate(new \DateTime('1999-10-14'));
+        $movie->setOverview('Test Overview');
+        $movie->setTmdbId(550);
+        $movie->setUserId($user->getId());
+        $movie->setUser($user);
+
+        $em->persist($movie);
+        $em->flush();
     }
 }

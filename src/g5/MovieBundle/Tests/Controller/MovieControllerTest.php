@@ -16,92 +16,43 @@ require_once dirname(__DIR__).'/../../../../app/g5WebTestCase.php';
 
 class MovieControllerTest extends \g5WebTestCase
 {
-    public function setUp()
-    {
-        $this->createUser(static::createClient(), 'test');
-    }
-
-    public function testIndex()
+    public function testIndexAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $this->login($client);
+        $this->createMovie($client, 'test');
+
+        $tmdbMock = $this->getTmdbMock();
+
+        $client->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
 
         $crawler = $client->request('GET', '/movie/');
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(1, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
-    public function testAdd()
+    public function testNewAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
 
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $crawler = $client->request('GET', '/movie/new/');
 
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertEquals(550, $content);
+        $this->assertEquals(1, $crawler->filter('input[placeholder="Movie Title"]')->count());
     }
 
-    public function testAddFail()
+    private function getTmdbMock()
     {
-        $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $tmdbMock = $this->getMockBuilder('g5\ToolsBundle\Tmdb\TmdbApi')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
 
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $tmdbMock->expects($this->any())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
 
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertEquals(550, $content);
-
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-        $this->assertEquals('This value is already used.', $content[0]);
-    }
-
-    public function testSearch()
-    {
-        $client = static::createClient();
-        $this->loginAs($client, 'test');
-
-        $crawler = $client->request('GET', '/movie/search');
-
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter("button[id=btnSearch]")->count());
-
-        $form = $crawler->selectButton('btnSearch')->form();
-
-        $form['g5_movie_search[search]'] = "";
-        $crawler = $client->submit($form);
-        $this->assertTrue($client->getResponse()->isNotFound());
-
-        $form['g5_movie_search[search]'] = "Fight Club";
-        $crawler = $client->submit($form);
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Fight Club")')->count());
-    }
-
-    public function testLoadmeta()
-    {
-        $client = static::createClient();
-        $this->loginAs($client, 'test');
-
-        $crawler = $client->request('POST', '/movie/loadmeta/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
-
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertTrue($content instanceof \stdClass);
-    }
-
-    public function tearDown()
-    {
-        $this->deleteUser(static::createClient(), 'test');
+        return $tmdbMock;
     }
 }

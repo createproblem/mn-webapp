@@ -4,7 +4,6 @@
 <div class="row-fluid">
     <div class="span6">
         {% for movie in movies %}
-            {{ movie.getTmdbId() }}<br>
             {% include 'g5MovieBundle:Movie:movieObject.html.twig' with { "movie": movie, "imgUrl": imgUrl } %}
         {% endfor %}
     </div>
