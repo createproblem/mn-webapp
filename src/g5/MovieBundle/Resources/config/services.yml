@@ -2,13 +2,9 @@ parameters:
 #    g5_movie.example.class: g5\MovieBundle\Example
 
 services:
-    g5.movie.tmdb_api:
-        class: g5\MovieBundle\Tmdb
-        arguments: [%tmdb_api_key%]
-
-    g5.movie.movie_manager:
+    g5_movie.movie_manager:
         class: g5\MovieBundle\Service\MovieManager
-        arguments: [@g5.movie.tmdb_api]
+        arguments: ["@g5_tools.tmdb.api"]
 
 #    g5_movie.example:
 #        class: %g5_movie.example.class%

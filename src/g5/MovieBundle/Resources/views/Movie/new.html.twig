@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<div class="row-fluid">
+    <div class="span5 offset4">
+        <form id="formSearch" class="form-inline" action="" method="post">
+            {{ form_widget(form.search) }}
+            {{ form_rest(form) }}
+            <button id="btnSearch" type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6 offset3" id="searchResult"></div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5MovieBundle/Resources/public/js/search.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
