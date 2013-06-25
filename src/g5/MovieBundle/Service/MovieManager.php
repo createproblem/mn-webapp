@@ -3,16 +3,15 @@
 
 namespace g5\MovieBundle\Service;
 
-use g5\MovieBundle\Tmdb;
 use g5\MovieBundle\Entity\Movie;
 
 class MovieManager
 {
-    private $tmdb;
+    private $tmdbApi;
 
-    public function __construct($tmdb)
+    public function __construct($tmdbApi)
     {
-        $this->tmdb = $tmdb;
+        $this->tmdbApi = $tmdbApi;
     }
 
     /**
@@ -22,20 +21,17 @@ class MovieManager
      *
      * @return Movie
      */
-    public function createMovie($tmdbId)
+    public function createMovieFromTmdb($tmdbId)
     {
         // load data from tmdb
-        $res = $this->tmdb->getMovieData($tmdbId);
+        $res = $this->tmdbApi->getMovie($tmdbId);
 
-        if (isset($res->status_code)) {
-           // error handling here
-        }
         $movie = new Movie();
         $movie->setTmdbid($tmdbId);
-        $movie->setOverview($res->{Tmdb::DATA_OVERVIEW});
-        $movie->setTitle($res->{Tmdb::DATA_TITLE});
-        $movie->setCoverUrl($res->{Tmdb::DATA_COVER_URL});
-        $movie->setReleaseDate(new \DateTime($res->release_date));
+        $movie->setOverview($res['overview']);
+        $movie->setTitle($res['original_title']);
+        $movie->setCoverUrl($res['poster_path']);
+        $movie->setReleaseDate(new \DateTime($res['release_date']));
 
         return $movie;
     }

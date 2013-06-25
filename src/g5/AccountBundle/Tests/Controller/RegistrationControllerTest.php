@@ -26,8 +26,8 @@ class RegistrationControllerTest extends \g5WebTestCase
 
         $form = $buttonCrawlerNode->form();
 
-        $form['fos_user_registration_form[username]'] = 'test';
-        $form['fos_user_registration_form[email]'] = 'test'.'@example.org';
+        $form['fos_user_registration_form[username]'] = 'test1';
+        $form['fos_user_registration_form[email]'] = 'test1'.'@example.org';
         $form['fos_user_registration_form[plainPassword][first]'] = 'test';
         $form['fos_user_registration_form[plainPassword][second]'] = 'test';
         // $form['fos_user_registration_form[termsOfService]']->tick();
@@ -36,7 +36,7 @@ class RegistrationControllerTest extends \g5WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertTrue($crawler->filter('html:contains("The user has been created successfully")')->count() > 0);
 
-        $this->deleteUser($client, 'test');
+        $this->deleteUser($client, 'test1');
     }
 }
 

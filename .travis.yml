@@ -17,5 +17,6 @@ before_script:
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - composer install --prefer-source --dev
     - php app/console doctrine:schema:create
+    - php app/console doctrine:fixtures:load --append
 
-script: phpunit -c app
+script: phpunit --coverage-text -c app

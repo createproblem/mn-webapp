@@ -1,10 +1,9 @@
 <?php
-// /src/g5/MovieBundle/Tests/Controller/MovieControllerTest.php
 
 /*
 * This file is part of the mn-webapp package.
 *
-* (c) gogol-medien <https://github.com/gogol-medien/>
+* (c) createproblem <https://github.com/createproblem/>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -16,92 +15,161 @@ require_once dirname(__DIR__).'/../../../../app/g5WebTestCase.php';
 
 class MovieControllerTest extends \g5WebTestCase
 {
-    public function setUp()
-    {
-        $this->createUser(static::createClient(), 'test');
-    }
-
-    public function testIndex()
+    public function testIndexAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $this->login($client);
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->once())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
 
         $crawler = $client->request('GET', '/movie/');
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(1, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
-    public function testAdd()
+    public function testNewAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $this->login($client);
 
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $crawler = $client->request('GET', '/movie/new');
 
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertEquals(550, $content);
+        $this->assertEquals(1, $crawler->filter('form #g5_movie_search_search')->count());
     }
 
-    public function testAddFail()
+    public function testSearchTmdbWithExceptionAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $this->login($client);
 
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $client->request('GET', '/movie/search');
 
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertEquals(550, $content);
-
-        $crawler = $client->request('GET', '/movie/add/550');
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-        $this->assertEquals('This value is already used.', $content[0]);
-    }
-
-    public function testSearch()
-    {
-        $client = static::createClient();
-        $this->loginAs($client, 'test');
-
-        $crawler = $client->request('GET', '/movie/search');
-
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter("button[id=btnSearch]")->count());
-
-        $form = $crawler->selectButton('btnSearch')->form();
-
-        $form['g5_movie_search[search]'] = "";
-        $crawler = $client->submit($form);
         $this->assertTrue($client->getResponse()->isNotFound());
 
-        $form['g5_movie_search[search]'] = "Fight Club";
-        $crawler = $client->submit($form);
-        $this->assertGreaterThan(0, $crawler->filter('html:contains("Fight Club")')->count());
+        $client->request(
+            'POST',
+            '/movie/search',
+            array(
+                'g5_movie_search[search]' => 'Fight Club',
+            ),
+            array(),
+            array(
+                'HTTP_X-Requested-With' => 'XMLHttpRequest'
+            )
+        );
+
+        $this->assertTrue($client->getResponse()->isNotFound());
     }
 
-    public function testLoadmeta()
+    public function testSearchTmdbAction()
     {
         $client = static::createClient();
-        $this->loginAs($client, 'test');
+        $this->login($client);
 
-        $crawler = $client->request('POST', '/movie/loadmeta/550');
+        $token = $client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_search');
+
+        // Session Mock failure workaround
+        $session = static::$kernel->getContainer()->get('session');
+        $session->save();
+
+        $movieSearchResult = json_decode(file_get_contents($this->getTestDataDir().'/tmdb_search_movie_response.json'), true);
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->once())
+            ->method('searchMovie')
+            ->with(array('query' => 'Fight Club'))
+            ->will($this->returnValue($movieSearchResult))
+        ;
+
+        $tmdbMock->expects($this->once())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
+
+        $crawler = $client->request('POST', '/movie/search',
+            array('g5_movie_search' => array(
+                '_token' => $token,
+                'search' => 'Fight Club'
+            )),
+            array(),
+            array(
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
+            )
+        );
+
         $this->assertTrue($client->getResponse()->isSuccessful());
-
-        $content = $client->getResponse()->getContent();
-        $content = json_decode($content);
-
-        $this->assertTrue($content instanceof \stdClass);
+        $this->assertEquals(1, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
-    public function tearDown()
+    public function testAddAction()
     {
-        $this->deleteUser(static::createClient(), 'test');
+        $client = static::createClient();
+        $this->login($client);
+
+        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Service\MovieManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $movieManagerMock->expects($this->any())
+            ->method('createMovieFromTmdb')
+            ->with(8413)
+            ->will($this->returnValue($this->createTestMovieEventHorizon()))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
+            $kernel->getContainer()->set('g5_movie.movie_manager', $movieManagerMock);
+        });
+
+        $client->request('POST', '/movie/add', array('tmdbId' => 8413));
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(8413, $client->getResponse()->getContent());
+
+        static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
+            $kernel->getContainer()->set('g5_movie.movie_manager', $movieManagerMock);
+        });
+
+        $client->request('POST', '/movie/add', array('tmdbId' => 8413));
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals('["This value is already used."]', $client->getResponse()->getContent());
+
+        $this->delTestMovieEventHorizon();
+    }
+
+    public function testLoadTmdbAction()
+    {
+        $client = static::createClient();
+        $this->login($client);
+
+        $expected = file_get_contents($this->getTestDataDir().'/tmdb_movie_response.json', true);
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->once())
+            ->method('getMovie')
+            ->with(550)
+            ->will($this->returnValue($expected))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
+
+        $client->request('POST', '/movie/loadTmdb', array('tmdbId' => 550));
+        $this->assertTrue($client->getResponse()->isSuccessful());
     }
 }

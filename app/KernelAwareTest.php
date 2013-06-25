@@ -44,6 +44,12 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
     }
 
+    protected function getTestDataDir()
+    {
+        $this->kernel->getRootDir().'/Resources/meta/TestData';
+    }
+
+
     /**
      * @return null
      */

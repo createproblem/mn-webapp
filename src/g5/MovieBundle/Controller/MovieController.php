@@ -9,35 +9,74 @@ use Symfony\Component\HttpFoundation\Response;
 
 use g5\MovieBundle\Form\Type\SearchType;
 use g5\MovieBundle\Entity\Movie;
-use g5\MovieBundle\Tmdb;
 
 class MovieController extends Controller
 {
     public function indexAction()
     {
+        // throw $this->createNotFoundException('asd');
         $user = $this->getUser();
-
         $movies = $user->getMovies();
-        // print_r($movies);
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
 
         return $this->render('g5MovieBundle:Movie:index.html.twig', array(
             'movies' => $movies,
+            'imgUrl' => $tmdbApi->getImageUrl('w185'),
         ));
+    }
+
+    public function newAction()
+    {
+        $form = $this->createForm(new SearchType());
+
+        return $this->render('g5MovieBundle:Movie:new.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function searchTmdbAction()
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Wrong Request Type.');
+        }
+
+        $form = $this->createForm(new SearchType());
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $tmdbApi = $this->get('g5_tools.tmdb.api');
+
+            $query = array(
+                'query' => $form->get('search')->getData(),
+            );
+
+            $result = $tmdbApi->searchMovie($query);
+            $movies = $result['results'];
+
+            return $this->render('g5MovieBundle:Movie:searchResult.html.twig', array(
+                'movies' => $movies,
+                'imgUrl' => $tmdbApi->getImageUrl('w185'),
+            ));
+        }
+
+        throw $this->createNotFoundException('Api access denied.');
     }
 
     /**
      * Adds a Movie
      */
-    public function addAction($tmdbId)
+    public function addAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $moviemanager = $this->get('g5.movie.movie_manager');
+        $moviemanager = $this->get('g5_movie.movie_manager');
         $validator = $this->get('validator');
         $user = $this->getUser();
+        $tmdbId = $this->getRequest()->get('tmdbId');
 
-        $movie = $moviemanager->createMovie($tmdbId);
+        $movie = $moviemanager->createMovieFromTmdb($tmdbId);
         $movie->setUserId($user->getId());
-
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
@@ -54,50 +93,15 @@ class MovieController extends Controller
         return new JsonResponse($movie->getTmdbid());
     }
 
-    /**
-     * Search for Movie in the tmdb db
-     */
-    public function searchAction()
+    public function loadTmdbAction()
     {
-        $tmdb = $this->get('g5.movie.tmdb_api');
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
         $request = $this->getRequest();
-        $form = $this->createForm(new SearchType());
+        $result = $tmdbApi->getMovie($request->get('tmdbId'));
 
-        // if GET return search template
-        if (!$request->isMethod('POST')) {
+        $response = new JsonResponse();
+        $response->setData($result);
 
-            return $this->render('g5MovieBundle:Movie:search.html.twig', array(
-                'form' => $form->createView(),
-                'results' => array(),
-                'imgUrl' => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w185),
-            ));
-        }
-
-        $form->bind($request);
-        if ($form->isValid()) {
-            $formData = $form->getData();
-            $res = $tmdb->searchMovie($formData['search']);
-
-            return $this->render('g5MovieBundle:Movie:search.html.twig', array(
-                'form' => $form->createView(),
-                'results' => $res->results,
-                'imgUrl' => $tmdb->getImageUrl(Tmdb::POSTER_SIZE_w185),
-            ));
-        } else {
-            throw $this->createNotFoundException('Empty search not allowed');
-        }
-    }
-
-    /**
-     * Load Movie details
-     *
-     * @param  int $tmdbId
-     */
-    public function loadmetaAction($tmdbId)
-    {
-        $tmdb = $this->get('g5.movie.tmdb_api');
-        $res = $tmdb->getMovieData($tmdbId);
-
-        return new JsonResponse($res);
+        return $response;
     }
 }
