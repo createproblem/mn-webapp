@@ -3,7 +3,7 @@
 /*
 * This file is part of the mn-webapp package.
 *
-* (c) gogol-medien <https://github.com/gogol-medien/>
+* (c) createproblem <https://github.com/createproblem/>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -12,11 +12,16 @@
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\Finder\Finder;
 
 use g5\MovieBundle\Entity\Movie;
 
 abstract class g5WebTestCase extends WebTestCase
 {
+    private $classesLoaded = false;
+    private $em = null;
+    private $container = null;
+
     protected function login(&$client)
     {
         $this->loginAs($client, 'test');
@@ -74,23 +79,77 @@ abstract class g5WebTestCase extends WebTestCase
         $userManager->deleteUser($user);
     }
 
-    protected function createMovie(&$client, $username)
+    protected function getTmdbMock()
     {
-        $container = $client->getContainer();
-        $em = $container->get('doctrine')->getManager();
-        $userManager = $container->get('fos_user.user_manager');
-        $user = $this->loadUser($userManager, $username);
+        $tmdbMock = $this->getMockBuilder('g5\ToolsBundle\Tmdb\TmdbApi')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        return $tmdbMock;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected static function getKernelClass()
+    {
+        $dir = isset($_SERVER['KERNEL_DIR']) ? $_SERVER['KERNEL_DIR'] : static::getPhpUnitXmlDir();
+
+        $finder = new Finder();
+        $finder->name('*TestKernel.php')->depth(0)->in($dir);
+        $results = iterator_to_array($finder);
+        if (!count($results)) {
+            throw new \RuntimeException('Either set KERNEL_DIR in your phpunit.xml according to http://symfony.com/doc/current/book/testing.html#your-first-functional-test or override the WebTestCase::createKernel() method.');
+        }
+
+        $file = current($results);
+        $class = $file->getBasename('.php');
+
+        require_once $file;
+
+        return $class;
+    }
+
+    protected function getTestDataDir()
+    {
+        return static::$kernel->getRootDir().'/Resources/meta/TestData';
+    }
+
+    protected function createTestMovieEventHorizon()
+    {
         $movie = new Movie();
+        $movie->setTitle('Event Horizon');
+        $movie->setCoverUrl('/vo02iJLsem3VCJ2TNvSzRiJMpAE.jpg');
+        $movie->setReleaseDate(new \DateTime('1999'));
+        $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_eventhorizon.txt'));
+        $movie->setTmdbId(8413);
 
-        $movie->setTitle('Fight Club');
-        $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
-        $movie->setReleaseDate(new \DateTime('1999-10-14'));
-        $movie->setOverview('Test Overview');
-        $movie->setTmdbId(550);
-        $movie->setUserId($user->getId());
-        $movie->setUser($user);
+        return $movie;
+    }
 
-        $em->persist($movie);
-        $em->flush();
+    protected function delTestMovieEventHorizon()
+    {
+        $this->loadClasses();
+
+        $user = $this->loadUser($this->container->get('fos_user.user_manager'), 'test');
+
+        $movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
+        $movie = $movieRepo->findOneBy(array('user_id' => $user->getId(), 'tmdb_id' => 8413));
+
+        $this->em->remove($movie);
+        $this->em->flush();
+    }
+
+    private function loadClasses()
+    {
+        if ($this->classesLoaded) {
+            return;
+        }
+
+        $this->container = static::$kernel->getContainer();
+        $this->em = $this->container->get('doctrine')->getManager();
+
+        $this->classesLoaded = true;
     }
 }

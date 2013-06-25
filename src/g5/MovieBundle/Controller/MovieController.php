@@ -14,6 +14,7 @@ class MovieController extends Controller
 {
     public function indexAction()
     {
+        // throw $this->createNotFoundException('asd');
         $user = $this->getUser();
         $movies = $user->getMovies();
         $tmdbApi = $this->get('g5_tools.tmdb.api');
@@ -59,6 +60,8 @@ class MovieController extends Controller
                 'imgUrl' => $tmdbApi->getImageUrl('w185'),
             ));
         }
+
+        throw $this->createNotFoundException('Api access denied.');
     }
 
     /**

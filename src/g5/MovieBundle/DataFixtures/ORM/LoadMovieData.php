@@ -41,7 +41,7 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface
         $movie->setUserId($this->getReference('test-user')->getId());
         $movie->setTmdbId(550);
         $movie->setTitle('Fight Club');
-        $movie->setOverview(file_get_contents(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/overview.txt'));
+        $movie->setOverview(file_get_contents(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/overview_fightclub.txt'));
         $movie->setReleaseDate(new \DateTime('1999-10-14'));
         $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
         $movie->setUser($this->getReference('test-user'));

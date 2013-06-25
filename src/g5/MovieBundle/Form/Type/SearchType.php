@@ -1,5 +1,14 @@
 <?php
-// src/g5/MovieBundle/Form/Type/SearchType.php
+
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace g5\MovieBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
@@ -32,6 +41,16 @@ class SearchType extends AbstractType
         };
 
         $builder->addEventListener(FormEvents::POST_BIND, $searchFieldValidator);
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            // a unique key to help generate the secret token
+            'intention'       => 'g5_movie_search',
+        ));
     }
 
     public function getName()
