@@ -6,6 +6,7 @@ services:
         class: g5\MovieBundle\Service\MovieManager
         arguments: ["@g5_tools.tmdb.api"]
 
-#    g5_movie.example:
-#        class: %g5_movie.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    g5_movie.form.type.label:
+        class: g5\MovieBundle\Form\Type\LabelType
+        tags:
+            - { name: form.type, alias: label }

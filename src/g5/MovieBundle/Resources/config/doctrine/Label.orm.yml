@@ -1,0 +1,16 @@
+# /src/g5/MovieBundle/Resources/config/doctrine/Label.orm.yml
+g5\MovieBundle\Entity\Label:
+    type: entity
+    table: label
+    id:
+        id:
+            type: integer
+            generator: { strategy: auto }
+
+    fields:
+        name:
+            type: string
+
+    manyToOne:
+        user:
+            targetEntity: g5\AccountBundle\Entity\User
