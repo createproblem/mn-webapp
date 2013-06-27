@@ -38,11 +38,23 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-        $label = new Label();
-        $label->setName('Test 1');
-        $label->setUser($this->getReference('test-user'));
+        $user = $this->getReference('test-user');
 
-        $manager->persist($label);
+        $label1 = new Label();
+        $label1->setName('ATest 1A');
+        $label1->setUser($user);
+
+        $label2 = new Label();
+        $label2->setName('ATest 1B');
+        $label2->setUser($user);
+
+        $labelHorror = new Label();
+        $labelHorror->setName('Horror');
+        $labelHorror->setUser($user);
+
+        $manager->persist($label1);
+        $manager->persist($label2);
+        $manager->persist($labelHorror);
         $manager->flush();
     }
 

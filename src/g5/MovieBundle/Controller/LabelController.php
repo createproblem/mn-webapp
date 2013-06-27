@@ -13,6 +13,7 @@ namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use g5\MovieBundle\Entity\Label;
 
@@ -25,5 +26,29 @@ class LabelController extends Controller
         return $this->render('g5MovieBundle:Label:new.html.twig', array(
             'form' => $form->createView(),
         ));
+    }
+
+    public function getAction()
+    {
+        $request = $this->getRequest();
+
+        // if (!$request->isXmlHttpRequest()) {
+        //     return $this->createNotFoundException('Method not allowed.');
+        // }
+
+        $name = $request->query->get('query');
+
+        // $labelManager = $this->get('g5_movie.label_manager');
+        // $labels = $labelManager->findLabelTypeahead($name, $this->getUser());
+
+        $labels = $this->getDoctrine()
+            ->getRepository('g5MovieBundle:Label')
+            ->findAll();
+
+        if (!$labels) {
+            throw $this->createNotFoundException('Label not found.');
+        }
+
+        return new Response(print_r($labels, true));
     }
 }
