@@ -23,12 +23,21 @@ class LabelControllerTest extends \g5WebTestCase
         $crawler = $client->request('GET', '/movie/label/new');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(1, $crawler->filter('#g5movie_label_new_form')->count());
+    }
 
-        $form = $crawler->selectButton('btnAddLabel')->form();
-        $form['label[name]'] = 'Horror';
+    public function testFindAction()
+    {
+        $client = static::createClient();
+        $this->login($client);
 
-        $client->submit($form);
-
+        $client->request('GET', '/movie/label/find',
+            array('query' => 'horr'),
+            array(),
+            array(
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
+            )
+        );
         $this->assertTrue($client->getResponse()->isSuccessful());
     }
 }

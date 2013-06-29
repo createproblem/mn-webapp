@@ -34,10 +34,6 @@ g5_movie_loadTmdbData:
     options:
         expose: true
 
-g5movie_label_index:
-    pattern: /label
-    defaults: { _controller: g5MovieBundle:Label:index }
-
 g5_movie_label_new:
     pattern: /label/new
     defaults: { _controller: g5MovieBundle:Label:new }

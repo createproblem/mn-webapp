@@ -19,18 +19,6 @@ use g5\MovieBundle\Entity\Label;
 
 class LabelController extends Controller
 {
-    public function indexAction()
-    {
-        $user = $this->getUser();
-        $labelRepo = $this->getDoctrine()->getRepository('g5MovieBundle:Label');
-
-        $labels = $labelRepo->findAll();
-
-        return $this->render('g5MovieBundle:Label:index.html.twig', array(
-            'labels' => $labels,
-        ));
-    }
-
     public function newAction()
     {
         $form = $this->createForm('label', new Label());
