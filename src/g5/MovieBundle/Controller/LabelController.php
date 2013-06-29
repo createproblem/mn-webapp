@@ -19,6 +19,18 @@ use g5\MovieBundle\Entity\Label;
 
 class LabelController extends Controller
 {
+    public function indexAction()
+    {
+        $user = $this->getUser();
+        $labelRepo = $this->getDoctrine()->getRepository('g5MovieBundle:Label');
+
+        $labels = $labelRepo->findAll();
+
+        return $this->render('g5MovieBundle:Label:index.html.twig', array(
+            'labels' => $labels,
+        ));
+    }
+
     public function newAction()
     {
         $form = $this->createForm('label', new Label());
@@ -28,27 +40,15 @@ class LabelController extends Controller
         ));
     }
 
-    public function getAction()
+    public function findAction()
     {
         $request = $this->getRequest();
-
-        // if (!$request->isXmlHttpRequest()) {
-        //     return $this->createNotFoundException('Method not allowed.');
-        // }
-
+        $user = $this->getUser();
         $name = $request->query->get('query');
 
-        // $labelManager = $this->get('g5_movie.label_manager');
-        // $labels = $labelManager->findLabelTypeahead($name, $this->getUser());
+        $labelManager = $this->get('g5_movie.label_manager');
+        $labelNames = $labelManager->findLabelNamesTypeahead($name, $this->getUser());
 
-        $labels = $this->getDoctrine()
-            ->getRepository('g5MovieBundle:Label')
-            ->findAll();
-
-        if (!$labels) {
-            throw $this->createNotFoundException('Label not found.');
-        }
-
-        return new Response(print_r($labels, true));
+        return new JsonResponse(array('labels' => $labelNames));
     }
 }

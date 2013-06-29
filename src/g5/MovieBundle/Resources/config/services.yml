@@ -6,9 +6,9 @@ services:
         class: g5\MovieBundle\Service\MovieManager
         arguments: ["@g5_tools.tmdb.api"]
 
-    # g5_movie.label_manager:
-    #     class: g5\MovieBundle\Service\LabelManager
-    #     # arguments: ["@doctrine.orm.entity_manager"]
+    g5_movie.label_manager:
+        class: g5\MovieBundle\Service\LabelManager
+        arguments: ["@doctrine.orm.entity_manager"]
 
     g5_movie.form.type.label:
         class: g5\MovieBundle\Form\Type\LabelType

@@ -21,7 +21,8 @@
         "friendsofsymfony/user-bundle": "*",
         "friendsofsymfony/jsrouting-bundle": "~1.1",
         "g5/tools-bundle": "dev-master",
-        "doctrine/doctrine-fixtures-bundle": "dev-master"
+        "doctrine/doctrine-fixtures-bundle": "dev-master",
+        "jms/serializer-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

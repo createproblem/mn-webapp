@@ -21,14 +21,21 @@ class LabelManager
 
     public function __construct($em)
     {
-        // $this->em = $em;
-        // $this->repository = $em->getRepository('g5MovieBundle:Label');
+        $this->em = $em;
+        $this->repository = $em->getRepository('g5MovieBundle:Label');
     }
 
-    public function findLabelTypeahead($name, User $user)
+    public function findLabelNamesTypeahead($name, User $user)
     {
-        // $labels = $this->repository->find(7);
+        $data = array();
+        $labels = $this->repository->findLikeByName($name, $user);
 
-        // return $labels;
+        if ($labels) {
+            foreach ($labels as $label) {
+                $data[] = $label->getName();
+            }
+        }
+
+        return $data;
     }
 }

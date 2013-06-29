@@ -2,6 +2,8 @@
 g5\MovieBundle\Entity\Label:
     type: entity
     table: label
+    repositoryClass: g5\MovieBundle\Entity\LabelRepository
+
     id:
         id:
             type: integer
