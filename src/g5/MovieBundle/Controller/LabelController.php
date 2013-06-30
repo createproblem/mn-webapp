@@ -35,9 +35,15 @@ class LabelController extends Controller
         $name = $request->query->get('query');
 
         $labelManager = $this->get('g5_movie.label_manager');
-        $labelNames = $labelManager->findLabelNamesTypeahead($name, $this->getUser());
+        $labels = $labelManager->findLabelNamesTypeahead($name, $this->getUser());
 
-        return new JsonResponse(array('labels' => $labelNames));
+        $serializer = $this->get('jms_serializer');
+        $data = $serializer->serialize(array('labels' => $labels), 'json');
+
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;
     }
 
     public function addAction()
@@ -54,9 +60,22 @@ class LabelController extends Controller
         if ($form->isValid()) {
             $label = $form->getData();
             $label->setUser($user);
-            $lm->update($label);
+            $label = $lm->update($label);
 
-            return new JsonResponse(array('status' => 'OK', 'message' => 'New label added.'));
+            $serializer = $this->get('jms_serializer');
+
+            $jsonData = array(
+                'status' => 'OK',
+                'message' => 'New label added.',
+                'label' => $label,
+            );
+
+            $data = $serializer->serialize($jsonData, 'json');
+
+            $response = new JsonResponse();
+            $response->setData($data);
+
+            return $response;
         }
 
         return new JsonResponse($form->getErrorsAsString());

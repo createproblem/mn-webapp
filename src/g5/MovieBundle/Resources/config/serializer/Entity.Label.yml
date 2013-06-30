@@ -1,0 +1,9 @@
+# /src/g5/MovieBundle/Resources/config/serializer/Entity.Label.yml
+
+g5\MovieBundle\Entity\Label:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+        name:
+            expose: true
