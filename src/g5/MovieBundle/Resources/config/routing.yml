@@ -33,3 +33,21 @@ g5_movie_loadTmdbData:
         _method: POST
     options:
         expose: true
+
+g5_movie_label_new:
+    pattern: /label/new
+    defaults: { _controller: g5MovieBundle:Label:new }
+
+g5_movie_label_find:
+    pattern: /label/find
+    defaults: { _controller: g5MovieBundle:Label:find }
+    # requirements:
+    #     _method: GET
+    options:
+        expose: true
+
+g5_movie_label_add:
+    pattern: /label/add
+    defaults: { _controller: g5MovieBundle:Label:add }
+    options:
+        expose: true
