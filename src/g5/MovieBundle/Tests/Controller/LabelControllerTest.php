@@ -40,4 +40,34 @@ class LabelControllerTest extends \g5WebTestCase
         );
         $this->assertTrue($client->getResponse()->isSuccessful());
     }
+
+    public function testAddAction()
+    {
+        $client = static::createClient();
+        $this->login($client);
+
+        $expected = array('status' => 'OK', 'message' => 'New label added.');
+
+        $token = $client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_label');
+
+        // Session Mock failure workaround
+        $session = static::$kernel->getContainer()->get('session');
+        $session->save();
+
+        $client->request('POST', '/movie/label/add',
+            array(
+                'label' => array(
+                    'name' => 'test1',
+                    '_token' => $token,
+                ),
+            ),
+            array(),
+            array(
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
+            )
+        );
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals($expected, json_decode($client->getResponse()->getContent(), true));
+    }
 }

@@ -39,4 +39,26 @@ class LabelController extends Controller
 
         return new JsonResponse(array('labels' => $labelNames));
     }
+
+    public function addAction()
+    {
+        $request = $this->getRequest();
+        $user = $this->getUser();
+
+        $lm = $this->get('g5_movie.label_manager');
+        $label = $lm->createLabel();
+
+        $form = $this->createForm('label', $label);
+        $form->bind($request);
+
+        if ($form->isValid()) {
+            $label = $form->getData();
+            $label->setUser($user);
+            $lm->update($label);
+
+            return new JsonResponse(array('status' => 'OK', 'message' => 'New label added.'));
+        }
+
+        return new JsonResponse($form->getErrorsAsString());
+    }
 }

@@ -12,6 +12,7 @@
 namespace g5\MovieBundle\Service;
 
 use g5\AccountBundle\Entity\User;
+use g5\MovieBundle\Entity\Label;
 
 class LabelManager
 {
@@ -37,5 +38,23 @@ class LabelManager
         }
 
         return $data;
+    }
+
+    public function createLabel()
+    {
+        return new Label();
+    }
+
+    public function update(Label $label)
+    {
+        $tLabel = $this->repository->findOneBy(array(
+            'name' => $label->getName(),
+            'user' => $label->getUser(),
+        ));
+
+        if (!$tLabel) {
+            $this->em->persist($label);
+            $this->em->flush();
+        }
     }
 }

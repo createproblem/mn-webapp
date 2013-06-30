@@ -33,6 +33,9 @@ class LabelType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'g5\MovieBundle\Entity\Label',
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'intention'       => 'g5_movie_label',
         ));
     }
 

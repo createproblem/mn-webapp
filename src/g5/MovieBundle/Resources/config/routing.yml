@@ -45,3 +45,9 @@ g5_movie_label_find:
     #     _method: GET
     options:
         expose: true
+
+g5_movie_label_add:
+    pattern: /label/add
+    defaults: { _controller: g5MovieBundle:Label:add }
+    options:
+        expose: true
