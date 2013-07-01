@@ -14,3 +14,14 @@
     right: 5px;
     z-index: 999;
 }
+
+.label .badge
+{
+    line-height: 18px;
+}
+
+.label .close
+{
+    line-height: 14px;
+    margin: 0 0 0 3px;
+}

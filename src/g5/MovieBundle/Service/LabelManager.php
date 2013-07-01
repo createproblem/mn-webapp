@@ -28,16 +28,9 @@ class LabelManager
 
     public function findLabelNamesTypeahead($name, User $user)
     {
-        $data = array();
         $labels = $this->repository->findLikeByName($name, $user);
 
-        if ($labels) {
-            foreach ($labels as $label) {
-                $data[] = $label->getName();
-            }
-        }
-
-        return $data;
+        return $labels;
     }
 
     public function createLabel()
@@ -55,6 +48,9 @@ class LabelManager
         if (!$tLabel) {
             $this->em->persist($label);
             $this->em->flush();
+            $tLabel = $label;
         }
+
+        return $tLabel;
     }
 }

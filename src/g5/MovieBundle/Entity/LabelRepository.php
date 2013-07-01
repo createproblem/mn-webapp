@@ -27,7 +27,6 @@ class LabelRepository extends EntityRepository
     {
         $parameters = array();
 
-
         $qb = $this->createQueryBuilder('l');
         $qb = $qb->where($qb->expr()->like('l.name', ':name'));
         $parameters[':name'] = $name.'%';
