@@ -16,3 +16,13 @@ g5\MovieBundle\Entity\Label:
     manyToOne:
         user:
             targetEntity: g5\AccountBundle\Entity\User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+                nullable: false
+                onDelete: CASCADE
+
+    manyToMany:
+        movies:
+            targetEntity: g5\MovieBundle\Entity\Movie
+            mappedBy: labels

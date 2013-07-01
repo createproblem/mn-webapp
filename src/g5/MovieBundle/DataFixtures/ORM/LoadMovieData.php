@@ -13,11 +13,12 @@ namespace g5\AccountBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use g5\MovieBundle\Entity\Movie;
 
-class LoadMovieData extends AbstractFixture implements ContainerAwareInterface
+class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -38,7 +39,6 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $movie = new Movie();
-        $movie->setUserId($this->getReference('test-user')->getId());
         $movie->setTmdbId(550);
         $movie->setTitle('Fight Club');
         $movie->setOverview(file_get_contents(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/overview_fightclub.txt'));
@@ -48,6 +48,8 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface
 
         $manager->persist($movie);
         $manager->flush();
+
+        $this->addReference('test-movie', $movie);
     }
 
     /**
