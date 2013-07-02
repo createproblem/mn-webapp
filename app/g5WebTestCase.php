@@ -135,7 +135,7 @@ abstract class g5WebTestCase extends WebTestCase
         $user = $this->loadUser($this->container->get('fos_user.user_manager'), 'test');
 
         $movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
-        $movie = $movieRepo->findOneBy(array('user_id' => $user->getId(), 'tmdb_id' => 8413));
+        $movie = $movieRepo->findOneBy(array('user' => $user, 'tmdb_id' => 8413));
 
         $this->em->remove($movie);
         $this->em->flush();

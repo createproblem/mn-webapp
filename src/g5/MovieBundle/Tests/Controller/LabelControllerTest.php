@@ -46,7 +46,7 @@ class LabelControllerTest extends \g5WebTestCase
         $client = static::createClient();
         $this->login($client);
 
-        $expected = array('status' => 'OK', 'message' => 'New label added.');
+        $expected = 'OK';
 
         $token = $client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_label');
 
@@ -68,6 +68,8 @@ class LabelControllerTest extends \g5WebTestCase
         );
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals($expected, json_decode($client->getResponse()->getContent(), true));
+
+        $compare = json_decode($client->getResponse()->getContent(), true);
+        $this->assertEquals($expected, $compare['status']);
     }
 }

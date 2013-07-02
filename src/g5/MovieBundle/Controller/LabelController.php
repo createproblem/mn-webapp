@@ -41,7 +41,7 @@ class LabelController extends Controller
         $data = $serializer->serialize(array('labels' => $labels), 'json');
 
         $response = new JsonResponse();
-        $response->setData($data);
+        $response->setContent($data);
 
         return $response;
     }
@@ -73,7 +73,7 @@ class LabelController extends Controller
             $data = $serializer->serialize($jsonData, 'json');
 
             $response = new JsonResponse();
-            $response->setData($data);
+            $response->setContent($data);
 
             return $response;
         }
