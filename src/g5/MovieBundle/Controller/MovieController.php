@@ -76,7 +76,6 @@ class MovieController extends Controller
         $tmdbId = $this->getRequest()->get('tmdbId');
 
         $movie = $moviemanager->createMovieFromTmdb($tmdbId);
-        $movie->setUserId($user->getId());
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {

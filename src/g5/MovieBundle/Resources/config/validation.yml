@@ -2,5 +2,5 @@
 g5\MovieBundle\Entity\Movie:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            - user_id
+            - user
             - tmdb_id

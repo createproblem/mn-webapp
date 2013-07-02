@@ -90,3 +90,11 @@ fos_user:
     #     form:
     #         type: g5_registration_form_type
     #         handler: g5.registration.form.handler
+
+g5_tools:
+    tmdb:
+        api_key: "%tmdb_api_key%"
+
+jms_serializer:
+    metadata:
+        auto_detection: true

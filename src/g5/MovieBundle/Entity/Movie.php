@@ -61,34 +61,11 @@ class Movie
     /**
      * Get tmdb_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getTmdbId()
     {
         return $this->tmdb_id;
-    }
-
-    /**
-     * Set user_id
-     *
-     * @param integer $userId
-     * @return Movie
-     */
-    public function setUserId($userId)
-    {
-        $this->user_id = $userId;
-
-        return $this;
-    }
-
-    /**
-     * Get user_id
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->user_id;
     }
 
     /**
@@ -107,7 +84,7 @@ class Movie
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -130,7 +107,7 @@ class Movie
     /**
      * Get overview
      *
-     * @return string 
+     * @return string
      */
     public function getOverview()
     {
@@ -153,7 +130,7 @@ class Movie
     /**
      * Get cover_url
      *
-     * @return string 
+     * @return string
      */
     public function getCoverUrl()
     {
@@ -176,7 +153,7 @@ class Movie
     /**
      * Get release_date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -189,8 +166,9 @@ class Movie
      * @param \g5\AccountBundle\Entity\User $user
      * @return Movie
      */
-    public function setUser(\g5\AccountBundle\Entity\User $user = null)
+    public function setUser(\g5\AccountBundle\Entity\User $user)
     {
+        $user->addMovie($this);
         $this->user = $user;
 
         return $this;
@@ -199,7 +177,7 @@ class Movie
     /**
      * Get user
      *
-     * @return \g5\AccountBundle\Entity\User 
+     * @return \g5\AccountBundle\Entity\User
      */
     public function getUser()
     {
@@ -214,10 +192,55 @@ class Movie
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $labels;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->labels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add labels
+     *
+     * @param \g5\MovieBundle\Entity\Label $labels
+     * @return Movie
+     */
+    public function addLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels[] = $labels;
+
+        return $this;
+    }
+
+    /**
+     * Remove labels
+     *
+     * @param \g5\MovieBundle\Entity\Label $labels
+     */
+    public function removeLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels->removeElement($labels);
+    }
+
+    /**
+     * Get labels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLabels()
+    {
+        return $this->labels;
     }
 }
