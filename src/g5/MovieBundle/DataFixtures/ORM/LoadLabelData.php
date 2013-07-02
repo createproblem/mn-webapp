@@ -12,13 +12,14 @@
 namespace g5\MovieBundle\DataFixtrues\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use g5\MovieBundle\Entity\Label;
 
-class LoadLabelData extends AbstractFixture implements ContainerAwareInterface
+class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -39,6 +40,7 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $user = $this->getReference('test-user');
+        $movie = $this->getReference('test-movie');
 
         $label1 = new Label();
         $label1->setName('ATest 1A');
@@ -55,6 +57,9 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface
         $manager->persist($label1);
         $manager->persist($label2);
         $manager->persist($labelHorror);
+
+        $movie->addLabel($labelHorror);
+
         $manager->flush();
     }
 

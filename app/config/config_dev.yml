@@ -25,9 +25,5 @@ monolog:
 assetic:
     use_controller: true
 
-g5_tools:
-    tmdb:
-        api_key: "%tmdb_api_key%"
-
 #swiftmailer:
 #    delivery_address: me@example.com
