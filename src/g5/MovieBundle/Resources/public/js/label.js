@@ -127,7 +127,7 @@ g5.label.addLabel = function(labelBox, label)
 
     var labelDelItem = $("<span>");
     labelDelItem.addClass("close");
-    labelDelItem.html("&VerticalSeparator;&times;");
+    labelDelItem.html("<i class='icon-remove'></i>");
 
     labelItem.append(labelDelItem);
     labelItem.append(label.name);

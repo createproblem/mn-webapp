@@ -7,10 +7,10 @@
     <div class="media-body">
         <h4 class="media-heading">{{ movie.getTitle() }}</h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
-        <div id="label-box-{{ uid }}"><i class="icon-tag"></i>
+        <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}
                 <span class="label">
-                    <span class="close">&VerticalSeparator;&times;</span>
+                    <span class="close"><i class="icon-remove"></i></span>
                     {{ label.getName() }}
                 </span>
             {% endfor %}
