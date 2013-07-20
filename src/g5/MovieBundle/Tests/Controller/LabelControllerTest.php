@@ -20,10 +20,20 @@ class LabelControllerTest extends \g5WebTestCase
         $client = static::createClient();
         $this->login($client);
 
-        $crawler = $client->request('GET', '/movie/label/new');
+        $client->request('GET', '/movie/label/new');
+
+        $this->assertFalse($client->getResponse()->isSuccessful());
+
+        $crawler = $client->request('GET', '/movie/label/new',
+            array(),
+            array(),
+            array(
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
+            )
+        );
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('#g5movie_label_new_form')->count());
+        $this->assertEquals(1, $crawler->filter('form')->count());
     }
 
     public function testFindAction()
@@ -32,7 +42,7 @@ class LabelControllerTest extends \g5WebTestCase
         $this->login($client);
 
         $client->request('GET', '/movie/label/find',
-            array('query' => 'horr'),
+            array('query' => 'horror'),
             array(),
             array(
                 'HTTP_X-Requested-With' => 'XMLHttpRequest',
@@ -45,6 +55,14 @@ class LabelControllerTest extends \g5WebTestCase
     {
         $client = static::createClient();
         $this->login($client);
+
+        // pre setup
+        $user = $this->createUser($client, 'test1234');
+        $movie = $this->createTestMovieEventHorizon();
+        $movie->setUser($user);
+        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em->persist($movie);
+        $em->flush();
 
         $expected = 'OK';
 
@@ -59,6 +77,7 @@ class LabelControllerTest extends \g5WebTestCase
                 'label' => array(
                     'name' => 'test1',
                     '_token' => $token,
+                    'movie_id' => $movie->getId(),
                 ),
             ),
             array(),
@@ -71,5 +90,7 @@ class LabelControllerTest extends \g5WebTestCase
 
         $compare = json_decode($client->getResponse()->getContent(), true);
         $this->assertEquals($expected, $compare['status']);
+
+        $this->deleteUser($client, 'test1234');
     }
 }

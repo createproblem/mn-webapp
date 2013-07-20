@@ -21,6 +21,10 @@ class LabelController extends Controller
 {
     public function newAction()
     {
+        if (!$this->getRequest()->isXmlHttpRequest()) {
+            throw $this->createNotFoundException('Wrong Request Type.');
+        }
+
         $form = $this->createForm('label', new Label());
 
         return $this->render('g5MovieBundle:Label:new.html.twig', array(

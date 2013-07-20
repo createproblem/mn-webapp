@@ -67,6 +67,8 @@ abstract class g5WebTestCase extends WebTestCase
             $this->fail($e->getMessage());
             $this->deleteUser($client, $username);
         }
+
+        return $user;
     }
 
     protected function deleteUser($client, $username)

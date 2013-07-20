@@ -30,7 +30,9 @@ class MovieManagerTest extends \KernelAwareTest
             ->will($this->returnValue(json_decode($this->getTestDataDir().'/tmdb_movie_response.json'), true))
         ;
 
-        $movieManager = new MovieManager($tmdbMock);
+        $doctrine = $this->container->get('doctrine');
+
+        $movieManager = new MovieManager($tmdbMock, $doctrine);
         $movie = $movieManager->createMovieFromTmdb(550);
 
         $this->assertEquals(550, $movie->getTmdbId());
