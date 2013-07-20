@@ -59,6 +59,12 @@ class LabelController extends Controller
 
         if ($form->isValid()) {
             $label = $form->getData();
+            $movieId = $form->get('movie_id')->getData();
+            if ($movieId) {
+                $movieManager = $this->get('g5_movie.movie_manager');
+                $movie = $movieManager->findById($movieId);
+                $label->addMovie($movie);
+            }
             $label->setUser($user);
             $label = $lm->update($label);
 
@@ -68,6 +74,7 @@ class LabelController extends Controller
                 'status' => 'OK',
                 'message' => 'New label added.',
                 'label' => $label,
+                'movieId' => $movieId,
             );
 
             $data = $serializer->serialize($jsonData, 'json');

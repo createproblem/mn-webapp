@@ -4,7 +4,7 @@ parameters:
 services:
     g5_movie.movie_manager:
         class: g5\MovieBundle\Service\MovieManager
-        arguments: ["@g5_tools.tmdb.api"]
+        arguments: ["@g5_tools.tmdb.api", "@doctrine"]
 
     g5_movie.label_manager:
         class: g5\MovieBundle\Service\LabelManager

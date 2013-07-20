@@ -47,9 +47,15 @@ class LabelManager
 
         if (!$tLabel) {
             $this->em->persist($label);
-            $this->em->flush();
             $tLabel = $label;
+        } else {
+            $tLabel->setName($label->getName());
+            foreach ($label->getMovies() as $movie) {
+                $tLabel->addMovie($movie);
+            }
         }
+
+        $this->em->flush();
 
         return $tLabel;
     }

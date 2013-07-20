@@ -27,6 +27,11 @@ class LabelType extends AbstractType
             ),
             'required' => true,
         ));
+
+        $builder->add('movie_id', 'hidden', array(
+            'mapped' => false,
+            'required' => false,
+        ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

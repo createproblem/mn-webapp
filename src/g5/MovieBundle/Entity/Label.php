@@ -4,10 +4,12 @@ namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use g5\MovieBundle\Entity\Model\LabelAbstract as LabelBase;
+
 /**
  * Label
  */
-class Label
+class Label extends LabelBase
 {
     /**
      * @var integer
@@ -40,7 +42,7 @@ class Label
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -63,7 +65,7 @@ class Label
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -96,7 +98,7 @@ class Label
     /**
      * Get movieLabels
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMovieLabels()
     {
@@ -119,7 +121,7 @@ class Label
     /**
      * Get user
      *
-     * @return \g5\AccountBundle\Entity\User 
+     * @return \g5\AccountBundle\Entity\User
      */
     public function getUser()
     {

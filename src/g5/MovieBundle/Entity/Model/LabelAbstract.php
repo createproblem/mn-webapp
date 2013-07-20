@@ -13,34 +13,34 @@ namespace g5\MovieBundle\Entity\Model;
 
 use g5\MovieBundle\Entity\MovieLabel;
 
-abstract class MovieAbstract
+abstract class LabelAbstract
 {
     /**
      * Shortcut function
      *
      * @return array
      */
-    public function getLabels()
+    public function getMovies()
     {
-        $labels = array();
+        $movies = array();
 
         foreach ($this->getMovieLabels() as $movieLabel) {
-            $labels[] = $movieLabel->getLabel();
+            $movies[] = $movieLabel->getMovie();
         }
 
-        return $labels;
+        return $movies;
     }
 
     /**
      * Shortcut function
      *
-     * @param \g5\MovieBundle\Entity\Label $label
+     * @param \g5\MovieBundle\Entity\Movie $movie
      */
-    public function addLabel(\g5\MovieBundle\Entity\Label $label)
+    public function addMovie(\g5\MovieBundle\Entity\Movie $movie)
     {
         $movieLabel = new MovieLabel();
-        $movieLabel->setMovie($this);
-        $movieLabel->setLabel($label);
+        $movieLabel->setMovie($movie);
+        $movieLabel->setLabel($this);
 
         $this->addMovieLabel($movieLabel);
     }
@@ -48,14 +48,15 @@ abstract class MovieAbstract
     /**
      * Shortcut function
      *
-     * @param  \g5\MovieBundle\Entity\Label $label
+     * @param  \g5\MovieBundle\Entity\Model $movie
      */
-    public function removeLabel(\g5\MovieBundle\Entity\Label $label)
+    public function removeMove(\g5\MovieBundle\Entity\Movie $movie)
     {
         foreach ($this->getMovieLabels() as $movieLabel) {
-            if ($label->getId() === $movieLabel->getLabel()->getId()) {
+            if ($movie->getId() === $movieLabel->getMovie()->getId()) {
                 $this->removeMovieLabel($movieLabel);
             }
         }
     }
+
 }

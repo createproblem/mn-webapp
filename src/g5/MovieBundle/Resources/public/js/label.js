@@ -24,7 +24,7 @@ g5.label.dispatchForm = function(formContainer, uid)
 {
     // form elements
     formContainer.show();
-
+    var $uid = uid;
     var form = formContainer.children(".g5movie_label_new_form");
     var labelInput = form.find("input[name='label[name]']");
     var labelToken = form.find("input[name='label[_token]']");
@@ -76,6 +76,7 @@ g5.label.dispatchForm = function(formContainer, uid)
                 url: Routing.generate("g5_movie_label_add"),
                 data: {
                     "label[name]": item,
+                    "label[movie_id]": $uid,
                     "label[_token]": labelToken.val()
                 }
             }, function(response) {

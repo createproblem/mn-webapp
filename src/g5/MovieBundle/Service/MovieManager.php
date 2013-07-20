@@ -8,10 +8,14 @@ use g5\MovieBundle\Entity\Movie;
 class MovieManager
 {
     private $tmdbApi;
+    private $em;
+    private $movieRepo;
 
-    public function __construct($tmdbApi)
+    public function __construct($tmdbApi, $doctrine)
     {
         $this->tmdbApi = $tmdbApi;
+        $this->em = $doctrine->getManager();
+        $this->movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
     }
 
     /**
@@ -34,5 +38,10 @@ class MovieManager
         $movie->setReleaseDate(new \DateTime($res['release_date']));
 
         return $movie;
+    }
+
+    public function findById($id)
+    {
+        return $this->movieRepo->findOneById($id);
     }
 }

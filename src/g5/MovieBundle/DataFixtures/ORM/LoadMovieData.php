@@ -47,12 +47,8 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
         $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
         $movie->setUser($this->getReference('test-user'));
 
-        $movieLabel = new MovieLabel();
-        $movieLabel->setMovie($movie);
-        $movieLabel->setLabel($this->getReference('label-horror'));
-        $movie->addMovieLabel($movieLabel);
+        $movie->addLabel($this->getReference('label-horror'));
         $manager->persist($movie);
-        $manager->persist($movieLabel);
         $manager->flush();
 
         $this->addReference('test-movie', $movie);
