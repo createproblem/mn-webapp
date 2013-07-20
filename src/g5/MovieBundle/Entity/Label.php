@@ -20,15 +20,27 @@ class Label
     private $name;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $movieLabels;
+
+    /**
      * @var \g5\AccountBundle\Entity\User
      */
     private $user;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movieLabels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -51,11 +63,44 @@ class Label
     /**
      * Get name
      *
-     * @return string
+     * @return string 
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Add movieLabels
+     *
+     * @param \g5\MovieBundle\Entity\MovieLabel $movieLabels
+     * @return Label
+     */
+    public function addMovieLabel(\g5\MovieBundle\Entity\MovieLabel $movieLabels)
+    {
+        $this->movieLabels[] = $movieLabels;
+
+        return $this;
+    }
+
+    /**
+     * Remove movieLabels
+     *
+     * @param \g5\MovieBundle\Entity\MovieLabel $movieLabels
+     */
+    public function removeMovieLabel(\g5\MovieBundle\Entity\MovieLabel $movieLabels)
+    {
+        $this->movieLabels->removeElement($movieLabels);
+    }
+
+    /**
+     * Get movieLabels
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMovieLabels()
+    {
+        return $this->movieLabels;
     }
 
     /**
@@ -74,55 +119,10 @@ class Label
     /**
      * Get user
      *
-     * @return \g5\AccountBundle\Entity\User
+     * @return \g5\AccountBundle\Entity\User 
      */
     public function getUser()
     {
         return $this->user;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $movies;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->movies = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add movies
-     *
-     * @param \g5\MovieBundle\Entity\Movie $movies
-     * @return Label
-     */
-    public function addMovie(\g5\MovieBundle\Entity\Movie $movies)
-    {
-        $this->movies[] = $movies;
-
-        return $this;
-    }
-
-    /**
-     * Remove movies
-     *
-     * @param \g5\MovieBundle\Entity\Movie $movies
-     */
-    public function removeMovie(\g5\MovieBundle\Entity\Movie $movies)
-    {
-        $this->movies->removeElement($movies);
-    }
-
-    /**
-     * Get movies
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMovies()
-    {
-        return $this->movies;
     }
 }

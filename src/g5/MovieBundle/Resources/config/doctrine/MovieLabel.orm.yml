@@ -1,0 +1,31 @@
+# /src/g5/MovieBundle/Resources/config/doctrine/MovieLabel.orm.yml
+
+g5\MovieBundle\Entity\MovieLabel:
+    type: entity
+    table: movie_label
+
+    id:
+        id:
+            type: integer
+            generator: { strategy: auto }
+
+    manyToOne:
+        movie:
+            targetEntity: g5\MovieBundle\Entity\Movie
+            inversedBy: movieLabels
+            joinColumn:
+                name: movie_id
+                nullable: false
+                onDelete: CASCADE
+
+        label:
+            targetEntity: g5\MovieBundle\Entity\Label
+            inversedBy: movieLabels
+            joinColumn:
+                name: label_id
+                nullable: false
+                onDelete: CASCADE
+
+    uniqueConstraints:
+        movie_label_idx:
+            columns: ["movie_id", "label_id"]

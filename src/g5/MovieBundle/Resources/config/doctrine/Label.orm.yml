@@ -22,7 +22,7 @@ g5\MovieBundle\Entity\Label:
                 nullable: false
                 onDelete: CASCADE
 
-    manyToMany:
-        movies:
-            targetEntity: g5\MovieBundle\Entity\Movie
-            mappedBy: labels
+    oneToMany:
+        movieLabels:
+            targetEntity: g5\MovieBundle\Entity\MovieLabel
+            mappedBy: label

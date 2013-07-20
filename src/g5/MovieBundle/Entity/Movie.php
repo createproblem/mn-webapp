@@ -4,20 +4,22 @@ namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use g5\MovieBundle\Entity\Model\MovieAbstract as MovieBase;
+
 /**
  * Movie
  */
-class Movie
+class Movie extends MovieBase
 {
     /**
      * @var integer
      */
-    private $tmdb_id;
+    private $id;
 
     /**
      * @var integer
      */
-    private $user_id;
+    private $tmdb_id;
 
     /**
      * @var string
@@ -40,10 +42,32 @@ class Movie
     private $release_date;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $movieLabels;
+
+    /**
      * @var \g5\AccountBundle\Entity\User
      */
     private $user;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->movieLabels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set tmdb_id
@@ -161,6 +185,39 @@ class Movie
     }
 
     /**
+     * Add movieLabels
+     *
+     * @param \g5\MovieBundle\Entity\MovieLabel $movieLabels
+     * @return Movie
+     */
+    public function addMovieLabel(\g5\MovieBundle\Entity\MovieLabel $movieLabels)
+    {
+        $this->movieLabels[] = $movieLabels;
+
+        return $this;
+    }
+
+    /**
+     * Remove movieLabels
+     *
+     * @param \g5\MovieBundle\Entity\MovieLabel $movieLabels
+     */
+    public function removeMovieLabel(\g5\MovieBundle\Entity\MovieLabel $movieLabels)
+    {
+        $this->movieLabels->removeElement($movieLabels);
+    }
+
+    /**
+     * Get movieLabels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMovieLabels()
+    {
+        return $this->movieLabels;
+    }
+
+    /**
      * Set user
      *
      * @param \g5\AccountBundle\Entity\User $user
@@ -168,7 +225,6 @@ class Movie
      */
     public function setUser(\g5\AccountBundle\Entity\User $user)
     {
-        $user->addMovie($this);
         $this->user = $user;
 
         return $this;
@@ -182,65 +238,5 @@ class Movie
     public function getUser()
     {
         return $this->user;
-    }
-    /**
-     * @var integer
-     */
-    private $id;
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $labels;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->labels = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add labels
-     *
-     * @param \g5\MovieBundle\Entity\Label $labels
-     * @return Movie
-     */
-    public function addLabel(\g5\MovieBundle\Entity\Label $labels)
-    {
-        $this->labels[] = $labels;
-
-        return $this;
-    }
-
-    /**
-     * Remove labels
-     *
-     * @param \g5\MovieBundle\Entity\Label $labels
-     */
-    public function removeLabel(\g5\MovieBundle\Entity\Label $labels)
-    {
-        $this->labels->removeElement($labels);
-    }
-
-    /**
-     * Get labels
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLabels()
-    {
-        return $this->labels;
     }
 }

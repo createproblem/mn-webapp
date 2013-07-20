@@ -37,17 +37,7 @@ g5\MovieBundle\Entity\Movie:
                 nullable: false
                 onDelete: CASCADE
 
-    manyToMany:
-        labels:
-            targetEntity: g5\MovieBundle\Entity\Label
-            inversedBy: movies
-            joinTable:
-                name: movies_labels
-                joinColumns:
-                    movie_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
-                inverseJoinColumns:
-                    label_id:
-                        referencedColumnName: id
-                        onDelete: CASCADE
+    oneToMany:
+        movieLabels:
+            targetEntity: g5\MovieBundle\Entity\MovieLabel
+            mappedBy: movie

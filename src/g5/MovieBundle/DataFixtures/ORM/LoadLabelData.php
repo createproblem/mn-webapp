@@ -40,7 +40,6 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $user = $this->getReference('test-user');
-        $movie = $this->getReference('test-movie');
 
         $label1 = new Label();
         $label1->setName('ATest 1A');
@@ -58,9 +57,9 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, 
         $manager->persist($label2);
         $manager->persist($labelHorror);
 
-        $movie->addLabel($labelHorror);
-
         $manager->flush();
+
+        $this->addReference('label-horror', $labelHorror);
     }
 
     /**
@@ -68,6 +67,6 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function getOrder()
     {
-        return 3;
+        return 2;
     }
 }

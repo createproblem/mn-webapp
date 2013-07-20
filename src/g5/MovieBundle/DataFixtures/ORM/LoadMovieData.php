@@ -17,6 +17,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use g5\MovieBundle\Entity\Movie;
+use g5\MovieBundle\Entity\MovieLabel;
 
 class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -46,7 +47,12 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
         $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
         $movie->setUser($this->getReference('test-user'));
 
+        $movieLabel = new MovieLabel();
+        $movieLabel->setMovie($movie);
+        $movieLabel->setLabel($this->getReference('label-horror'));
+        $movie->addMovieLabel($movieLabel);
         $manager->persist($movie);
+        $manager->persist($movieLabel);
         $manager->flush();
 
         $this->addReference('test-movie', $movie);
@@ -57,6 +63,6 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function getOrder()
     {
-        return 2;
+        return 3;
     }
 }
