@@ -19,9 +19,12 @@ class MovieController extends Controller
         $movies = $user->getMovies();
         $tmdbApi = $this->get('g5_tools.tmdb.api');
 
+        $form = $this->createForm('label');
+
         return $this->render('g5MovieBundle:Movie:index.html.twig', array(
             'movies' => $movies,
             'imgUrl' => $tmdbApi->getImageUrl('w185'),
+            'labelForm' => $form->createView(),
         ));
     }
 

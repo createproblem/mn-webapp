@@ -9,3 +9,9 @@
     </div>
 </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5MovieBundle/Resources/public/js/label.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

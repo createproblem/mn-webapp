@@ -37,6 +37,8 @@ g5_movie_loadTmdbData:
 g5_movie_label_new:
     pattern: /label/new
     defaults: { _controller: g5MovieBundle:Label:new }
+    options:
+        expose: true
 
 g5_movie_label_find:
     pattern: /label/find

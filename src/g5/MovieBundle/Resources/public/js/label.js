@@ -16,53 +16,19 @@ g5.label.jqxhr = null;
 g5.label.isEmpty = false;
 g5.label.storage = [];
 
-g5.label.showMessage = function(type, message)
+//new
+g5.label.dispatchForm = function(formContainer, uid)
 {
-    var msgBox = $("#g5_movie_label_messageBox");
-    msgBox.html("");
+    // form elements
+    formContainer.show();
 
-    var msg = $("<small>");
-    msg.addClass(type);
-    msg.html(message);
+    var form = formContainer.children(".g5movie_label_new_form");
+    var labelInput = form.find("input[name='label[name]']");
+    var labelToken = form.find("input[name='label[_token]']");
+    var messageBox = formContainer.children(".g5_movie_label_messageBox");
+    var labelBox = $("#label-box-"+uid);
 
-    msgBox.append(msg);
-    msgBox.show();
-};
-
-g5.label.addLabel = function(label)
-{
-    var labelItem = $("<span>");
-    labelItem.addClass("label");
-    labelItem.attr("data-labelId", label.id);
-
-    var labelDelItem = $("<span>");
-    labelDelItem.addClass("close");
-    labelDelItem.html("&VerticalSeparator;&times;");
-
-    labelItem.append(labelDelItem);
-    labelItem.append(label.name);
-
-    $("#g5_movie_label_result").append(labelItem);
-    $("#g5_movie_label_result").append("&nbsp;");
-};
-
-g5.label.searchStorage = function(labelName) {
-    var retLabel = null
-    $.each(g5.label.storage, function(index, label) {
-        if (label.name === labelName) {
-            retLabel = label
-
-            return;
-        }
-    });
-
-    return retLabel;
-}
-
-$(document).ready(function() {
-
-    // setup typeahead file for labels
-    $("#label_name").typeahead({
+    labelInput.typeahead({
         "source": function(query, process) {
             var $this = this;
             g5.label.storage = [];
@@ -70,13 +36,11 @@ $(document).ready(function() {
                 g5.label.jqxhr.abort();
             }
 
-            g5.label.jqxhr = $.ajax({
+            g5.label.jqxhr = g5.ajaxRequest({
                 type: "GET",
-                url: Routing.generate("g5_movie_label_find", {"query": query}),
-                beforeSend: function(xhr) { g5.loading(); }
-            })
-            .done(function(response) {
-                var data = $.parseJSON(response);
+                url: Routing.generate("g5_movie_label_find", {"query": query})
+            }, function(response) {
+                var data = response;
                 var labels = [];
 
                 $.each(data.labels, function(index, label) {
@@ -89,9 +53,6 @@ $(document).ready(function() {
                 }
 
                 return process(labels);
-            })
-            .always(function() {
-                g5.doneLoading();
             });
         },
 
@@ -107,30 +68,87 @@ $(document).ready(function() {
         },
 
         "updater": function(item) {
-            var jqxhr = $.ajax({
+            g5.ajaxRequest({
                 type: "POST",
                 url: Routing.generate("g5_movie_label_add"),
                 data: {
                     "label[name]": item,
-                    "label[_token]": $("#label__token").val()
-                },
-
-                beforeSend: function(xhr) { g5.loading(); }
-            })
-            .done(function(response) {
-                var data = $.parseJSON(response);
-                if (data.status === "OK") {
-                    g5.label.addLabel(data.label);
-                    g5.label.showMessage("text-success", data.message);
-                } else {
-                    g5.label.showMessage("text-error", data.message);
+                    "label[_token]": labelToken.val()
                 }
-            })
-            .always(function() {
-                g5.doneLoading();
+            }, function(response) {
+                var data = response;
+                if (data.status === "OK") {
+                    g5.label.addLabel(labelBox, data.label);
+                    g5.label.showMessage(messageBox, "text-success", data.message);
+                } else {
+                    g5.label.showMessage(messageBox, "text-error", data.message);
+                }
             });
+            formContainer.hide();
 
             return item;
         }
+    });
+
+    labelInput.focus();
+
+}
+
+g5.label.showMessage = function(msgBox, type, message)
+{
+    msgBox.html("");
+
+    var msg = $("<small>");
+    msg.addClass(type);
+    msg.html(message);
+
+    msgBox.append(msg);
+    msgBox.show();
+};
+
+g5.label.addLabel = function(labelBox, label)
+{
+    var labelItem = $("<span>");
+    labelItem.addClass("label");
+    labelItem.attr("data-labelId", label.id);
+
+    var labelDelItem = $("<span>");
+    labelDelItem.addClass("close");
+    labelDelItem.html("&VerticalSeparator;&times;");
+
+    labelItem.append(labelDelItem);
+    labelItem.append(label.name);
+
+    labelBox.append(labelItem);
+    labelBox.append("&nbsp;");
+};
+
+g5.label.searchStorage = function(labelName) {
+    var retLabel = null
+    $.each(g5.label.storage, function(index, label) {
+        if (label.name === labelName) {
+            retLabel = label
+
+            return;
+        }
+    });
+
+    return retLabel;
+};
+
+$(document).ready(function() {
+    // Label button binding
+    $("[id|='label-trigger']").bind('click', function() {
+        var $this = this;
+        var uid = $(this).attr("data-id");
+        // load label form
+        g5.ajaxRequest({
+            type: "GET",
+            url: Routing.generate("g5_movie_label_new"),
+        }, function(response) {
+            // start label form
+            $("#label-form-"+uid).html(response);
+            g5.label.dispatchForm($("#label-form-"+uid), uid);
+        });
     });
 });

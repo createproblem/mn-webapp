@@ -1,7 +1,13 @@
+{% set uid = movie.getId() %}
 <div class="media">
+    <button id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-small pull-right">
+        <i class="icon-tag"></i>
+    </button>
     <img class="pull-left media-object" src="{{ imgUrl }}{{ movie.getCoverUrl() }}">
     <div class="media-body">
         <h4 class="media-heading">{{ movie.getTitle() }}</h4>
+        <div id="label-form-{{ uid }}" style="display: none;"></div>
+        <div id="label-box-{{ uid }}"><i class="icon-tag"></i> </div>
         {{ movie.getOverview() }}
     </div>
 </div>
