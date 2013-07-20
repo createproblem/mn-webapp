@@ -12,19 +12,78 @@ use g5\MovieBundle\Entity\Movie;
 
 class MovieController extends Controller
 {
-    public function indexAction()
+    public function indexAction($page)
     {
-        // throw $this->createNotFoundException('asd');
         $user = $this->getUser();
-        $movies = $user->getMovies();
+        $mm = $this->get('g5_movie.movie_manager');
+        $movieCount = $mm->getMovieCountByUser($user);
+
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+        $lastPage = ceil($movieCount / $limit);
+
+        $movies = $mm->findMoviesByUser($user, $limit, $offset);
         $tmdbApi = $this->get('g5_tools.tmdb.api');
 
-        $form = $this->createForm('label');
+        // pagination
+
+        // prev link
+        $prevBtn = array(
+            'state' => ($page > 1) ? null : 'disabled',
+            'link' => ($page > 1) ? $this->generateUrl('g5_movie_index', array('page' => $page - 1)) : null,
+            'name' => 'Prev',
+        );
+
+        $curBtn = array(
+            'state' => 'active',
+            'link' => null,
+            'name' => $page,
+        );
+
+        $nextBtn = array(
+            'state' => ($page < $lastPage) ? null : 'disabled',
+            'link' => ($page < $lastPage) ? $this->generateUrl('g5_movie_index', array('page' => $page + 1 )) : null,
+            'name' => 'Next',
+        );
+
+        $firstBtn = array(
+            'state' => ($page === 1) ? 'disabled' : null,
+            'link' => ($page === 1) ? null : $this->generateUrl('g5_movie_index', array('page' => 1 )),
+            'name' => 1,
+        );
+
+        $lastBtn = array(
+            'state' => ($page == $lastPage) ? 'disabled' : null,
+            'link' => ($page === $lastPage) ? null : $this->generateUrl('g5_movie_index', array('page' => $lastPage )),
+            'name' => $lastPage,
+        );
+
+        $pagination = array();
+        $pagination[] = $prevBtn;
+        $pagination[] = $firstBtn;
+        $pagination[] = $curBtn;
+        $pagination[] = $lastBtn;
+        $pagination[] = $nextBtn;
+
+        // $lPageBtn = array(
+        //     'state' => ($page === $lastPage) ? 'disabled':'enabled',
+        //     'link' => ($page === $lastPage) ? null:'',
+        // );
+
+
+        // $fPageBtn = array(
+        //     'state' => ($page === 1) ? 'disabled':'enabled',
+        //     'link' => ($page === 1) ? null : '',
+        // );
+
+
+        // $pagination = array();
+
 
         return $this->render('g5MovieBundle:Movie:index.html.twig', array(
             'movies' => $movies,
             'imgUrl' => $tmdbApi->getImageUrl('w185'),
-            'labelForm' => $form->createView(),
+            'pagination' => $pagination,
         ));
     }
 

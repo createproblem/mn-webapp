@@ -1,6 +1,8 @@
 g5_movie_index:
-    pattern: /
-    defaults: { _controller: g5MovieBundle:Movie:index }
+    pattern: /{page}
+    defaults: { _controller: g5MovieBundle:Movie:index, page: 1 }
+    requirements:
+        page: "\d+"
 
 g5_movie_new:
     pattern: /new

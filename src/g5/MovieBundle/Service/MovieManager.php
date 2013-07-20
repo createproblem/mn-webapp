@@ -44,4 +44,32 @@ class MovieManager
     {
         return $this->movieRepo->findOneById($id);
     }
+
+    /**
+     * @param  \g5\AccountBundle\Entity\User $user
+     * @param  integer                       $limit
+     * @param  integer                       $offset
+     *
+     * @return array
+     */
+    public function findMoviesByUser(\g5\AccountBundle\Entity\User $user, $limit = null, $offset = null)
+    {
+        $movies = $this->movieRepo->findBy(
+            array(
+                'user' => $user,
+            ),
+            array(
+                'title' => 'ASC',
+            ),
+            $limit,
+            $offset
+        );
+
+        return $movies;
+    }
+
+    public function getMovieCountByUser(\g5\AccountBundle\Entity\User $user)
+    {
+        return $this->movieRepo->getMovieCountByUser($user);
+    }
 }
