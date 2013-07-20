@@ -16,7 +16,10 @@ g5.label.jqxhr = null;
 g5.label.isEmpty = false;
 g5.label.storage = [];
 
-//new
+/**
+ * @param  Object       formContainer
+ * @param  string|int   uid             Unituqe id (need for multiple implemenation)
+ */
 g5.label.dispatchForm = function(formContainer, uid)
 {
     // form elements
@@ -94,6 +97,11 @@ g5.label.dispatchForm = function(formContainer, uid)
 
 }
 
+/**
+ * @param  Object msgBox
+ * @param  string type    Twitter Bootstrap CSS class
+ * @param  string message
+ */
 g5.label.showMessage = function(msgBox, type, message)
 {
     msgBox.html("");
@@ -106,6 +114,10 @@ g5.label.showMessage = function(msgBox, type, message)
     msgBox.show();
 };
 
+/**
+ * @param  Object labelBox  The view element
+ * @param  Object label
+ */
 g5.label.addLabel = function(labelBox, label)
 {
     var labelItem = $("<span>");
@@ -123,6 +135,11 @@ g5.label.addLabel = function(labelBox, label)
     labelBox.append("&nbsp;");
 };
 
+/**
+ * @param  string labelName
+ *
+ * @return Object|null
+ */
 g5.label.searchStorage = function(labelName) {
     var retLabel = null
     $.each(g5.label.storage, function(index, label) {
