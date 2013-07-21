@@ -125,7 +125,7 @@ abstract class g5WebTestCase extends WebTestCase
         $movie->setCoverUrl('/vo02iJLsem3VCJ2TNvSzRiJMpAE.jpg');
         $movie->setReleaseDate(new \DateTime('1999'));
         $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_eventhorizon.txt'));
-        $movie->setTmdbId(8413);
+        $movie->setTmdbId(9070);
 
         return $movie;
     }
@@ -137,7 +137,7 @@ abstract class g5WebTestCase extends WebTestCase
         $user = $this->loadUser($this->container->get('fos_user.user_manager'), 'test');
 
         $movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
-        $movie = $movieRepo->findOneBy(array('user' => $user, 'tmdb_id' => 8413));
+        $movie = $movieRepo->findOneBy(array('user' => $user, 'tmdb_id' => 9070));
 
         $this->em->remove($movie);
         $this->em->flush();

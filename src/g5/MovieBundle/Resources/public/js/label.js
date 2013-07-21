@@ -82,7 +82,7 @@ g5.label.dispatchForm = function(formContainer, uid)
             }, function(response) {
                 var data = response;
                 if (data.status === "OK") {
-                    g5.label.addLabel(labelBox, data.label);
+                    g5.label.renderLabel(labelBox, data.label, data.movieId);
                     g5.label.showMessage(messageBox, "text-success", data.message);
                 } else {
                     g5.label.showMessage(messageBox, "text-error", data.message);
@@ -95,7 +95,6 @@ g5.label.dispatchForm = function(formContainer, uid)
     });
 
     labelInput.focus();
-
 }
 
 /**
@@ -119,11 +118,24 @@ g5.label.showMessage = function(msgBox, type, message)
  * @param  Object labelBox  The view element
  * @param  Object label
  */
-g5.label.addLabel = function(labelBox, label)
+g5.label.renderLabel = function(labelBox, label, movieId)
+{
+    var labelHtml = g5.label.renderLabelItem(label, movieId);
+
+    labelHtml.children(".close").bind('click', function() {
+        g5.label.removeLabel(labelHtml, label.id, movieId);
+    });
+
+    labelBox.append(labelHtml);
+    labelBox.append("&nbsp;");
+};
+
+g5.label.renderLabelItem = function(label, movieId)
 {
     var labelItem = $("<span>");
     labelItem.addClass("label");
     labelItem.attr("data-labelId", label.id);
+    labelItem.attr("data-movieId", movieId);
 
     var labelDelItem = $("<span>");
     labelDelItem.addClass("close");
@@ -132,9 +144,20 @@ g5.label.addLabel = function(labelBox, label)
     labelItem.append(labelDelItem);
     labelItem.append(label.name);
 
-    labelBox.append(labelItem);
-    labelBox.append("&nbsp;");
-};
+    return labelItem;
+}
+
+g5.label.removeLabel = function(el, labelId, movieId)
+{
+    g5.ajaxRequest({
+        type: "GET",
+        url: Routing.generate('g5_movie_label_unlink', { labelId: labelId, movieId: movieId })
+    }, function(response) {
+        if (response.status === 'OK') {
+            el.hide();
+        }
+    });
+}
 
 /**
  * @param  string labelName
@@ -172,13 +195,9 @@ $(document).ready(function() {
 
     // bind label unlink
     $(".label .close").bind("click", function() {
-        var labelId = $(this).parent(".label").attr('data-id');
+        var label = $(this).parent(".label");
+        var labelId = label.attr('data-labelId');
         var movieId = $(this).parent(".label").attr('data-movieId');
-        g5.ajaxRequest({
-            type: "GET",
-            url: Routing.generate('g5_movie_label_unlink', { labelId: labelId, movieId: movieId })
-        }, function(response) {
-            console.log(response);
-        });
+        g5.label.removeLabel(label, labelId, movieId);
     });
 });

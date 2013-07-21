@@ -78,7 +78,7 @@ class LabelController extends Controller
                 'status' => 'OK',
                 'message' => 'New label added.',
                 'label' => $label,
-                'movieId' => $movieId,
+                'movieId' => $movie->getId()
             );
 
             $data = $serializer->serialize($jsonData, 'json');
@@ -111,9 +111,11 @@ class LabelController extends Controller
             $movie->removeLabel($label);
             $mm->updateMovie($movie);
 
-            return new JsonResponse('check');
+            $data['status'] = 'OK';
+            return new JsonResponse($data);
         }
+        $data['status'] = 'ERROR';
 
-        return new JsonResponse('fail');
+        return new JsonResponse($data);
     }
 }

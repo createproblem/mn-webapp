@@ -38,7 +38,7 @@ class LabelManager
         return new Label();
     }
 
-    public function update(Label &$label)
+    public function update(Label $label)
     {
         if (null === $label->getId()) {
             $tLabel = $this->repository->findOneBy(array(
@@ -48,17 +48,18 @@ class LabelManager
 
             if (!$tLabel) {
                 $this->em->persist($label);
-                $tLabel = $label;
             } else {
                 $tLabel->setName($label->getName());
                 foreach ($label->getMovies() as $movie) {
                     $tLabel->addMovie($movie);
                 }
+                $label = $tLabel;
             }
         }
 
         $this->em->flush();
-        // return $tLabel;
+
+        return $label;
     }
 
     public function findLabelById($id, \g5\AccountBundle\Entity\User $user = null)
