@@ -38,25 +38,31 @@ class LabelManager
         return new Label();
     }
 
-    public function update(Label $label)
+    public function update(Label &$label)
     {
-        $tLabel = $this->repository->findOneBy(array(
-            'name' => $label->getName(),
-            'user' => $label->getUser(),
-        ));
+        if (null === $label->getId()) {
+            $tLabel = $this->repository->findOneBy(array(
+                'name' => $label->getName(),
+                'user' => $label->getUser(),
+            ));
 
-        if (!$tLabel) {
-            $this->em->persist($label);
-            $tLabel = $label;
-        } else {
-            $tLabel->setName($label->getName());
-            foreach ($label->getMovies() as $movie) {
-                $tLabel->addMovie($movie);
+            if (!$tLabel) {
+                $this->em->persist($label);
+                $tLabel = $label;
+            } else {
+                $tLabel->setName($label->getName());
+                foreach ($label->getMovies() as $movie) {
+                    $tLabel->addMovie($movie);
+                }
             }
         }
 
         $this->em->flush();
+        // return $tLabel;
+    }
 
-        return $tLabel;
+    public function findLabelById($id, \g5\AccountBundle\Entity\User $user = null)
+    {
+        return $this->repository->findOneBy(array('id' => $id, 'user' => $user));
     }
 }

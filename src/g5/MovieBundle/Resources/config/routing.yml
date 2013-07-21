@@ -42,6 +42,12 @@ g5_movie_label_new:
     options:
         expose: true
 
+g5_movie_label_unlink:
+    pattern: /label/unlink
+    defaults: { _controller: g5MovieBundle:Label:unlink }
+    options:
+        expose: true
+
 g5_movie_label_find:
     pattern: /label/find
     defaults: { _controller: g5MovieBundle:Label:find }

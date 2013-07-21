@@ -45,6 +45,11 @@ class MovieManager
         return $this->movieRepo->findOneById($id);
     }
 
+    public function findeMovieById($id, \g5\AccountBundle\Entity\User $user = null)
+    {
+        return $this->movieRepo->findOneBy(array('id' => $id, 'user' => $user));
+    }
+
     /**
      * @param  \g5\AccountBundle\Entity\User $user
      * @param  integer                       $limit
@@ -71,5 +76,14 @@ class MovieManager
     public function getMovieCountByUser(\g5\AccountBundle\Entity\User $user)
     {
         return $this->movieRepo->getMovieCountByUser($user);
+    }
+
+    public function updateMovie(\g5\MovieBundle\Entity\Movie $movie)
+    {
+        if (null == $movie->getId()) {
+            $this->em->persist($movie);
+        }
+
+        $this->em->flush();
     }
 }

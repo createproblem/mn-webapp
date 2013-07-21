@@ -169,4 +169,16 @@ $(document).ready(function() {
             g5.label.dispatchForm($("#label-form-"+uid), uid);
         });
     });
+
+    // bind label unlink
+    $(".label .close").bind("click", function() {
+        var labelId = $(this).parent(".label").attr('data-id');
+        var movieId = $(this).parent(".label").attr('data-movieId');
+        g5.ajaxRequest({
+            type: "GET",
+            url: Routing.generate('g5_movie_label_unlink', { labelId: labelId, movieId: movieId })
+        }, function(response) {
+            console.log(response);
+        });
+    });
 });

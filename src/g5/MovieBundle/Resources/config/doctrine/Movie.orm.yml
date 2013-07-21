@@ -43,4 +43,5 @@ g5\MovieBundle\Entity\Movie:
         movieLabels:
             targetEntity: g5\MovieBundle\Entity\MovieLabel
             mappedBy: movie
-            cascade: ["persist"]
+            cascade: ["persist", "remove"]
+            orphanRemoval: true

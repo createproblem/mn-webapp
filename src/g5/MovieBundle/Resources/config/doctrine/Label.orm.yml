@@ -27,3 +27,4 @@ g5\MovieBundle\Entity\Label:
             targetEntity: g5\MovieBundle\Entity\MovieLabel
             mappedBy: label
             cascade: ["persist", "remove"]
+            orphanRemoval: true

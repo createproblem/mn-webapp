@@ -9,10 +9,7 @@
         <div id="label-form-{{ uid }}" style="display: none;"></div>
         <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}
-                <span class="label">
-                    <span class="close"><i class="icon-remove"></i></span>
-                    {{ label.getName() }}
-                </span>
+                {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
             {% endfor %}
         </div>
         <br>

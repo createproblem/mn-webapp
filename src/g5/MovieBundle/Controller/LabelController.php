@@ -91,4 +91,29 @@ class LabelController extends Controller
 
         return new JsonResponse($form->getErrorsAsString());
     }
+
+    public function unlinkAction()
+    {
+        $request = $this->getRequest();
+        $labelManager = $this->get('g5_movie.label_manager');
+        $mm = $this->get('g5_movie.movie_manager');
+        $em = $this->getDoctrine()->getManager();
+
+
+        $user = $this->getUser();
+
+        $labelId = $request->query->get('labelId');
+        $movieId = $request->query->get('movieId');
+
+        $label = $labelManager->findLabelById($labelId, $user);
+        $movie = $mm->findById($movieId, $user);
+        if ($label && $movie) {
+            $movie->removeLabel($label);
+            $mm->updateMovie($movie);
+
+            return new JsonResponse('check');
+        }
+
+        return new JsonResponse('fail');
+    }
 }

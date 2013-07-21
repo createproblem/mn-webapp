@@ -50,7 +50,7 @@ abstract class LabelAbstract
      *
      * @param  \g5\MovieBundle\Entity\Model $movie
      */
-    public function removeMove(\g5\MovieBundle\Entity\Movie $movie)
+    public function removeMovie(\g5\MovieBundle\Entity\Movie $movie)
     {
         foreach ($this->getMovieLabels() as $movieLabel) {
             if ($movie->getId() === $movieLabel->getMovie()->getId()) {
