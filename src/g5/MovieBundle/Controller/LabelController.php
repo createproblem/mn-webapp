@@ -19,6 +19,17 @@ use g5\MovieBundle\Entity\Label;
 
 class LabelController extends Controller
 {
+    public function indexAction($name)
+    {
+        $lm = $this->get('g5_movie.label_manager');
+
+        $labels = $lm->findLabelsBy(array('name' => $name));
+
+        return $this->render('g5MovieBundle:Label:index.html.twig', array(
+            'labels' => $labels,
+        ));
+    }
+
     public function newAction()
     {
         if (!$this->getRequest()->isXmlHttpRequest()) {
@@ -69,6 +80,10 @@ class LabelController extends Controller
             if ($movieId) {
                 $movieManager = $this->get('g5_movie.movie_manager');
                 $movie = $movieManager->loadMovieById($movieId, $user);
+                $tLabel = $lm->findLabelBy(array('user' => $user, 'name' => $label->getName()));
+                if ($tLabel) {
+                    $label = $tLabel;
+                }
                 $label->addMovie($movie);
             }
             $lm->updateLabel($label);

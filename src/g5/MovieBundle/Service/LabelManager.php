@@ -40,6 +40,29 @@ class LabelManager
     }
 
     /**
+     * @param  array    $criteria
+     * @param  array    $orderBy
+     * @param  integer  $limit
+     * @param  integer  $offset
+     *
+     * @return array
+     */
+    public function findLabelsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param  array  $criteria
+     *
+     * @return Label|null
+     */
+    public function findLabelBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function findLabelsByNameWithLike($name, \g5\AccountBundle\Entity\User $user)

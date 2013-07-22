@@ -34,6 +34,29 @@ class LabelManagerTest extends \KernelAwareTest
         $this->assertInstanceOf('g5\MovieBundle\Entity\Label', $label);
     }
 
+    public function testFindLabelsBy()
+    {
+        $expectedLabel = $this->createTestLabel();
+
+        $labels = $this->lm->findLabelsBy(array('id' => $expectedLabel->getId()));
+
+        $this->assertTrue(is_array($labels));
+        $this->assertEquals($expectedLabel->getId(), $labels[0]->getId());
+
+        $this->deleteLabel($expectedLabel);
+    }
+
+    public function testFindLabelBy()
+    {
+        $expectedLabel = $this->createTestLabel();
+
+        $label = $this->lm->findLabelBy(array('id' => $expectedLabel->getId()));
+
+        $this->assertEquals($expectedLabel->getId(), $label->getId());
+
+        $this->deleteLabel($expectedLabel);
+    }
+
     public function testFindLabelsByNameWithLike()
     {
         $expectedLabel = $this->createTestLabel();

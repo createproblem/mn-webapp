@@ -27,6 +27,12 @@ g5.label.dispatchForm = function(formContainer, uid)
     var $uid = uid;
     var form = formContainer.children(".g5movie_label_new_form");
     var labelInput = form.find("input[name='label[name]']");
+
+    // bind focus lose event
+    labelInput.bind('blur', function() {
+        formContainer.hide();
+    });
+
     var labelToken = form.find("input[name='label[_token]']");
     var messageBox = formContainer.children(".g5_movie_label_messageBox");
     var labelBox = $("#label-box-"+uid);
@@ -142,7 +148,7 @@ g5.label.renderLabelItem = function(label, movieId)
     labelDelItem.html("<i class='icon-remove'></i>");
 
     labelItem.append(labelDelItem);
-    labelItem.append(label.name);
+    labelItem.append("<a href='"+Routing.generate('g5_movie_label_index', { name: label.name })+"'>"+label.name+"</a>");
 
     return labelItem;
 }
