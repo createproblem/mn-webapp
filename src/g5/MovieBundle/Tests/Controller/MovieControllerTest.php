@@ -171,8 +171,9 @@ class MovieControllerTest extends \g5WebTestCase
         $this->assertEquals('["This value is already used."]', $this->client->getResponse()->getContent());
 
         // Reset MovieManager
-        static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
-            $kernel->getContainer()->set('g5_movie.movie_manager', $this->mm);
+        $mm = $this->mm;
+        static::$kernel->setKernelModifier(function($kernel) use ($mm) {
+            $kernel->getContainer()->set('g5_movie.movie_manager', $mm);
         });
         static::$kernel->boot();
 
