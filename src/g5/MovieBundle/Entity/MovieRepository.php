@@ -11,18 +11,4 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class MovieRepository extends EntityRepository
-{
-    public function getMovieCountByUser(\g5\AccountBundle\Entity\User $user)
-    {
-        $query = $this->createQueryBuilder('m')
-            ->select('count(m.id)')
-            ->where('m.user=:user')
-            ->setParameter(':user', $user)
-            ->getQuery()
-        ;
-
-        $count = $query->getSingleScalarResult();
-
-        return $count;
-    }
-}
+{}

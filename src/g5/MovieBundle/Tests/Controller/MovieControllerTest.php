@@ -15,10 +15,20 @@ require_once dirname(__DIR__).'/../../../../app/g5WebTestCase.php';
 
 class MovieControllerTest extends \g5WebTestCase
 {
+    private $mm;
+    private $client;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->client = static::createClient();
+        $this->mm = $this->client->getContainer()->get('g5_movie.movie_manager');
+    }
+
     public function testIndexAction()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
         $tmdbMock = $this->getTmdbMock();
         $tmdbMock->expects($this->once())
@@ -31,31 +41,29 @@ class MovieControllerTest extends \g5WebTestCase
             $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
         });
 
-        $crawler = $client->request('GET', '/movie');
+        $crawler = $this->client->request('GET', '/movie');
 
-        $this->assertGreaterThan(1, $crawler->filter('h4')->count());
+        $this->assertEquals(20, $crawler->filter('h4')->count());
     }
 
     public function testNewAction()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
-        $crawler = $client->request('GET', '/movie/new');
+        $crawler = $this->client->request('GET', '/movie/new');
 
         $this->assertEquals(1, $crawler->filter('form #g5_movie_search_search')->count());
     }
 
     public function testSearchTmdbWithExceptionAction()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
-        $client->request('GET', '/movie/search');
+        $this->client->request('GET', '/movie/search');
 
-        $this->assertTrue($client->getResponse()->isNotFound());
+        $this->assertTrue($this->client->getResponse()->isNotFound());
 
-        $client->request(
+        $this->client->request(
             'POST',
             '/movie/search',
             array(
@@ -67,15 +75,14 @@ class MovieControllerTest extends \g5WebTestCase
             )
         );
 
-        $this->assertTrue($client->getResponse()->isNotFound());
+        $this->assertTrue($this->client->getResponse()->isNotFound());
     }
 
     public function testSearchTmdbAction()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
-        $token = $client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_search');
+        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_search');
 
         // Session Mock failure workaround
         $session = static::$kernel->getContainer()->get('session');
@@ -100,7 +107,7 @@ class MovieControllerTest extends \g5WebTestCase
             $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
         });
 
-        $crawler = $client->request('POST', '/movie/search',
+        $crawler = $this->client->request('POST', '/movie/search',
             array('g5_movie_search' => array(
                 '_token' => $token,
                 'search' => 'Fight Club'
@@ -111,44 +118,65 @@ class MovieControllerTest extends \g5WebTestCase
             )
         );
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertEquals(1, $crawler->filter('html:contains("Fight Club")')->count());
     }
 
     public function testAddAction()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
-        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Service\MovieManager')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $expectedMovie = $this->createTestMovie(false);
 
+        $movieManagerMock = $this->getMovieManagerMock();
         $movieManagerMock->expects($this->any())
             ->method('createMovieFromTmdb')
             ->with(9070)
-            ->will($this->returnValue($this->createTestMovieEventHorizon()))
+            ->will($this->returnValue($expectedMovie))
         ;
 
         static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
             $kernel->getContainer()->set('g5_movie.movie_manager', $movieManagerMock);
         });
 
-        $client->request('POST', '/movie/add', array('tmdbId' => 9070));
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(9070, $client->getResponse()->getContent());
+        $this->client->request('POST', '/movie/add', array('tmdbId' => 9070));
 
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertEquals($expectedMovie->getTmdbId(), $this->client->getResponse()->getContent());
+    }
+
+    public function testAddActionWithDuplicated()
+    {
+        $this->login($this->client);
+
+        $expectedMovie = $this->createTestMovie();
+
+        $movieManagerMock = $this->getMovieManagerMock();
+        $movieManagerMock->expects($this->any())
+            ->method('createMovieFromTmdb')
+            ->with(9070)
+            ->will($this->returnValue($expectedMovie))
+        ;
+
+        // Set Mock MovieManager
         static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
             $kernel->getContainer()->set('g5_movie.movie_manager', $movieManagerMock);
         });
 
-        $client->request('POST', '/movie/add', array('tmdbId' => 9070));
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals('["This value is already used."]', $client->getResponse()->getContent());
 
-        $this->delTestMovieEventHorizon();
+        $this->client->request('POST', '/movie/add', array('tmdbId' => 9070));
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertEquals('["This value is already used."]', $this->client->getResponse()->getContent());
+
+        // Reset MovieManager
+        static::$kernel->setKernelModifier(function($kernel) use ($movieManagerMock) {
+            $kernel->getContainer()->set('g5_movie.movie_manager', $this->mm);
+        });
+        static::$kernel->boot();
+
+        $this->deleteMovie($expectedMovie);
     }
 
     public function testLoadTmdbAction()

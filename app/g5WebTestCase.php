@@ -18,10 +18,6 @@ use g5\MovieBundle\Entity\Movie;
 
 abstract class g5WebTestCase extends WebTestCase
 {
-    private $classesLoaded = false;
-    private $em = null;
-    private $container = null;
-
     protected function login(&$client)
     {
         $this->loginAs($client, 'test');
@@ -50,6 +46,17 @@ abstract class g5WebTestCase extends WebTestCase
         return $userManager->findUserByUsername($username);
     }
 
+    /**
+     * @return g5\AccountBundle\Entity\User
+     */
+    protected function loadTestUser()
+    {
+        $um = static::$kernel->getContainer()->get('fos_user.user_manager');
+        $user = $um->findUserByUsername('test');
+
+        return $user;
+    }
+
     protected function createUser($client, $username)
     {
         $container = $client->getContainer();
@@ -71,6 +78,78 @@ abstract class g5WebTestCase extends WebTestCase
         return $user;
     }
 
+    /**
+     * @param  boolean $save
+     *
+     * @return \g5\MovieBundle\Entity\Movie
+     */
+    protected function createTestMovie($save = true)
+    {
+        $mm = static::$kernel->getContainer()->get('g5_movie.movie_manager');
+        $um = static::$kernel->getContainer()->get('fos_user.user_manager');
+
+        $user = $this->loadUser($um, 'test');
+        $movie = $mm->createMovie();
+
+        $movie->setTmdbId(9070);
+        $movie->setTitle('Power Rangers');
+        $movie->setReleaseDate(new DateTime(1995));
+        $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_9070.txt'));
+        $movie->setCoverUrl('/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg');
+        $movie->setUser($user);
+
+        if (true === $save) {
+            if (true === $save) {
+                try {
+                    $mm->updateMovie($movie);
+                } catch (Doctrine\DBAL\DBALException $e) {
+                    $this->fail($e->getMessage());
+                }
+            }
+        }
+
+        return $movie;
+    }
+
+    protected function deleteMovie(\g5\MovieBundle\Entity\Movie $movie)
+    {
+        $mm = static::$kernel->getContainer()->get('g5_movie.movie_manager');
+        $mm->removeMovie($movie);
+    }
+
+    /**
+     * @param  boolean $save
+     *
+     * @return \g5\MovieBundle\Entity\Label
+     */
+    protected function createTestLabel($save = true)
+    {
+        $lm = static::$kernel->getContainer()->get('g5_movie.label_manager');
+        $um = static::$kernel->getContainer()->get('fos_user.user_manager');
+
+        $label = $lm->createLabel();
+        $user = $um->findUserByUsername('test');
+
+        $label->setName('Test-Label');
+        $label->setUser($user);
+
+        if (true === $save) {
+            try {
+                $lm->updateLabel($label);
+            } catch (Doctrine\DBAL\DBALException $e) {
+                $this->fail($e->getMessage());
+            }
+        }
+
+        return $label;
+    }
+
+    protected function deleteLabel(\g5\MovieBundle\Entity\Label $label)
+    {
+        $lm = static::$kernel->getContainer()->get('g5_movie.label_manager');
+        $lm->removeLabel($label);
+    }
+
     protected function deleteUser($client, $username)
     {
         $container = $client->getContainer();
@@ -89,6 +168,16 @@ abstract class g5WebTestCase extends WebTestCase
         ;
 
         return $tmdbMock;
+    }
+
+    protected function getMovieManagerMock()
+    {
+        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Service\MovieManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        return $movieManagerMock;
     }
 
     /**
@@ -116,42 +205,5 @@ abstract class g5WebTestCase extends WebTestCase
     protected function getTestDataDir()
     {
         return static::$kernel->getRootDir().'/Resources/meta/TestData';
-    }
-
-    protected function createTestMovieEventHorizon()
-    {
-        $movie = new Movie();
-        $movie->setTitle('Event Horizon');
-        $movie->setCoverUrl('/vo02iJLsem3VCJ2TNvSzRiJMpAE.jpg');
-        $movie->setReleaseDate(new \DateTime('1999'));
-        $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_eventhorizon.txt'));
-        $movie->setTmdbId(9070);
-
-        return $movie;
-    }
-
-    protected function delTestMovieEventHorizon()
-    {
-        $this->loadClasses();
-
-        $user = $this->loadUser($this->container->get('fos_user.user_manager'), 'test');
-
-        $movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
-        $movie = $movieRepo->findOneBy(array('user' => $user, 'tmdb_id' => 9070));
-
-        $this->em->remove($movie);
-        $this->em->flush();
-    }
-
-    private function loadClasses()
-    {
-        if ($this->classesLoaded) {
-            return;
-        }
-
-        $this->container = static::$kernel->getContainer();
-        $this->em = $this->container->get('doctrine')->getManager();
-
-        $this->classesLoaded = true;
     }
 }

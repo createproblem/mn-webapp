@@ -17,6 +17,18 @@ use g5\MovieBundle\Service\MovieManager;
 
 class MovieManagerTest extends \KernelAwareTest
 {
+    /**
+     * @var g5\MovieBundle\Service\MovieManager
+     */
+    private $mm;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->mm = $this->container->get('g5_movie.movie_manager');
+    }
+
     public function testCreateMovieFromTmdb()
     {
         $tmdbMock = $this->getMockBuilder('g5\ToolsBundle\Tmdb\TmdbApi')
@@ -36,5 +48,60 @@ class MovieManagerTest extends \KernelAwareTest
         $movie = $movieManager->createMovieFromTmdb(550);
 
         $this->assertEquals(550, $movie->getTmdbId());
+    }
+
+    public function testFindMovieBy()
+    {
+        $expectedMovie = $this->createTestMovie();
+        $movies = $this->mm->findMovieBy(array('id' => $expectedMovie));
+
+        $this->assertTrue(is_array($movies));
+        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movies[0]);
+        $this->assertEquals($expectedMovie->getId(), $movies[0]->getId());
+
+        $this->deleteMovie($expectedMovie);
+    }
+
+    public function testLoadMovieByIdWithoutException()
+    {
+        $expectedMovie = $this->createTestMovie();
+
+        $movie = $this->mm->loadMovieById($expectedMovie->getId());
+
+        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movie);
+        $this->assertEquals($expectedMovie->getId(), $movie->getId());
+
+        $user = $this->loadTestUser();
+
+        $movie = $this->mm->loadMovieById($expectedMovie->getId(), $user);
+
+        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movie);
+        $this->assertEquals($expectedMovie->getId(), $movie->getId());
+        $this->assertEquals($expectedMovie->getUser()->getId(), $movie->getUser()->getId());
+
+        $this->deleteMovie($expectedMovie);
+    }
+
+    public function testRemoveMovie()
+    {
+        $expectedMovie = $this->createTestMovie();
+
+        $this->mm->removeMovie($expectedMovie);
+
+        $this->assertNull($expectedMovie->getId());
+
+        $this->deleteMovie($expectedMovie);
+    }
+
+    public function testUpdateMovie()
+    {
+        $expectedMovie = $this->createTestMovie();
+
+        $expectedMovie->setTitle('Test123');
+        $this->mm->updateMovie($expectedMovie);
+
+        $this->assertEquals('Test123', $expectedMovie->getTitle());
+
+        $this->deleteMovie($expectedMovie);
     }
 }

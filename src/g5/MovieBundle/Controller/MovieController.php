@@ -16,13 +16,13 @@ class MovieController extends Controller
     {
         $user = $this->getUser();
         $mm = $this->get('g5_movie.movie_manager');
-        $movieCount = $mm->getMovieCountByUser($user);
+        $movieCount = count($user->getMovies());
 
         $limit = 20;
         $offset = ($page - 1) * $limit;
         $lastPage = ceil($movieCount / $limit);
 
-        $movies = $mm->findMoviesByUser($user, $limit, $offset);
+        $movies = $mm->findMovieBy(array('user' => $user), array('title' => 'ASC'), $limit, $offset);
         $tmdbApi = $this->get('g5_tools.tmdb.api');
 
         // pagination
@@ -64,21 +64,6 @@ class MovieController extends Controller
         $pagination[] = $curBtn;
         $pagination[] = $lastBtn;
         $pagination[] = $nextBtn;
-
-        // $lPageBtn = array(
-        //     'state' => ($page === $lastPage) ? 'disabled':'enabled',
-        //     'link' => ($page === $lastPage) ? null:'',
-        // );
-
-
-        // $fPageBtn = array(
-        //     'state' => ($page === 1) ? 'disabled':'enabled',
-        //     'link' => ($page === 1) ? null : '',
-        // );
-
-
-        // $pagination = array();
-
 
         return $this->render('g5MovieBundle:Movie:index.html.twig', array(
             'movies' => $movies,
@@ -131,13 +116,13 @@ class MovieController extends Controller
      */
     public function addAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $moviemanager = $this->get('g5_movie.movie_manager');
+        $mm = $this->get('g5_movie.movie_manager');
         $validator = $this->get('validator');
         $user = $this->getUser();
         $tmdbId = $this->getRequest()->get('tmdbId');
 
-        $movie = $moviemanager->createMovieFromTmdb($tmdbId);
+        $movie = $mm->createMovieFromTmdb($tmdbId);
+        $movie->setUser($user);
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
@@ -147,11 +132,10 @@ class MovieController extends Controller
             }
             return new JsonResponse($messages);
         }
-        $movie->setUser($user);
-        $em->persist($movie);
-        $em->flush();
 
-        return new JsonResponse($movie->getTmdbid());
+        $mm->updateMovie($movie);
+
+        return new JsonResponse($movie->getTmdbId());
     }
 
     public function loadTmdbAction()

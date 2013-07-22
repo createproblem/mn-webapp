@@ -11,59 +11,68 @@
 
 namespace g5\MovieBundle\Service;
 
-use g5\AccountBundle\Entity\User;
 use g5\MovieBundle\Entity\Label;
 
 class LabelManager
 {
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
     private $em;
 
+    /**
+     * @var Doctrine\ORM\EntityRepository
+     */
     private $repository;
 
-    public function __construct($em)
+    public function __construct($doctrine)
     {
-        $this->em = $em;
-        $this->repository = $em->getRepository('g5MovieBundle:Label');
+        $this->em = $doctrine->getManager();
+        $this->repository = $this->em->getRepository('g5MovieBundle:Label');
     }
 
-    public function findLabelNamesTypeahead($name, User $user)
-    {
-        $labels = $this->repository->findLikeByName($name, $user);
-
-        return $labels;
-    }
-
+    /**
+     * @return Label
+     */
     public function createLabel()
     {
         return new Label();
     }
 
-    public function update(Label $label)
+    /**
+     * {@inheritDoc}
+     */
+    public function findLabelsByNameWithLike($name, \g5\AccountBundle\Entity\User $user)
     {
-        if (null === $label->getId()) {
-            $tLabel = $this->repository->findOneBy(array(
-                'name' => $label->getName(),
-                'user' => $label->getUser(),
-            ));
-
-            if (!$tLabel) {
-                $this->em->persist($label);
-            } else {
-                $tLabel->setName($label->getName());
-                foreach ($label->getMovies() as $movie) {
-                    $tLabel->addMovie($movie);
-                }
-                $label = $tLabel;
-            }
-        }
-
-        $this->em->flush();
-
-        return $label;
+        return $this->repository->findByNameWithLike($name, $user);
     }
 
-    public function findLabelById($id, \g5\AccountBundle\Entity\User $user = null)
+    /**
+     * @param  int                           $id
+     * @param  \g5\AccountBundle\Entity\User $user [description]
+     *
+     * @return \g5\MovieBundle\Entity\Label
+     */
+    public function loadLabelById($id, \g5\AccountBundle\Entity\User $user)
     {
         return $this->repository->findOneBy(array('id' => $id, 'user' => $user));
+    }
+
+    /**
+     * @param  Label  $label
+     */
+    public function updateLabel(Label $label)
+    {
+        $this->em->persist($label);
+        $this->em->flush();
+    }
+
+    /**
+     * @param  Label $label
+     */
+    public function removeLabel(Label $label)
+    {
+        $this->em->remove($label);
+        $this->em->flush();
     }
 }

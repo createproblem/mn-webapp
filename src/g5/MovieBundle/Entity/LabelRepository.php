@@ -13,8 +13,6 @@ namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
-use g5\AccountBundle\Entity\User;
-
 /**
  * LabelRepository
  *
@@ -23,21 +21,24 @@ use g5\AccountBundle\Entity\User;
  */
 class LabelRepository extends EntityRepository
 {
-    public function findLikeByName($name, User $user = null)
+    /**
+     * @param  string                        $name
+     * @param  \g5\AccountBundle\Entity\User $user
+     *
+     * @return array
+     */
+    public function findByNameWithLike($name, \g5\AccountBundle\Entity\User $user)
     {
         $parameters = array();
 
         $qb = $this->createQueryBuilder('l');
-        $qb = $qb->where($qb->expr()->like('l.name', ':name'));
-        $parameters[':name'] = $name.'%';
-
-        if ($user !== null) {
-            $qb = $qb->andwhere('l.user = :user');
-            $parameters['user'] = $user;
-        }
-
-        $qb = $qb->setParameters($parameters);
-        $qb = $qb->getQuery();
+        $qb = $qb->where($qb->expr()->like('l.name', ':name'))
+            ->andwhere('l.user = :user')
+            ->setParameters(array(
+                ':name' => $name.'%',
+                ':user' => $user,
+            ))
+            ->getQuery();
 
         return $qb->getResult();
     }

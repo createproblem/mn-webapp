@@ -39,7 +39,7 @@ class LabelController extends Controller
         $name = $request->query->get('query');
 
         $labelManager = $this->get('g5_movie.label_manager');
-        $labels = $labelManager->findLabelNamesTypeahead($name, $this->getUser());
+        $labels = $labelManager->findLabelsByNameWithLike($name, $user);
 
         $serializer = $this->get('jms_serializer');
         $data = $serializer->serialize(array('labels' => $labels), 'json');
@@ -63,14 +63,15 @@ class LabelController extends Controller
 
         if ($form->isValid()) {
             $label = $form->getData();
+            $label->setUser($user);
             $movieId = $form->get('movie_id')->getData();
+
             if ($movieId) {
                 $movieManager = $this->get('g5_movie.movie_manager');
-                $movie = $movieManager->findById($movieId);
+                $movie = $movieManager->loadMovieById($movieId, $user);
                 $label->addMovie($movie);
             }
-            $label->setUser($user);
-            $label = $lm->update($label);
+            $lm->updateLabel($label);
 
             $serializer = $this->get('jms_serializer');
 
@@ -105,13 +106,14 @@ class LabelController extends Controller
         $labelId = $request->query->get('labelId');
         $movieId = $request->query->get('movieId');
 
-        $label = $labelManager->findLabelById($labelId, $user);
-        $movie = $mm->findById($movieId, $user);
+        $label = $labelManager->loadLabelById($labelId, $user);
+        $movie = $mm->loadMovieById($movieId, $user);
         if ($label && $movie) {
             $movie->removeLabel($label);
             $mm->updateMovie($movie);
 
             $data['status'] = 'OK';
+
             return new JsonResponse($data);
         }
         $data['status'] = 'ERROR';

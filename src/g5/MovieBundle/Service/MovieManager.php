@@ -7,15 +7,31 @@ use g5\MovieBundle\Entity\Movie;
 
 class MovieManager
 {
+    /**
+     * @var integer
+     */
     private $tmdbApi;
-    private $em;
-    private $movieRepo;
 
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
+
+    /**
+     * @var Doctrine\ORM\EntityRepository
+     */
+    private $repository;
+
+    /**
+     * @param  integer $tmdbApi
+     *
+     * @param  $doctrine
+     */
     public function __construct($tmdbApi, $doctrine)
     {
         $this->tmdbApi = $tmdbApi;
         $this->em = $doctrine->getManager();
-        $this->movieRepo = $this->em->getRepository('g5MovieBundle:Movie');
+        $this->repository = $this->em->getRepository('g5MovieBundle:Movie');
     }
 
     /**
@@ -40,50 +56,63 @@ class MovieManager
         return $movie;
     }
 
-    public function findById($id)
+    /**
+     * @return Movie
+     */
+    public function createMovie()
     {
-        return $this->movieRepo->findOneById($id);
-    }
-
-    public function findeMovieById($id, \g5\AccountBundle\Entity\User $user = null)
-    {
-        return $this->movieRepo->findOneBy(array('id' => $id, 'user' => $user));
+        return new Movie();
     }
 
     /**
-     * @param  \g5\AccountBundle\Entity\User $user
-     * @param  integer                       $limit
-     * @param  integer                       $offset
+     * @param  array    $criteria
+     * @param  array    $orderBy
+     * @param  integer  $limit
+     * @param  integer  $offset
      *
      * @return array
      */
-    public function findMoviesByUser(\g5\AccountBundle\Entity\User $user, $limit = null, $offset = null)
+    public function findMovieBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        $movies = $this->movieRepo->findBy(
-            array(
-                'user' => $user,
-            ),
-            array(
-                'title' => 'ASC',
-            ),
-            $limit,
-            $offset
-        );
-
-        return $movies;
+        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
 
-    public function getMovieCountByUser(\g5\AccountBundle\Entity\User $user)
+    /**
+     * @param  integer                       $id
+     * @param  \g5\AccountBundle\Entity\User $user
+     *
+     * @return Movie|null
+     */
+    public function loadMovieById($id, \g5\AccountBundle\Entity\User $user = null)
     {
-        return $this->movieRepo->getMovieCountByUser($user);
-    }
-
-    public function updateMovie(\g5\MovieBundle\Entity\Movie $movie)
-    {
-        if (null == $movie->getId()) {
-            $this->em->persist($movie);
+        $criteria = array('id' => $id);
+        if ($user !== null) {
+            $filter['user'] = $user;
         }
 
+        $movie = $this->repository->findOneBy($criteria);
+
+        // exception
+        return $movie;
+    }
+
+    /**
+     * @param  \g5\MovieBundle\Entity\Movie $movie
+     *
+     */
+    public function updateMovie(\g5\MovieBundle\Entity\Movie $movie)
+    {
+        $this->em->persist($movie);
+        $this->em->flush();
+    }
+
+    /**
+     * @param  \g5\MovieBundle\Entity\Movie $movie
+     *
+     */
+    public function removeMovie(\g5\MovieBundle\Entity\Movie $movie)
+    {
+        $this->em->remove($movie);
         $this->em->flush();
     }
 }
