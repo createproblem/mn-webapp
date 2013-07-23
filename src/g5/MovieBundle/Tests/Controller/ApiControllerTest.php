@@ -13,7 +13,7 @@ namespace g5\MovieBundle\Tests\Controller;
 
 require_once dirname(__DIR__).'/../../../../app/g5WebTestCase.php';
 
-class LabelControllerTest extends \g5WebTestCase
+class ApiControllerTest extends \g5WebTestCase
 {
     private $client;
     private $mm;
@@ -28,15 +28,15 @@ class LabelControllerTest extends \g5WebTestCase
         $this->lm = $this->client->getContainer()->get('g5_movie.label_manager');
     }
 
-    public function testNewAction()
+    public function testLabelNewAction()
     {
         $this->login($this->client);
 
-        $this->client->request('GET', '/movie/label/new');
+        $this->client->request('GET', '/movie/api/label/new');
 
         $this->assertFalse($this->client->getResponse()->isSuccessful());
 
-        $crawler = $this->client->request('GET', '/movie/label/new',
+        $crawler = $this->client->request('GET', '/movie/api/label/new',
             array(),
             array(),
             array(
@@ -48,11 +48,11 @@ class LabelControllerTest extends \g5WebTestCase
         $this->assertEquals(1, $crawler->filter('form')->count());
     }
 
-    public function testFindAction()
+    public function testLabelFindAction()
     {
         $this->login($this->client);
 
-        $this->client->request('GET', '/movie/label/find',
+        $this->client->request('GET', '/movie/api/label/find',
             array('query' => 'horror'),
             array(),
             array(
@@ -62,7 +62,7 @@ class LabelControllerTest extends \g5WebTestCase
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
-    public function testAddAction()
+    public function testLabelAddAction()
     {
         $this->login($this->client);
 
@@ -77,7 +77,7 @@ class LabelControllerTest extends \g5WebTestCase
         $session = static::$kernel->getContainer()->get('session');
         $session->save();
 
-        $this->client->request('POST', '/movie/label/add',
+        $this->client->request('POST', '/movie/api/label/add',
             array(
                 'label' => array(
                     'name' => 'test1',
@@ -105,7 +105,7 @@ class LabelControllerTest extends \g5WebTestCase
         $movie = $this->createTestMovie();
         $expected = "ERROR: The CSRF token is invalid. Please try to resubmit the form.\nname:\n    No errors\nmovie_id:\n    No errors\n";
 
-        $this->client->request('POST', '/movie/label/add',
+        $this->client->request('POST', '/movie/api/label/add',
             array(
                 'label' => array(
                     'name' => 'test1',
@@ -135,7 +135,7 @@ class LabelControllerTest extends \g5WebTestCase
         $this->mm->updateMovie($movie);
 
 
-        $this->client->request('GET', '/movie/label/unlink',
+        $this->client->request('GET', '/movie/api/unlink',
             array(
                 'labelId' => $label->getId(),
                 'movieId' => $movie->getId(),
@@ -163,7 +163,7 @@ class LabelControllerTest extends \g5WebTestCase
         $this->mm->updateMovie($movie);
 
 
-        $this->client->request('GET', '/movie/label/unlink',
+        $this->client->request('GET', '/movie/api/unlink',
             array(
                 'labelId' => $label->getId(),
                 'movieId' => 9999,

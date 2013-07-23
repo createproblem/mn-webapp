@@ -47,7 +47,7 @@ g5.label.dispatchForm = function(formContainer, uid)
 
             g5.label.jqxhr = g5.ajaxRequest({
                 type: "GET",
-                url: Routing.generate("g5_movie_label_find", {"query": query})
+                url: Routing.generate("g5_movie_api_label_find", {"query": query})
             }, function(response) {
                 var data = response;
                 var labels = [];
@@ -79,7 +79,7 @@ g5.label.dispatchForm = function(formContainer, uid)
         "updater": function(item) {
             g5.ajaxRequest({
                 type: "POST",
-                url: Routing.generate("g5_movie_label_add"),
+                url: Routing.generate("g5_movie_api_label_add"),
                 data: {
                     "label[name]": item,
                     "label[movie_id]": $uid,
@@ -101,7 +101,7 @@ g5.label.dispatchForm = function(formContainer, uid)
     });
 
     labelInput.focus();
-}
+};
 
 /**
  * @param  Object msgBox
@@ -151,19 +151,19 @@ g5.label.renderLabelItem = function(label, movieId)
     labelItem.append("<a href='"+Routing.generate('g5_movie_label_index', { name: label.name_norm })+"'>"+label.name+"</a>");
 
     return labelItem;
-}
+};
 
 g5.label.removeLabel = function(el, labelId, movieId)
 {
     g5.ajaxRequest({
         type: "GET",
-        url: Routing.generate('g5_movie_label_unlink', { labelId: labelId, movieId: movieId })
+        url: Routing.generate('g5_movie_api_unlink', { labelId: labelId, movieId: movieId })
     }, function(response) {
         if (response.status === 'OK') {
             el.hide();
         }
     });
-}
+};
 
 /**
  * @param  string labelName
@@ -171,10 +171,10 @@ g5.label.removeLabel = function(el, labelId, movieId)
  * @return Object|null
  */
 g5.label.searchStorage = function(labelName) {
-    var retLabel = null
+    var retLabel = null;
     $.each(g5.label.storage, function(index, label) {
         if (label.name === labelName) {
-            retLabel = label
+            retLabel = label;
 
             return;
         }
@@ -191,7 +191,7 @@ $(document).ready(function() {
         // load label form
         g5.ajaxRequest({
             type: "GET",
-            url: Routing.generate("g5_movie_label_new"),
+            url: Routing.generate("g5_movei_api_label_new")
         }, function(response) {
             // start label form
             $("#label-form-"+uid).html(response);
