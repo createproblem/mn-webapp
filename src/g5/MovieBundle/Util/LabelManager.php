@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\MovieBundle\Service;
+namespace g5\MovieBundle\Util;
 
 use g5\MovieBundle\Entity\Label;
 

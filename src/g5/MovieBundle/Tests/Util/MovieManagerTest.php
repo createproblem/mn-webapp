@@ -9,16 +9,16 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\MovieBundle\Tests\Service;
+namespace g5\MovieBundle\Tests\Util;
 
 require_once dirname(__DIR__).'/../../../../app/KernelAwareTest.php';
 
-use g5\MovieBundle\Service\MovieManager;
+use g5\MovieBundle\Util\MovieManager;
 
 class MovieManagerTest extends \KernelAwareTest
 {
     /**
-     * @var g5\MovieBundle\Service\MovieManager
+     * @var g5\MovieBundle\Util\MovieManager
      */
     private $mm;
 

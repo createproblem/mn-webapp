@@ -173,7 +173,7 @@ abstract class g5WebTestCase extends WebTestCase
 
     protected function getMovieManagerMock()
     {
-        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Service\MovieManager')
+        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Util\MovieManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;

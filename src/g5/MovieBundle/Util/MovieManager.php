@@ -1,7 +1,15 @@
 <?php
-// /src/g5/MovieBundle/Service/MovieManager.php
 
-namespace g5\MovieBundle\Service;
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
+namespace g5\MovieBundle\Util;
 
 use g5\MovieBundle\Entity\Movie;
 
