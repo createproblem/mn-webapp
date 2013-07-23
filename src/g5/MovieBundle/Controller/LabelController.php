@@ -65,6 +65,7 @@ class LabelController extends Controller
     {
         $request = $this->getRequest();
         $user = $this->getUser();
+        $normalizer = $this->get('g5_tools.normalizer');
 
         $lm = $this->get('g5_movie.label_manager');
         $label = $lm->createLabel();
@@ -86,6 +87,7 @@ class LabelController extends Controller
                 }
                 $label->addMovie($movie);
             }
+            $label->setNameNorm($normalizer->normalizeUtf8String($label->getName()));
             $lm->updateLabel($label);
 
             $serializer = $this->get('jms_serializer');

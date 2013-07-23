@@ -1,4 +1,4 @@
 <span class="label" data-labelId="{{ label.getId() }}" data-movieId="{{ movieId }}">
     <span class="close"><i class="icon-remove"></i></span>
-    <a href="{{ path('g5_movie_label_index', { name: label.getName() }) }}">{{ label.getName() }}</a>
+    <a href="{{ path('g5_movie_label_index', { name: label.getNameNorm() }) }}">{{ label.getName() }}</a>
 </span>

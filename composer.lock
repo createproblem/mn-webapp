@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6b0325a2806105bee0946ccfe0db909f",
+    "hash": "1c9106f24b80d5477012696457f3f4b2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -835,18 +835,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/createproblem/g5ToolsBundle.git",
-                "reference": "c2c2f32d066fd8d955f106fa518a8d5fff27d7cc"
+                "reference": "c66070f97fedd2043a67803fd81261b02183756d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/c2c2f32d066fd8d955f106fa518a8d5fff27d7cc",
-                "reference": "c2c2f32d066fd8d955f106fa518a8d5fff27d7cc",
+                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/c66070f97fedd2043a67803fd81261b02183756d",
+                "reference": "c66070f97fedd2043a67803fd81261b02183756d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "symfony/console": ">=2.0,<3.0",
-                "symfony/framework-bundle": ">=2.0,<3.0"
+                "symfony/console": "~2.0",
+                "symfony/framework-bundle": "~2.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -869,7 +869,7 @@
             "keywords": [
                 "Tools Wrapper Api"
             ],
-            "time": "2013-06-23 03:10:11"
+            "time": "2013-07-23 17:36:55"
         },
         {
             "name": "jdorn/sql-formatter",

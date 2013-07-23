@@ -148,7 +148,7 @@ g5.label.renderLabelItem = function(label, movieId)
     labelDelItem.html("<i class='icon-remove'></i>");
 
     labelItem.append(labelDelItem);
-    labelItem.append("<a href='"+Routing.generate('g5_movie_label_index', { name: label.name })+"'>"+label.name+"</a>");
+    labelItem.append("<a href='"+Routing.generate('g5_movie_label_index', { name: label.name_norm })+"'>"+label.name+"</a>");
 
     return labelItem;
 }

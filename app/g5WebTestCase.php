@@ -131,6 +131,7 @@ abstract class g5WebTestCase extends WebTestCase
         $user = $um->findUserByUsername('test');
 
         $label->setName('Test-Label');
+        $label->setNameNorm('test-label');
         $label->setUser($user);
 
         if (true === $save) {
