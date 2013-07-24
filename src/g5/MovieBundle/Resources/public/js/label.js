@@ -73,6 +73,11 @@ g5.label.dispatchForm = function(formContainer, uid)
             }
             text += item;
 
+            // unbind blur event, because the click on the element
+            // will trigger the blur event and the input box is gone away before
+            // the label will be assiged
+            labelInput.unbind('blur');
+
             return text;
         },
 
