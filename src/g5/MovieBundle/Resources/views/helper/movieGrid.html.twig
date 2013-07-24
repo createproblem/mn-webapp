@@ -1,4 +1,5 @@
 {# /src/g5/MovieBundle/Resources/views/helper/movieGrid.html.twig #}
+{% set max = movies|length %}
 {% for movie in movies %}
     {% if loop.index % 2 > 0 %}
         <div class="row-fluid">

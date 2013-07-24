@@ -1,5 +1,7 @@
 {# /src/g5/MovieBundle/Resources/views/Label/index.html.twig #}
 {% extends '::base.html.twig' %}
 {% block body %}
-{{ dump(labels) }}
+
+{% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies, "imgUrl": imgUrl } %}
+
 {% endblock body %}

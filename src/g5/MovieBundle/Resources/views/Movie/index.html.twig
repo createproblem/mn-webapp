@@ -1,6 +1,5 @@
 {# /src/g5/MovieBundle/Resources/views/Movie/index.html.twig #}
 {% extends '::base.html.twig' %}
-{% set max = movies|length %}
 {% block body %}
 
 {% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies, "imgUrl": imgUrl } %}

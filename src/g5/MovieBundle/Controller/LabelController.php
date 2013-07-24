@@ -22,11 +22,14 @@ class LabelController extends Controller
     public function indexAction($name)
     {
         $lm = $this->get('g5_movie.label_manager');
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
 
-        $labels = $lm->findLabelsBy(array('name' => $name));
+        $label = $lm->findLabelBy(array('name_norm' => $name));
+        $movies = $label->getMovies();
 
         return $this->render('g5MovieBundle:Label:index.html.twig', array(
-            'labels' => $labels,
+            'movies' => $movies,
+            'imgUrl' => $tmdbApi->getImageUrl('w185'),
         ));
     }
 }
