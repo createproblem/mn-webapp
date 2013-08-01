@@ -39,7 +39,7 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         $this->rootDir = $this->kernel->getRootDir();
 
         $this->container = $this->kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine')->getEntityManager();
+        $this->entityManager = $this->container->get('doctrine')->getManager();
 
         parent::setUp();
     }

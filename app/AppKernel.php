@@ -16,14 +16,14 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new JMS\AopBundle\JMSAopBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+
+            // Third Party
             new FOS\UserBundle\FOSUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
 
+            // Internal
             new g5\HomeBundle\g5HomeBundle(),
             new g5\AccountBundle\g5AccountBundle(),
             new g5\MovieBundle\g5MovieBundle(),
