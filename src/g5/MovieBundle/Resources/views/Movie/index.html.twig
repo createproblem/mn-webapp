@@ -5,17 +5,7 @@
 {% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies, "imgUrl": imgUrl } %}
 
 <div class="row-fluid">
-    <div class="pagination pagination-centered">
-        <ul>
-            {% for page in pagination %}
-                {% if page.link == null %}
-                    <li class="{{ page.state }}"><span>{{ page.name }}</span></li>
-                {% else %}
-                    <li class="{{ page.state }}"><a href="{{ page.link }}">{{ page.name }}</a></li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
+    {{ paginationBar(pagination) }}
 </div>
 
 {% endblock %}

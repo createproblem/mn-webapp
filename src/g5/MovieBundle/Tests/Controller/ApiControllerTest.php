@@ -150,6 +150,7 @@ class ApiControllerTest extends \g5WebTestCase
         $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
 
         $this->deleteMovie($movie);
+        $this->deleteLabel($label);
     }
 
     public function testUnlinkActionError()
@@ -178,5 +179,6 @@ class ApiControllerTest extends \g5WebTestCase
         $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
 
         $this->deleteMovie($movie);
+        $this->deleteLabel($label);
     }
 }

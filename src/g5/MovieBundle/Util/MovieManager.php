@@ -80,7 +80,7 @@ class MovieManager
      *
      * @return array
      */
-    public function findMovieBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findMoviesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
@@ -102,6 +102,11 @@ class MovieManager
 
         // exception
         return $movie;
+    }
+
+    public function findMoviesByLabel(\g5\MovieBundle\Entity\Label $label, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->repository->findByLabel($label, $orderBy, $limit, $offset);
     }
 
     /**

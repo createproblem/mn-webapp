@@ -99,12 +99,10 @@ abstract class g5WebTestCase extends WebTestCase
         $movie->setUser($user);
 
         if (true === $save) {
-            if (true === $save) {
-                try {
-                    $mm->updateMovie($movie);
-                } catch (Doctrine\DBAL\DBALException $e) {
-                    $this->fail($e->getMessage());
-                }
+            try {
+                $mm->updateMovie($movie);
+            } catch (Doctrine\DBAL\DBALException $e) {
+                $this->fail($e->getMessage());
             }
         }
 

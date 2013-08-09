@@ -27,8 +27,8 @@ g5_movie_api_unlink:
 # LabelController
 
 g5_movie_label_index:
-    pattern: /label/{name}
-    defaults: { _controller: g5MovieBundle:Label:index }
+    pattern: /label/{name}/{page}
+    defaults: { _controller: g5MovieBundle:Label:index, page: 1 }
     options:
         expose: true
 
