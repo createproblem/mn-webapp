@@ -1,6 +1,8 @@
 <?php
 ini_set("error_reporting", E_ALL & ~E_DEPRECATED);
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Debug\Debug;
+
 // use Symfony\Component\ClassLoader\ApcClassLoader;
 umask(0002);
 // If you don't want to setup permissions the proper way, just uncomment the following PHP line
@@ -22,6 +24,7 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 // $loader = new ApcClassLoader('sf2', $loader);
+Debug::enable();
 $loader->register(true);
 
 require_once __DIR__.'/../app/AppKernel.php';
