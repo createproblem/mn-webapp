@@ -9,14 +9,14 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\MovieBundle\Tests\Service;
+namespace g5\MovieBundle\Tests\Util;
 
 require_once dirname(__DIR__).'/../../../../app/KernelAwareTest.php';
 
 class LabelManagerTest extends \KernelAwareTest
 {
     /**
-     * @var g5\MovieBundle\Service\LabelManager
+     * @var g5\MovieBundle\Util\LabelManager
      */
     private $lm;
 
@@ -32,6 +32,29 @@ class LabelManagerTest extends \KernelAwareTest
         $label = $this->lm->createLabel();
 
         $this->assertInstanceOf('g5\MovieBundle\Entity\Label', $label);
+    }
+
+    public function testFindLabelsBy()
+    {
+        $expectedLabel = $this->createTestLabel();
+
+        $labels = $this->lm->findLabelsBy(array('id' => $expectedLabel->getId()));
+
+        $this->assertTrue(is_array($labels));
+        $this->assertEquals($expectedLabel->getId(), $labels[0]->getId());
+
+        $this->deleteLabel($expectedLabel);
+    }
+
+    public function testFindLabelBy()
+    {
+        $expectedLabel = $this->createTestLabel();
+
+        $label = $this->lm->findLabelBy(array('id' => $expectedLabel->getId()));
+
+        $this->assertEquals($expectedLabel->getId(), $label->getId());
+
+        $this->deleteLabel($expectedLabel);
     }
 
     public function testFindLabelsByNameWithLike()

@@ -7,3 +7,5 @@ g5\MovieBundle\Entity\Label:
             expose: true
         name:
             expose: true
+        name_norm:
+            expose: true

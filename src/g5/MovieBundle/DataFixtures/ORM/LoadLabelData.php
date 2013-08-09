@@ -41,25 +41,23 @@ class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $user = $this->getReference('test-user');
 
-        $label1 = new Label();
-        $label1->setName('ATest 1A');
-        $label1->setUser($user);
+        $labelData = array(
+            array('name' => 'Horror', 'name_norm' => 'horror'),
+            array('name' => 'Action', 'name_norm' => 'action'),
+            array('name' => 'Top Hits', 'name_norm' => 'top-hits'),
+        );
 
-        $label2 = new Label();
-        $label2->setName('ATest 1B');
-        $label2->setUser($user);
+        foreach ($labelData as $data) {
+            $label = new Label();
+            $label->setName($data['name']);
+            $label->setNameNorm($data['name_norm']);
+            $label->setUser($user);
 
-        $labelHorror = new Label();
-        $labelHorror->setName('Horror');
-        $labelHorror->setUser($user);
-
-        $manager->persist($label1);
-        $manager->persist($label2);
-        $manager->persist($labelHorror);
+            $manager->persist($label);
+            $this->addReference('label-'.$label->getnameNorm(), $label);
+        }
 
         $manager->flush();
-
-        $this->addReference('label-horror', $labelHorror);
     }
 
     /**

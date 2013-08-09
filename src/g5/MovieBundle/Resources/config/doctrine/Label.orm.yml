@@ -12,6 +12,8 @@ g5\MovieBundle\Entity\Label:
     fields:
         name:
             type: string
+        name_norm:
+            type: string
 
     manyToOne:
         user:
