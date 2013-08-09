@@ -113,6 +113,10 @@ abstract class g5WebTestCase extends WebTestCase
     {
         $mm = static::$kernel->getContainer()->get('g5_movie.movie_manager');
         $mm->removeMovie($movie);
+
+        if ($movie->getId() !== null) {
+            $this->fail('Could not delete movie');
+        }
     }
 
     /**
@@ -147,6 +151,10 @@ abstract class g5WebTestCase extends WebTestCase
     {
         $lm = static::$kernel->getContainer()->get('g5_movie.label_manager');
         $lm->removeLabel($label);
+
+        if ($label->getId() !== null) {
+            $this->fail('Could not delete label');
+        }
     }
 
     protected function deleteUser($client, $username)
