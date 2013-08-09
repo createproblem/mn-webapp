@@ -9,16 +9,16 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\MovieBundle\Tests\Service;
+namespace g5\MovieBundle\Tests\Util;
 
 require_once dirname(__DIR__).'/../../../../app/KernelAwareTest.php';
 
-use g5\MovieBundle\Service\MovieManager;
+use g5\MovieBundle\Util\MovieManager;
 
 class MovieManagerTest extends \KernelAwareTest
 {
     /**
-     * @var g5\MovieBundle\Service\MovieManager
+     * @var g5\MovieBundle\Util\MovieManager
      */
     private $mm;
 
@@ -50,10 +50,10 @@ class MovieManagerTest extends \KernelAwareTest
         $this->assertEquals(550, $movie->getTmdbId());
     }
 
-    public function testFindMovieBy()
+    public function testFindMoviesBy()
     {
         $expectedMovie = $this->createTestMovie();
-        $movies = $this->mm->findMovieBy(array('id' => $expectedMovie));
+        $movies = $this->mm->findMoviesBy(array('id' => $expectedMovie));
 
         $this->assertTrue(is_array($movies));
         $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movies[0]);
@@ -103,5 +103,23 @@ class MovieManagerTest extends \KernelAwareTest
         $this->assertEquals('Test123', $expectedMovie->getTitle());
 
         $this->deleteMovie($expectedMovie);
+    }
+
+    public function testFindMoviesByLabel()
+    {
+        $label = $this->createTestLabel();
+        $movie = $this->createTestMovie();
+
+        $movie->addLabel($label);
+        $this->mm->updateMovie($movie);
+
+        $movies = $this->mm->findMoviesByLabel($label);
+        $this->assertEquals(1, count($movies));
+
+        $movies = $this->mm->findMoviesByLabel($label, null, 1, 0);
+        $this->assertEquals(1, count($movies));
+
+        $this->deleteLabel($label);
+        $this->deleteMovie($movie);
     }
 }

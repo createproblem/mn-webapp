@@ -1,3 +1,39 @@
+# ApiController
+
+g5_movei_api_label_new:
+    pattern: /api/label/new
+    defaults: { _controller: g5MovieBundle:Api:labelNew }
+    options:
+        expose: true
+
+g5_movie_api_label_find:
+    pattern: /api/label/find
+    defaults: { _controller: g5MovieBundle:Api:labelFind }
+    options:
+        expose: true
+
+g5_movie_api_label_add:
+    pattern: /api/label/add
+    defaults: { _controller: g5MovieBundle:Api:labelAdd }
+    options:
+        expose: true
+
+g5_movie_api_unlink:
+    pattern: /api/unlink
+    defaults: { _controller: g5MovieBundle:Api:unlink }
+    options:
+        expose: true
+
+# LabelController
+
+g5_movie_label_index:
+    pattern: /label/{name}/{page}
+    defaults: { _controller: g5MovieBundle:Label:index, page: 1 }
+    options:
+        expose: true
+
+# MovieController
+
 g5_movie_index:
     pattern: /{page}
     defaults: { _controller: g5MovieBundle:Movie:index, page: 1 }
@@ -33,31 +69,5 @@ g5_movie_loadTmdbData:
     defaults: { _controller: g5MovieBundle:Movie:loadTmdb }
     requirements:
         _method: POST
-    options:
-        expose: true
-
-g5_movie_label_new:
-    pattern: /label/new
-    defaults: { _controller: g5MovieBundle:Label:new }
-    options:
-        expose: true
-
-g5_movie_label_unlink:
-    pattern: /label/unlink
-    defaults: { _controller: g5MovieBundle:Label:unlink }
-    options:
-        expose: true
-
-g5_movie_label_find:
-    pattern: /label/find
-    defaults: { _controller: g5MovieBundle:Label:find }
-    # requirements:
-    #     _method: GET
-    options:
-        expose: true
-
-g5_movie_label_add:
-    pattern: /label/add
-    defaults: { _controller: g5MovieBundle:Label:add }
     options:
         expose: true

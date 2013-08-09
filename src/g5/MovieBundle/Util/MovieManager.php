@@ -1,7 +1,15 @@
 <?php
-// /src/g5/MovieBundle/Service/MovieManager.php
 
-namespace g5\MovieBundle\Service;
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
+namespace g5\MovieBundle\Util;
 
 use g5\MovieBundle\Entity\Movie;
 
@@ -72,7 +80,7 @@ class MovieManager
      *
      * @return array
      */
-    public function findMovieBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    public function findMoviesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
@@ -94,6 +102,11 @@ class MovieManager
 
         // exception
         return $movie;
+    }
+
+    public function findMoviesByLabel(\g5\MovieBundle\Entity\Label $label, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->repository->findByLabel($label, $orderBy, $limit, $offset);
     }
 
     /**

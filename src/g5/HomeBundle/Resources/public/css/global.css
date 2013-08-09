@@ -22,6 +22,12 @@
 
 .label .close
 {
-    line-height: 0px;
+    line-height: 0;
     margin: 0 0 0 3px;
+}
+
+.label a
+{
+    color: #FFFFFF;
+    text-decoration: none;
 }

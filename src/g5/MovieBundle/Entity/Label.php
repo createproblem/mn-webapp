@@ -22,6 +22,11 @@ class Label extends LabelBase
     private $name;
 
     /**
+     * @var string
+     */
+    private $name_norm;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $movieLabels;
@@ -126,5 +131,28 @@ class Label extends LabelBase
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set name_norm
+     *
+     * @param string $nameNorm
+     * @return Label
+     */
+    public function setNameNorm($nameNorm)
+    {
+        $this->name_norm = $nameNorm;
+
+        return $this;
+    }
+
+    /**
+     * Get name_norm
+     *
+     * @return string
+     */
+    public function getNameNorm()
+    {
+        return $this->name_norm;
     }
 }

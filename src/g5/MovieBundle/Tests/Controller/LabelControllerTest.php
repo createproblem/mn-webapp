@@ -28,155 +28,32 @@ class LabelControllerTest extends \g5WebTestCase
         $this->lm = $this->client->getContainer()->get('g5_movie.label_manager');
     }
 
-    public function testNewAction()
+    public function testIndexAction()
     {
         $this->login($this->client);
 
-        $this->client->request('GET', '/movie/label/new');
-
-        $this->assertFalse($this->client->getResponse()->isSuccessful());
-
-        $crawler = $this->client->request('GET', '/movie/label/new',
-            array(),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('form')->count());
-    }
-
-    public function testFindAction()
-    {
-        $this->login($this->client);
-
-        $this->client->request('GET', '/movie/label/find',
-            array('query' => 'horror'),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-    }
-
-    public function testAddAction()
-    {
-        $this->login($this->client);
-
-        // pre setup
-        $movie = $this->createTestMovie();
-
-        $expected = 'OK';
-
-        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_label');
-
-        // Session Mock failure workaround
-        $session = static::$kernel->getContainer()->get('session');
-        $session->save();
-
-        $this->client->request('POST', '/movie/label/add',
-            array(
-                'label' => array(
-                    'name' => 'test1',
-                    '_token' => $token,
-                    'movie_id' => $movie->getId(),
-                ),
-            ),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-
-        $compare = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($expected, $compare['status']);
-
-        $this->deleteMovie($movie);
-    }
-
-    public function testAddActionError()
-    {
-        $this->login($this->client);
-        $movie = $this->createTestMovie();
-        $expected = "ERROR: The CSRF token is invalid. Please try to resubmit the form.\nname:\n    No errors\nmovie_id:\n    No errors\n";
-
-        $this->client->request('POST', '/movie/label/add',
-            array(
-                'label' => array(
-                    'name' => 'test1',
-                    'movie_id' => $movie->getId(),
-                ),
-            ),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
-
-        $this->deleteMovie($movie);
-    }
-
-    public function testUnlinkAction()
-    {
-        $this->login($this->client);
         $label = $this->createTestLabel();
         $movie = $this->createTestMovie();
-        $expected = array('status' => 'OK');
         $movie->addLabel($label);
-
         $this->mm->updateMovie($movie);
 
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->any())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
 
-        $this->client->request('GET', '/movie/label/unlink',
-            array(
-                'labelId' => $label->getId(),
-                'movieId' => $movie->getId(),
-            ),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
 
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
-
-        $this->deleteMovie($movie);
-    }
-
-    public function testUnlinkActionError()
-    {
-        $this->login($this->client);
-        $label = $this->createTestLabel();
-        $movie = $this->createTestMovie();
-        $expected = array('status' => 'ERROR');
-        $movie->addLabel($label);
-
-        $this->mm->updateMovie($movie);
-
-
-        $this->client->request('GET', '/movie/label/unlink',
-            array(
-                'labelId' => $label->getId(),
-                'movieId' => 9999,
-            ),
-            array(),
-            array(
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
+        $crawler = $this->client->request('GET', '/movie/label/'.$label->getNameNorm());
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
+        $this->assertEquals(1, $crawler->filter('h4:contains("'.$movie->getTitle().'")')->count());
 
-        $this->deleteMovie($movie);
+        $this->mm->removeMovie($movie);
+        $this->lm->removeLabel($label);
     }
 }

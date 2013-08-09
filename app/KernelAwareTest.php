@@ -100,6 +100,7 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         $user = $um->findUserByUsername('test');
 
         $label->setName('Test-Label');
+        $label->setNameNorm('test-label');
         $label->setUser($user);
 
         if (true === $save) {

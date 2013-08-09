@@ -12,16 +12,18 @@ matrix:
 # services: mongodb
 
 branches:
-  except:
-    - experimental
+    except:
+        - experimental
 
 before_script:
     # - pecl install -f mongo-1.3.7
     - mysql -e 'create database mn_test;'
     - cp app/config/parameters_test.yml app/config/parameters.yml
-    - composer install --prefer-source --dev
+    - sudo $(which composer) self-update
+    - composer --version
+    - composer install
     - php app/console assetic:dump
     - php app/console doctrine:schema:create
     - php app/console doctrine:fixtures:load --append
 
-script: phpunit --coverage-text -c app
+script: phpunit --coverage-text -c app/

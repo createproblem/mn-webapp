@@ -19,105 +19,40 @@ use g5\MovieBundle\Entity\Label;
 
 class LabelController extends Controller
 {
-    public function newAction()
+    public function indexAction($name, $page)
     {
-        if (!$this->getRequest()->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('Wrong Request Type.');
-        }
-
-        $form = $this->createForm('label', new Label());
-
-        return $this->render('g5MovieBundle:Label:new.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    public function findAction()
-    {
-        $request = $this->getRequest();
-        $user = $this->getUser();
-        $name = $request->query->get('query');
-
-        $labelManager = $this->get('g5_movie.label_manager');
-        $labels = $labelManager->findLabelsByNameWithLike($name, $user);
-
-        $serializer = $this->get('jms_serializer');
-        $data = $serializer->serialize(array('labels' => $labels), 'json');
-
-        $response = new JsonResponse();
-        $response->setContent($data);
-
-        return $response;
-    }
-
-    public function addAction()
-    {
-        $request = $this->getRequest();
-        $user = $this->getUser();
-
         $lm = $this->get('g5_movie.label_manager');
-        $label = $lm->createLabel();
-
-        $form = $this->createForm('label', $label);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $label = $form->getData();
-            $label->setUser($user);
-            $movieId = $form->get('movie_id')->getData();
-
-            if ($movieId) {
-                $movieManager = $this->get('g5_movie.movie_manager');
-                $movie = $movieManager->loadMovieById($movieId, $user);
-                $label->addMovie($movie);
-            }
-            $lm->updateLabel($label);
-
-            $serializer = $this->get('jms_serializer');
-
-            $jsonData = array(
-                'status' => 'OK',
-                'message' => 'New label added.',
-                'label' => $label,
-                'movieId' => $movie->getId()
-            );
-
-            $data = $serializer->serialize($jsonData, 'json');
-
-            $response = new JsonResponse();
-            $response->setContent($data);
-
-            return $response;
-        }
-
-        return new JsonResponse($form->getErrorsAsString());
-    }
-
-    public function unlinkAction()
-    {
-        $request = $this->getRequest();
-        $labelManager = $this->get('g5_movie.label_manager');
         $mm = $this->get('g5_movie.movie_manager');
-        $em = $this->getDoctrine()->getManager();
-
-
         $user = $this->getUser();
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
 
-        $labelId = $request->query->get('labelId');
-        $movieId = $request->query->get('movieId');
+        $label = $lm->findLabelBy(array('user' => $user, 'name_norm' => $name));
 
-        $label = $labelManager->loadLabelById($labelId, $user);
-        $movie = $mm->loadMovieById($movieId, $user);
-        if ($label && $movie) {
-            $movie->removeLabel($label);
-            $mm->updateMovie($movie);
+        $movieCount = count($label->getMovies());
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+        $lastPage = ceil($movieCount / $limit);
 
-            $data['status'] = 'OK';
 
-            return new JsonResponse($data);
-        }
-        $data['status'] = 'ERROR';
+        $movies = $mm->findMoviesByLabel($label, null, $limit, $offset);
 
-        return new JsonResponse($data);
+        $pagination = array(
+            'page' => $page,
+            'page_items' => $limit,
+            'item_count' => $movieCount,
+            'url' => array(
+                'route' => 'g5_movie_label_index',
+                'params' => array(
+                    ':page' => 'page',
+                    'name' => $label->getNameNorm(),
+                ),
+            ),
+        );
+
+        return $this->render('g5MovieBundle:Label:index.html.twig', array(
+            'movies' => $movies,
+            'imgUrl' => $tmdbApi->getImageUrl('w185'),
+            'pagination' => $pagination,
+        ));
     }
 }

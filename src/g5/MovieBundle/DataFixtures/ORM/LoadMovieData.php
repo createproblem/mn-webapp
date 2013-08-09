@@ -42,33 +42,26 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
         $fh = fopen(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/movies.csv', 'r');
         $user = $this->getReference('test-user');
 
+        $labels = array('horror', 'action', 'top-hits');
+
         while (($data = fgetcsv($fh)) !== false) {
+            $labelN = $labels[array_rand($labels)];
+            $label = $this->getReference('label-'.$labelN);
+
             $movie = new Movie();
+
             $movie->setTmdbId($data[1]);
             $movie->setTitle($data[2]);
             $movie->setReleaseDate(new \DateTime($data[3]));
             $movie->setCoverUrl($data[4]);
             $movie->setOverview($data[5]);
             $movie->setUser($user);
+            $movie->addLabel($label);
 
             $manager->persist($movie);
         }
 
         $manager->flush();
-
-        // $movie = new Movie();
-        // $movie->setTmdbId(550);
-        // $movie->setTitle('Fight Club');
-        // $movie->setOverview(file_get_contents(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/overview_fightclub.txt'));
-        // $movie->setReleaseDate(new \DateTime('1999-10-14'));
-        // $movie->setCoverUrl('/8uO0gUM8aNqYLs1OsTBQiXu0fEv.jpg');
-        // $movie->setUser($this->getReference('test-user'));
-
-        // $movie->addLabel($this->getReference('label-horror'));
-        // $manager->persist($movie);
-        // $manager->flush();
-
-        // $this->addReference('test-movie', $movie);
     }
 
     /**

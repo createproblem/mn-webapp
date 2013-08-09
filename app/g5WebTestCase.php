@@ -99,12 +99,10 @@ abstract class g5WebTestCase extends WebTestCase
         $movie->setUser($user);
 
         if (true === $save) {
-            if (true === $save) {
-                try {
-                    $mm->updateMovie($movie);
-                } catch (Doctrine\DBAL\DBALException $e) {
-                    $this->fail($e->getMessage());
-                }
+            try {
+                $mm->updateMovie($movie);
+            } catch (Doctrine\DBAL\DBALException $e) {
+                $this->fail($e->getMessage());
             }
         }
 
@@ -115,6 +113,10 @@ abstract class g5WebTestCase extends WebTestCase
     {
         $mm = static::$kernel->getContainer()->get('g5_movie.movie_manager');
         $mm->removeMovie($movie);
+
+        if ($movie->getId() !== null) {
+            $this->fail('Could not delete movie');
+        }
     }
 
     /**
@@ -129,8 +131,9 @@ abstract class g5WebTestCase extends WebTestCase
 
         $label = $lm->createLabel();
         $user = $um->findUserByUsername('test');
-
-        $label->setName('Test-Label');
+        $name = 'test-'.time();
+        $label->setName($name);
+        $label->setNameNorm($name);
         $label->setUser($user);
 
         if (true === $save) {
@@ -148,6 +151,10 @@ abstract class g5WebTestCase extends WebTestCase
     {
         $lm = static::$kernel->getContainer()->get('g5_movie.label_manager');
         $lm->removeLabel($label);
+
+        if ($label->getId() !== null) {
+            $this->fail('Could not delete label');
+        }
     }
 
     protected function deleteUser($client, $username)
@@ -172,7 +179,7 @@ abstract class g5WebTestCase extends WebTestCase
 
     protected function getMovieManagerMock()
     {
-        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Service\MovieManager')
+        $movieManagerMock = $this->getMockBuilder('g5\MovieBundle\Util\MovieManager')
             ->disableOriginalConstructor()
             ->getMock()
         ;
