@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\MovieBundle\Service;
+namespace g5\MovieBundle\Util;
 
 use g5\MovieBundle\Entity\Label;
 
@@ -37,6 +37,29 @@ class LabelManager
     public function createLabel()
     {
         return new Label();
+    }
+
+    /**
+     * @param  array    $criteria
+     * @param  array    $orderBy
+     * @param  integer  $limit
+     * @param  integer  $offset
+     *
+     * @return array
+     */
+    public function findLabelsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param  array  $criteria
+     *
+     * @return Label|null
+     */
+    public function findLabelBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
     }
 
     /**

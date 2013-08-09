@@ -3,6 +3,7 @@
 namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use g5\MovieBundle\Entity\Label;
 
 /**
  * MovieRepository
@@ -11,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class MovieRepository extends EntityRepository
-{}
+{
+    public function findByLabel(Label $label, array $orderBy = null, $limit = null, $offset = null)
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        $qb->innerJoin('m.movieLabels', 'ml', 'WITH', 'ml.label = :label');
+        $qb->setParameter(':label', $label);
+
+        if ($offset !== null) {
+            $qb->setFirstResult($offset);
+        }
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        $q = $qb->getQuery();
+
+        return $q->getResult();
+    }
+}

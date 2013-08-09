@@ -22,48 +22,20 @@ class MovieController extends Controller
         $offset = ($page - 1) * $limit;
         $lastPage = ceil($movieCount / $limit);
 
-        $movies = $mm->findMovieBy(array('user' => $user), array('title' => 'ASC'), $limit, $offset);
+        $movies = $mm->findMoviesBy(array('user' => $user), array('title' => 'ASC'), $limit, $offset);
         $tmdbApi = $this->get('g5_tools.tmdb.api');
 
-        // pagination
-
-        // prev link
-        $prevBtn = array(
-            'state' => ($page > 1) ? null : 'disabled',
-            'link' => ($page > 1) ? $this->generateUrl('g5_movie_index', array('page' => $page - 1)) : null,
-            'name' => 'Prev',
+        $pagination = array(
+            'page' => $page,
+            'page_items' => $limit,
+            'item_count' => $movieCount,
+            'url' => array(
+                'route' => 'g5_movie_index',
+                'params' => array(
+                    ':page' => 'page',
+                ),
+            ),
         );
-
-        $curBtn = array(
-            'state' => 'active',
-            'link' => null,
-            'name' => $page,
-        );
-
-        $nextBtn = array(
-            'state' => ($page < $lastPage) ? null : 'disabled',
-            'link' => ($page < $lastPage) ? $this->generateUrl('g5_movie_index', array('page' => $page + 1 )) : null,
-            'name' => 'Next',
-        );
-
-        $firstBtn = array(
-            'state' => ($page === 1) ? 'disabled' : null,
-            'link' => ($page === 1) ? null : $this->generateUrl('g5_movie_index', array('page' => 1 )),
-            'name' => 1,
-        );
-
-        $lastBtn = array(
-            'state' => ($page == $lastPage) ? 'disabled' : null,
-            'link' => ($page === $lastPage) ? null : $this->generateUrl('g5_movie_index', array('page' => $lastPage )),
-            'name' => $lastPage,
-        );
-
-        $pagination = array();
-        $pagination[] = $prevBtn;
-        $pagination[] = $firstBtn;
-        $pagination[] = $curBtn;
-        $pagination[] = $lastBtn;
-        $pagination[] = $nextBtn;
 
         return $this->render('g5MovieBundle:Movie:index.html.twig', array(
             'movies' => $movies,
