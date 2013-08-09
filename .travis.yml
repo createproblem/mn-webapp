@@ -20,6 +20,7 @@ before_script:
     - mysql -e 'create database mn_test;'
     - cp app/config/parameters_test.yml app/config/parameters.yml
     - sudo $(which composer) self-update
+    - composer --version
     - composer install
     - php app/console assetic:dump
     - php app/console doctrine:schema:create

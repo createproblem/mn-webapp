@@ -36,7 +36,7 @@ class LabelControllerTest extends \g5WebTestCase
         $this->mm->updateMovie($movie);
 
         $crawler = $this->client->request('GET', '/movie/label/'.$label->getNameNorm());
-
+print($this->client->getResponse()->getContent());
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertEquals(1, $crawler->filter('h4:contains("'.$movie->getTitle().'")')->count());
 
