@@ -19,8 +19,7 @@ before_script:
     # - pecl install -f mongo-1.3.7
     - mysql -e 'create database mn_test;'
     - cp app/config/parameters_test.yml app/config/parameters.yml
-    - $(which composer.phar)
-    - sudo composer self-update
+    - sudo $(which composer) self-update
     - composer install
     - php app/console assetic:dump
     - php app/console doctrine:schema:create
