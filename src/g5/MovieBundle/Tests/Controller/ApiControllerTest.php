@@ -71,7 +71,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $expected = 'OK';
 
-        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_label');
+        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_link');
 
         // Session Mock failure workaround
         $session = static::$kernel->getContainer()->get('session');
@@ -79,7 +79,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request('POST', '/movie/api/label/add',
             array(
-                'label' => array(
+                'link' => array(
                     'name' => 'test1',
                     '_token' => $token,
                     'movie_id' => $movie->getId(),
@@ -99,15 +99,84 @@ class ApiControllerTest extends \g5WebTestCase
         $this->deleteMovie($movie);
     }
 
-    public function testAddActionError()
+    public function testLabelAddActionNew()
     {
         $this->login($this->client);
         $movie = $this->createTestMovie();
-        $expected = "ERROR: The CSRF token is invalid. Please try to resubmit the form.\nname:\n    No errors\nmovie_id:\n    No errors\n";
+        $expected = 'OK';
+        $labelname = time();
+
+        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_link');
+
+        // Session Mock failure workaround
+        $session = static::$kernel->getContainer()->get('session');
+        $session->save();
+
+        $data = array(
+            'link' => array(
+                'name' => $labelname,
+                '_token' => $token,
+                'movie_id' => $movie->getId(),
+            ),
+        );
+
+        $this->apiRequest('POST', '/label/add', $data);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($expected, $compare['status']);
+
+        $this->deleteLabel($this->lm->findLabelBy(array('name_norm' => $labelname)));
+        $this->deleteMovie($movie);
+    }
+
+    public function testLabelAddDuplicate()
+    {
+        $this->login($this->client);
+
+        $movie = $this->createTestMovie();
+        $label = $this->createTestLabel();
+        $movie->addLabel($label);
+
+        $this->mm->updateMovie($movie);
+
+        $expected = 'ERROR';
+
+        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_link');
+
+        // Session Mock failure workaround
+        $session = static::$kernel->getContainer()->get('session');
+        $session->save();
+
+        $data = array(
+            'link' => array(
+                'name' => $label->getName(),
+                '_token' => $token,
+                'movie_id' => $movie->getId(),
+            ),
+        );
+
+        $this->apiRequest('POST', '/label/add', $data);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($expected, $compare['status']);
+
+        $this->deleteLabel($label);
+        $this->deleteMovie($movie);
+    }
+
+    public function testAddActionInvalidForm()
+    {
+        $this->login($this->client);
+        $movie = $this->createTestMovie();
+        $expected = 'ERROR';
 
         $this->client->request('POST', '/movie/api/label/add',
             array(
-                'label' => array(
+                'link' => array(
                     'name' => 'test1',
                     'movie_id' => $movie->getId(),
                 ),
@@ -119,9 +188,39 @@ class ApiControllerTest extends \g5WebTestCase
         );
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals($expected, json_decode($this->client->getResponse()->getContent(), true));
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($expected, $compare['status']);
 
         $this->deleteMovie($movie);
+    }
+
+    public function testAddActionWrongMovie()
+    {
+        $this->login($this->client);
+
+        $expected = 'ERROR';
+
+        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_link');
+
+        // Session Mock failure workaround
+        $session = static::$kernel->getContainer()->get('session');
+        $session->save();
+
+        $data = array(
+            'link' => array(
+                'name' => 'test1',
+                '_token' => $token,
+                'movie_id' => 0,
+            ),
+        );
+
+        $this->apiRequest('POST', '/label/add', $data);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($expected, $compare['status']);
     }
 
     public function testUnlinkAction()
@@ -180,5 +279,14 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->deleteMovie($movie);
         $this->deleteLabel($label);
+    }
+
+    private function apiRequest($mehtod, $action, $data)
+    {
+        $this->client->request($mehtod, '/movie/api'.$action,
+            $data,
+            array(),
+            array('HTTP_X-Requested-With' => 'XMLHttpRequest')
+        );
     }
 }

@@ -12,6 +12,8 @@
 namespace g5\MovieBundle\Util;
 
 use g5\MovieBundle\Entity\Movie;
+use g5\MovieBundle\Entity\Label;
+use g5\MovieBundle\Entity\MovieLabel;
 
 class MovieManager
 {

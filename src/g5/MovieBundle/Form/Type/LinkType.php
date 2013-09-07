@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use g5\MovieBundle\Form\DataTransformer\LabelNameNormTransformer;
 
-class LabelType extends AbstractType
+class LinkType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -28,26 +28,27 @@ class LabelType extends AbstractType
                 'class' => 'span9',
             ),
             'required' => true,
+            'mapped' => true,
         ));
 
         $builder->add('movie_id', 'hidden', array(
-            'mapped' => false,
-            'required' => false,
+            'required' => true,
+            'mapped' => true,
         ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'g5\MovieBundle\Entity\Label',
+            'data_class' => 'g5\MovieBundle\Form\Model\Link',
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'intention'       => 'g5_movie_label',
+            'intention'       => 'g5_movie_link',
         ));
     }
 
     public function getName()
     {
-        return 'label';
+        return 'link';
     }
 }

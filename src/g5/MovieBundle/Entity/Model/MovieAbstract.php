@@ -46,6 +46,24 @@ abstract class MovieAbstract
     }
 
     /**
+     * Shortcut function will only add the if it doesn't exist
+     *
+     * @param \g5\MovieBundle\Entity\Label $label
+     *
+     * @return  boolean
+     */
+    public function addLabelSafe(\g5\MovieBundle\Entity\Label $label)
+    {
+        if (!$this->hasLabel($label)) {
+            $this->addLabel($label);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Shortcut function
      *
      * @param  \g5\MovieBundle\Entity\Label $label
@@ -57,5 +75,21 @@ abstract class MovieAbstract
                 $this->removeMovieLabel($movieLabel);
             }
         }
+    }
+
+    /**
+     * @param  g5MovieBundleEntityLabel $label
+     *
+     * @return boolean
+     */
+    public function hasLabel(\g5\MovieBundle\Entity\Label $label)
+    {
+        foreach ($this->getMovieLabels() as $movieLabel) {
+            if ($label->getId() === $movieLabel->getLabel()->getId()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

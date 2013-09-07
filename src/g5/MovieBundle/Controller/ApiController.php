@@ -13,9 +13,12 @@ namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use g5\MovieBundle\Entity\Label;
+use g5\MovieBundle\Entity\MovieLabel;
+use g5\MovieBundle\Form\Model\Link;
 
 class ApiController extends Controller
 {
@@ -30,7 +33,7 @@ class ApiController extends Controller
             throw $this->createNotFoundException('Wrong Request Type.');
         }
 
-        $form = $this->createForm('label', new Label());
+        $form = $this->get('g5_movie.link.form');
 
         return $this->render('g5MovieBundle:Label:new.html.twig', array(
             'form' => $form->createView(),
@@ -67,51 +70,29 @@ class ApiController extends Controller
      */
     public function labelAddAction()
     {
-        $request = $this->getRequest();
-        $user = $this->getUser();
-        $normalizer = $this->get('g5_tools.normalizer');
+        $formHandler = $this->get('g5_movie.link.form_handler');
+        $serializer = $this->get('jms_serializer');
 
-        $lm = $this->get('g5_movie.label_manager');
-        $label = $lm->createLabel();
-
-        $form = $this->createForm('label', $label);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $label = $form->getData();
-            $label->setUser($user);
-            $movieId = $form->get('movie_id')->getData();
-
-            if ($movieId) {
-                $movieManager = $this->get('g5_movie.movie_manager');
-                $movie = $movieManager->loadMovieById($movieId, $user);
-                $tLabel = $lm->findLabelBy(array('user' => $user, 'name' => $label->getName()));
-                if ($tLabel) {
-                    $label = $tLabel;
-                }
-                $label->addMovie($movie);
-            }
-            $label->setNameNorm($normalizer->normalizeUtf8String($label->getName()));
-            $lm->updateLabel($label);
-
-            $serializer = $this->get('jms_serializer');
-
+        $label = $formHandler->process(new Link(), $this->getUser());
+        if (false !== $label) {
             $jsonData = array(
                 'status' => 'OK',
-                'message' => 'New label added.',
+                'message' => 'Label added.',
                 'label' => $label,
-                'movieId' => $movie->getId()
             );
-
-            $data = $serializer->serialize($jsonData, 'json');
-
-            $response = new JsonResponse();
-            $response->setContent($data);
-
-            return $response;
+        } else {
+            $jsonData = array(
+                'status' => 'ERROR',
+                'message' => 'Label could not be added.',
+            );
         }
 
-        return new JsonResponse($form->getErrorsAsString());
+        $data = $serializer->serialize($jsonData, 'json');
+
+        $response = new JsonResponse();
+        $response->setContent($data);
+
+        return $response;
     }
 
     /**
@@ -145,5 +126,29 @@ class ApiController extends Controller
         $data['status'] = 'ERROR';
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * Creates the payload for the return
+     *
+     * @param  string   $status
+     * @param  string   $message
+     * @param  mixed    $data
+     *
+     * @return array
+     */
+    private function createPayload($status, $message = null, $data = null)
+    {
+        $jsonData = array('status' => $status);
+
+        if (null !== $message) {
+            $jsonData['message'] = $message;
+        }
+
+        if (null !== $data) {
+            $jsonData['data'] = $data;
+        }
+
+        return $jsonData;
     }
 }

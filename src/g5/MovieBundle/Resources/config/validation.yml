@@ -4,3 +4,10 @@ g5\MovieBundle\Entity\Movie:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             - user
             - tmdb_id
+
+g5\MovieBundle\Entity\MovieLabel:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            - movie
+            - label
+

@@ -26,14 +26,14 @@ g5.label.dispatchForm = function(formContainer, uid)
     formContainer.show();
     var $uid = uid;
     var form = formContainer.children(".g5movie_label_new_form");
-    var labelInput = form.find("input[name='label[name]']");
+    var labelInput = form.find("input[name='link[name]']");
 
     // bind focus lose event
     labelInput.bind('blur', function() {
         formContainer.hide();
     });
 
-    var labelToken = form.find("input[name='label[_token]']");
+    var labelToken = form.find("input[name='link[_token]']");
     var messageBox = formContainer.children(".g5_movie_label_messageBox");
     var labelBox = $("#label-box-"+uid);
 
@@ -86,9 +86,9 @@ g5.label.dispatchForm = function(formContainer, uid)
                 type: "POST",
                 url: Routing.generate("g5_movie_api_label_add"),
                 data: {
-                    "label[name]": item,
-                    "label[movie_id]": $uid,
-                    "label[_token]": labelToken.val()
+                    "link[name]": item,
+                    "link[movie_id]": $uid,
+                    "link[_token]": labelToken.val()
                 }
             }, function(response) {
                 var data = response;

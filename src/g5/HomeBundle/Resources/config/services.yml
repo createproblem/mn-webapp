@@ -1,7 +1,3 @@
 parameters:
-#    g5_home.example.class: g5\HomeBundle\Example
 
 services:
-#    g5_home.example:
-#        class: %g5_home.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
