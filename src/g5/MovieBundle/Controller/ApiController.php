@@ -127,28 +127,4 @@ class ApiController extends Controller
 
         return new JsonResponse($data);
     }
-
-    /**
-     * Creates the payload for the return
-     *
-     * @param  string   $status
-     * @param  string   $message
-     * @param  mixed    $data
-     *
-     * @return array
-     */
-    private function createPayload($status, $message = null, $data = null)
-    {
-        $jsonData = array('status' => $status);
-
-        if (null !== $message) {
-            $jsonData['message'] = $message;
-        }
-
-        if (null !== $data) {
-            $jsonData['data'] = $data;
-        }
-
-        return $jsonData;
-    }
 }

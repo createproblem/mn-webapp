@@ -6,21 +6,26 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-    {% javascripts '@g5HomeBundle/Resources/public/js/bootstrap.min.js' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
     {% stylesheets
         'bundles/g5home/css/bootstrap.min.css'
+        'bundles/g5home/css/bootstrap-theme.min.css'
+        'bundles/g5home/css/jquery-ui/jquery-ui-1.10.3.custom.min.css'
         'bundles/g5home/css/global.css'
         filter="cssrewrite"
     %}
         <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 
+    {% javascripts
+        '@g5HomeBundle/Resources/public/js/bootstrap.min.js'
+        '@g5HomeBundle/Resources/public/js/jquery-ui-1.10.3.custom.min.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
     <style type="text/css">
         body {
-            padding-top: 60px;
+            padding-top: 80px;
             padding-bottom: 40px;
         }
     </style>
@@ -29,7 +34,7 @@
 </head>
 <body>
 {% include '::nav.html.twig' %}
-<div class="container-fluid">
+<div class="container">
     {% include '::flash.html.twig' %}
     {% block body %}{% endblock %}
     <div id="loadingInfo" style="display: none;">

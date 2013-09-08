@@ -1,6 +1,32 @@
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-    {{ form_widget(form) }}
-    <div>
-        <button class="btn btn-primary" type="submit">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+<form class="form-horizontal" role="form" action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    <div class="form-group">
+        {{ form_label(form.username, 'Username', {"label_attr": {"class": "col-lg-2 control-label"}}) }}
+        <div class="col-lg-10">
+            {{ form_widget(form.username, {"attr": {"class": "form-control"}})}}
+        </div>
     </div>
+    <div class="form-group">
+        {{ form_label(form.email, 'EMail', {"label_attr": {"class": "col-lg-2 control-label"}}) }}
+        <div class="col-lg-10">
+            {{ form_widget(form.email, {"attr": {"class": "form-control"}})}}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(form.plainPassword.first, 'Password', {"label_attr": {"class": "col-lg-2 control-label"}}) }}
+        <div class="col-lg-10">
+            {{ form_widget(form.plainPassword.first, {"attr": {"class": "form-control"}})}}
+        </div>
+    </div>
+    <div class="form-group">
+        {{ form_label(form.plainPassword.second, 'Verification', {"label_attr": {"class": "col-lg-2 control-label"}}) }}
+        <div class="col-lg-10">
+            {{ form_widget(form.plainPassword.second, {"attr": {"class": "form-control"}})}}
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+            <button class="btn btn-primary" type="submit">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+        </div>
+    </div>
+    {{ form_rest(form) }}
 </form>

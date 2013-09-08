@@ -25,7 +25,7 @@ class LinkType extends AbstractType
             'attr' => array(
                 'data-provide' => 'typeahead',
                 'autocomplete' => 'off',
-                'class' => 'span9',
+                'class' => 'form-control',
             ),
             'required' => true,
             'mapped' => true,

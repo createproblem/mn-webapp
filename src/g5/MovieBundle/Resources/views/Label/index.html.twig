@@ -4,8 +4,10 @@
 
 {% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies, "imgUrl": imgUrl } %}
 
-<div class="row-fluid">
-    {{ paginationBar(pagination) }}
+<div class="row">
+    <div class="col-lg-4 col-lg-offset-5">
+        {{ paginationBar(pagination) }}
+    </div>
 </div>
 
 {% endblock body %}

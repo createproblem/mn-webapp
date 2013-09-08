@@ -15,12 +15,17 @@
     z-index: 999;
 }
 
-.label .badge
+.label-remove
 {
-    line-height: 18px;
+    line-height: 1;
 }
 
-.label .close
+.label-remove:hover
+{
+    cursor: pointer;
+}
+
+.label
 {
     line-height: 0;
     margin: 0 0 0 3px;
@@ -30,4 +35,5 @@
 {
     color: #FFFFFF;
     text-decoration: none;
+    margin-right: 3px;
 }

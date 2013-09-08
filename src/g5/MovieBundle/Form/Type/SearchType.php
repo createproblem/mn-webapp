@@ -27,7 +27,7 @@ class SearchType extends AbstractType
         $builder->add('search', 'text', array(
             'attr' => array(
                 'placeholder' => 'Movie Title',
-                'class' => 'input-xlarge',
+                'class' => 'form-control',
             ),
             'required' => true,
         ));

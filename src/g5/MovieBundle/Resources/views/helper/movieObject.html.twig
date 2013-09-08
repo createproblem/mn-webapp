@@ -1,7 +1,7 @@
 {% set uid = movie.getId() %}
 <div class="media">
-    <button id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-small pull-right">
-        <i class="icon-tag"></i>
+    <button id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
+        <span class="glyphicon glyphicon-tag"></span>
     </button>
     <img class="pull-left media-object" src="{{ imgUrl }}{{ movie.getCoverUrl() }}">
     <div class="media-body">

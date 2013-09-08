@@ -1,10 +1,12 @@
 {# /src/g5/MovieBundle/Resources/views/Label/new.html.twig #}
 
 <div class="g5_movie_label_messageBox" style="display: none;"></div>
-<form class="g5movie_label_new_form" onsubmit="return false;">
-    <div class="input-prepend">
-        <span class="add-on"><i class="icon-tag"></i></span>
+<form role="form"class="g5movie_label_new_form form-horizontal" onsubmit="return false;">
+    <div class="input-group col-lg-9 input-group-sm">
+        <span class="input-group-addon">@</span>
         {{ form_widget(form.name) }}
         {{ form_rest(form) }}
     </div>
+    <div class="clearfix"></div>
 </form>
+<br>

@@ -846,12 +846,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/createproblem/g5ToolsBundle.git",
-                "reference": "6fd7da5a45f70524ecabc644e7d188cc1807d344"
+                "reference": "6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/6fd7da5a45f70524ecabc644e7d188cc1807d344",
-                "reference": "6fd7da5a45f70524ecabc644e7d188cc1807d344",
+                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c",
+                "reference": "6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c",
                 "shasum": ""
             },
             "require": {
@@ -886,7 +886,7 @@
             "keywords": [
                 "Tools Wrapper Api"
             ],
-            "time": "2013-08-09 00:58:31"
+            "time": "2013-09-07 22:20:00"
         },
         {
             "name": "incenteev/composer-parameter-handler",

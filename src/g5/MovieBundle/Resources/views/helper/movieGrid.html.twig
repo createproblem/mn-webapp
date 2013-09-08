@@ -2,10 +2,10 @@
 {% set max = movies|length %}
 {% for movie in movies %}
     {% if loop.index % 2 > 0 %}
-        <div class="row-fluid">
+        <div class="row">
     {% endif %}
 
-    <div class="span6">
+    <div class="col-lg-6">
         {% include 'g5MovieBundle:helper:movieObject.html.twig' with { "movie": movie, "imgUrl": imgUrl } %}
     </div>
 

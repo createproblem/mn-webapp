@@ -13,162 +13,10 @@
 
 g5.label = {};
 g5.label.jqxhr = null;
-g5.label.isEmpty = false;
 g5.label.storage = [];
-
-/**
- * @param  Object       formContainer
- * @param  string|int   uid             Unituqe id (need for multiple implemenation)
- */
-g5.label.dispatchForm = function(formContainer, uid)
-{
-    // form elements
-    formContainer.show();
-    var $uid = uid;
-    var form = formContainer.children(".g5movie_label_new_form");
-    var labelInput = form.find("input[name='link[name]']");
-
-    // bind focus lose event
-    labelInput.bind('blur', function() {
-        formContainer.hide();
-    });
-
-    var labelToken = form.find("input[name='link[_token]']");
-    var messageBox = formContainer.children(".g5_movie_label_messageBox");
-    var labelBox = $("#label-box-"+uid);
-
-    labelInput.typeahead({
-        "source": function(query, process) {
-            var $this = this;
-            g5.label.storage = [];
-            if (g5.label.jqxhr !== null) {
-                g5.label.jqxhr.abort();
-            }
-
-            g5.label.jqxhr = g5.ajaxRequest({
-                type: "GET",
-                url: Routing.generate("g5_movie_api_label_find", {"query": query})
-            }, function(response) {
-                var data = response;
-                var labels = [];
-
-                $.each(data.labels, function(index, label) {
-                    g5.label.storage.push(label);
-                    labels.push(label.name);
-                });
-
-                if (g5.label.searchStorage($this.query) === null) {
-                    labels.push($this.query);
-                }
-
-                return process(labels);
-            });
-        },
-
-        "highlighter": function(item) {
-            var text = "";
-            var res = g5.label.searchStorage(item);
-            if (res === null) {
-                text += "<i class='icon-plus-sign'></i> ";
-            }
-            text += item;
-
-            // unbind blur event, because the click on the element
-            // will trigger the blur event and the input box is gone away before
-            // the label will be assiged
-            labelInput.unbind('blur');
-
-            return text;
-        },
-
-        "updater": function(item) {
-            g5.ajaxRequest({
-                type: "POST",
-                url: Routing.generate("g5_movie_api_label_add"),
-                data: {
-                    "link[name]": item,
-                    "link[movie_id]": $uid,
-                    "link[_token]": labelToken.val()
-                }
-            }, function(response) {
-                var data = response;
-                if (data.status === "OK") {
-                    g5.label.renderLabel(labelBox, data.label, data.movieId);
-                    g5.label.showMessage(messageBox, "text-success", data.message);
-                } else {
-                    g5.label.showMessage(messageBox, "text-error", data.message);
-                }
-            });
-            formContainer.hide();
-
-            return item;
-        }
-    });
-
-    labelInput.focus();
-};
-
-/**
- * @param  Object msgBox
- * @param  string type    Twitter Bootstrap CSS class
- * @param  string message
- */
-g5.label.showMessage = function(msgBox, type, message)
-{
-    msgBox.html("");
-
-    var msg = $("<small>");
-    msg.addClass(type);
-    msg.html(message);
-
-    msgBox.append(msg);
-    msgBox.show();
-};
-
-/**
- * @param  Object labelBox  The view element
- * @param  Object label
- */
-g5.label.renderLabel = function(labelBox, label, movieId)
-{
-    var labelHtml = g5.label.renderLabelItem(label, movieId);
-
-    labelHtml.children(".close").bind('click', function() {
-        g5.label.removeLabel(labelHtml, label.id, movieId);
-    });
-
-    labelBox.append(labelHtml);
-    labelBox.append("&nbsp;");
-};
-
-g5.label.renderLabelItem = function(label, movieId)
-{
-    var labelItem = $("<span>");
-    labelItem.addClass("label");
-    labelItem.attr("data-labelId", label.id);
-    labelItem.attr("data-movieId", movieId);
-
-    var labelDelItem = $("<span>");
-    labelDelItem.addClass("close");
-    labelDelItem.html("<i class='icon-remove'></i>");
-
-    labelItem.append(labelDelItem);
-    labelItem.append("<a href='"+Routing.generate('g5_movie_label_index', { name: label.name_norm })+"'>"+label.name+"</a>");
-
-    return labelItem;
-};
-
-g5.label.removeLabel = function(el, labelId, movieId)
-{
-    g5.ajaxRequest({
-        type: "GET",
-        url: Routing.generate('g5_movie_api_unlink', { labelId: labelId, movieId: movieId })
-    }, function(response) {
-        if (response.status === 'OK') {
-            el.hide();
-        }
-    });
-};
+g5.label.uid = 0;
+g5.label.labelBox = null;
+g5.label.formContainer = null;
 
 /**
  * @param  string labelName
@@ -188,27 +36,188 @@ g5.label.searchStorage = function(labelName) {
     return retLabel;
 };
 
+/**
+ * Helper function for autocomplete
+ *
+ * @param  Object ul
+ * @param  Object item
+ *
+ * @return Object
+ */
+g5.label._renderItem = function(ul, item)
+{
+    var res = g5.label.searchStorage(item.label);
+    var text = null;
+
+    if (res === null) {
+        text = "<a><span class='glyphicon glyphicon-plus'></span> "+item.label+"</a>";
+    } else {
+        text = "<a>"+item.label+"</a>";
+    }
+
+    return $("<li></li>")
+        .data("item.autocomplete", item )
+        .append(text)
+        .appendTo(ul)
+    ;
+};
+
+/**
+ * @param  Object   label
+ * @param  int      movieId
+ */
+g5.label.renderLabel = function(label, movieId)
+{
+    var a = $("<a></a>");
+    var spanLabel = $("<span></span>");
+    var spanRemove = $("<span></span>");
+
+    a.attr("href", Routing.generate('g5_movie_label_index', { name: label.name_norm }));
+    a.html(label.name);
+
+    spanRemove.addClass("label-remove glyphicon glyphicon-remove");
+    spanLabel.addClass("label label-default");
+    spanLabel.attr("data-labelId", g5.label.uid);
+    spanLabel.attr("data-movieId", movieId);
+    spanLabel.append(a);
+    spanLabel.append(spanRemove);
+
+    spanRemove.bind('click', function() {
+        g5.label.unlinkLabel(spanLabel, label.id, movieId);
+    });
+
+    g5.label.labelBox.append(spanLabel);
+    g5.label.formContainer.hide();
+};
+
+/**
+ * Links the label to the movie
+ *
+ * @param  Object event
+ * @param  Object ui
+ */
+g5.label.linkLabel = function(event, ui)
+{
+    var labelToken = $(this).parent().find("input[name='link[_token]']").val();
+    g5.ajaxRequest({
+        type: "POST",
+        url: Routing.generate("g5_movie_api_label_add"),
+        data: {
+            "link[name]": ui.item.value,
+            "link[movie_id]": g5.label.uid,
+            "link[_token]": labelToken
+        }
+    }, function(response) {
+        if (response.status === "OK") {
+            g5.label.renderLabel(response.label, g5.label.uid);
+        }
+    });
+};
+
+/**
+ * Label lookup
+ *
+ * @param  Object   request
+ * @param  function process
+ */
+g5.label.findLabels = function(request, process)
+{
+    var query = request.term;
+    g5.label.storage = [];
+
+    if (g5.label.jqxhr !== null) {
+        g5.label.jqxhr.abort();
+    }
+
+    g5.label.jqxhr = g5.ajaxRequest({
+        type: "GET",
+        url: Routing.generate("g5_movie_api_label_find", {"query": query})
+    }, function(response) {
+        var labels = [];
+        $.each(response.labels, function(index, label) {
+            g5.label.storage.push(label);
+            labels.push({
+                "label": label.name,
+                "value": label.name
+            });
+        });
+
+        if (g5.label.searchStorage(query) === null) {
+            labels.push({
+                "label": query,
+                "value": query
+            });
+        }
+
+        process(labels);
+    });
+};
+
+/**
+ * Unlinks the label from the movie
+ *
+ * @param  Object label
+ * @param  int labelId
+ * @param  int movieId
+ */
+g5.label.unlinkLabel = function(label, labelId, movieId)
+{
+    g5.ajaxRequest({
+        type: "GET",
+        url: Routing.generate('g5_movie_api_unlink', { labelId: labelId, movieId: movieId })
+    }, function(response) {
+        if (response.status === 'OK') {
+            label.hide();
+        }
+    });
+};
+
+/**
+ * @param  Object       formContainer
+ * @param  string|int   uid             Unituqe id (need for multiple implemenation)
+ */
+g5.label.dispatchForm = function(formContainer)
+{
+    g5.label.formContainer = formContainer;
+    formContainer.show();
+    var form = formContainer.children(".g5movie_label_new_form");
+    var labelInput = form.find("input[name='link[name]']");
+
+    // bind focus lose event
+    labelInput.bind('blur', function() {
+        formContainer.hide();
+    });
+
+    labelInput.autocomplete({
+        source: g5.label.findLabels,
+        select: g5.label.linkLabel
+    }).data("ui-autocomplete")._renderItem = g5.label._renderItem;
+
+    labelInput.focus();
+};
+
 $(document).ready(function() {
-    // Label button binding
     $("[id|='label-trigger']").bind('click', function() {
         var $this = this;
-        var uid = $(this).attr("data-id");
+        g5.label.uid = $(this).attr("data-id");
+        g5.label.labelBox = $("#label-box-"+g5.label.uid);
+
         // load label form
         g5.ajaxRequest({
             type: "GET",
             url: Routing.generate("g5_movei_api_label_new")
         }, function(response) {
             // start label form
-            $("#label-form-"+uid).html(response);
-            g5.label.dispatchForm($("#label-form-"+uid), uid);
+            $("#label-form-"+g5.label.uid).html(response);
+            g5.label.dispatchForm($("#label-form-"+g5.label.uid));
         });
     });
 
     // bind label unlink
-    $(".label .close").bind("click", function() {
+    $(".label .label-remove").bind("click", function() {
         var label = $(this).parent(".label");
         var labelId = label.attr('data-labelId');
         var movieId = $(this).parent(".label").attr('data-movieId');
-        g5.label.removeLabel(label, labelId, movieId);
+        g5.label.unlinkLabel(label, labelId, movieId);
     });
 });

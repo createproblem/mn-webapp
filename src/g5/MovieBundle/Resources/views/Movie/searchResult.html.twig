@@ -9,8 +9,12 @@
             <div class="media-body">
                 <h4 class="media-heading">{{ movie.original_title }}</h4>
                 <div>
-                    <a class="btn btn-small btnAdd" data-tmdbId="{{ movie.id }}"><i class="icon-plus"></i> Add</a>
-                    <a class="btn btn-small btnMore" data-tmdbId="{{ movie.id }}"><i class="icon-download"></i> More</a>
+                    <button class="btn btn-sm btnAdd" data-tmdbId="{{ movie.id }}">
+                        <span class="glyphicon glyphicon-plus"></span> Add
+                    </button>
+                    <button class="btn btn-sm btnMore" data-tmdbId="{{ movie.id }}">
+                        <span class="glyphicon glyphicon-download"></span> More
+                    </button>
                 </div>
                 <br>
                 Release: {{ movie.release_date|date("Y") }}<br>
