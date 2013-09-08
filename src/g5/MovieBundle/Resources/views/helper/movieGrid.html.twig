@@ -5,8 +5,9 @@
         <div class="row">
     {% endif %}
 
-    <div class="col-lg-6">
+    <div class="col-xs-12 col-md-6">
         {% include 'g5MovieBundle:helper:movieObject.html.twig' with { "movie": movie, "imgUrl": imgUrl } %}
+        <div class="clearfix visible-xs"></div>
     </div>
 
     {% if loop.index % 2 == 0 %}

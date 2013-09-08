@@ -92,9 +92,9 @@ class LinkFormHandler
                 return false;
             } else {
                 $movie->addLabel($label);
-                $this->mm->updateMovie($movie);
             }
 
+            $this->mm->updateMovie($movie);
             return $label;
         }
 
