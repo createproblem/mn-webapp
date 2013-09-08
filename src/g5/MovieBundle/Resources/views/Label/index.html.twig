@@ -11,3 +11,17 @@
 </div>
 
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5MovieBundle/Resources/public/js/label.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets '@g5MovieBundle/Resources/public/css/movie.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
