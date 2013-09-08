@@ -17,6 +17,7 @@ g5.label.storage = [];
 g5.label.uid = 0;
 g5.label.labelBox = null;
 g5.label.formContainer = null;
+g5.label.query = null;
 
 /**
  * @param  string labelName
@@ -26,7 +27,7 @@ g5.label.formContainer = null;
 g5.label.searchStorage = function(labelName) {
     var retLabel = null;
     $.each(g5.label.storage, function(index, label) {
-        if (label.name === labelName) {
+        if (label.name.toLowerCase() === labelName.toLowerCase()) {
             retLabel = label;
 
             return;
@@ -122,7 +123,7 @@ g5.label.linkLabel = function(event, ui)
  */
 g5.label.findLabels = function(request, process)
 {
-    var query = request.term;
+    g5.label.query = request.term;
     g5.label.storage = [];
 
     if (g5.label.jqxhr !== null) {
@@ -131,7 +132,7 @@ g5.label.findLabels = function(request, process)
 
     g5.label.jqxhr = g5.ajaxRequest({
         type: "GET",
-        url: Routing.generate("g5_movie_api_label_find", {"query": query})
+        url: Routing.generate("g5_movie_api_label_find", {"query": g5.label.query})
     }, function(response) {
         var labels = [];
         $.each(response.labels, function(index, label) {
@@ -142,10 +143,10 @@ g5.label.findLabels = function(request, process)
             });
         });
 
-        if (g5.label.searchStorage(query) === null) {
+        if (g5.label.searchStorage(g5.label.query) === null) {
             labels.push({
-                "label": query,
-                "value": query
+                "label": g5.label.query,
+                "value": g5.label.query
             });
         }
 
