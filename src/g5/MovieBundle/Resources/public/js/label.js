@@ -111,6 +111,8 @@ g5.label.linkLabel = function(event, ui)
     }, function(response) {
         if (response.status === "OK") {
             g5.label.renderLabel(response.label, g5.label.uid);
+        } else {
+            g5.label.formContainer.hide();
         }
     });
 };
