@@ -3,12 +3,44 @@
 {% extends '::base.html.twig' %}
 {% block title %}Home{% endblock %}
 {% block body %}
-<div class="row-fluid">
-    <div class="span10 offset1">
-        <div class="page-header">
-            <h1>Node.js <small>Examples</small></h1>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Welcome to Movie Nightmare</h1>
+        <p>Movie Nightmare is a platform for your private moviethek. Catalogue your entire movie collection and keep track of it anytime and anywhere.</p>
+        <p>
+            <a class="btn btn-primary btn-lg">Let's Go &raquo;</a>
+        </p>
+    </div>
+</div>
+
+<div class="container">
+      <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Broadcast</h2>
+            <p>
+                Public beta has been started. Create your account now and start to catalogue your movies.
+            </p>
         </div>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versi ons of Lorem Ipsum.
+        <div class="col-lg-4">
+            <h2>Features</h2>
+            <p>
+                <a href="http://www.themoviedb.org/">The Movie Database (TMDB)</a> API provides the movies you looking for.
+                You can easely add new movies by search TMDB. Add labels to each movie you add to categorize your moviethek.
+            </p>
+        </div>
+    <div class="col-lg-4">
+        <h2>Coming Soon</h2>
+        <p>The following features will be implemented soon.
+            <ul>
+                <li>Importer / Exporter</li>
+                Import your digital library and export it.
+                <li>Bookmarks</li>
+                With Bookmarks you can create watchlists and other stuff.
+                <li>Bloody-Pages</li>
+                Create and share Bloody-Pages to show other guys your awesome moviethek.
+            </ul>
+        </p>
     </div>
 </div>
 {% endblock %}

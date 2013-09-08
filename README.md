@@ -1,8 +1,7 @@
 Movie Nightmare
 ===============
 
-Welcome to Movie Nightmare, a small mediathek platform.
-This application is a product of [G5Network][1]
+Welcome to Movie Nightmare, a small moviethek platform.
 
 [![Build Status](https://travis-ci.org/createproblem/mn-webapp.png?branch=master)](https://travis-ci.org/createproblem/mn-webapp)
 
@@ -19,7 +18,13 @@ Now, install or update the libraries with the following command:
 
     php composer.phar install
 
-Run this command on the top of the g5webapp directory.
+Run this command on the top of the mn-webapp directory.
+
+Build all assets by running
+
+    php app/console assets:install
+    php app/console assetic:dump
+
 
 2) Requirements
 ---------------
@@ -27,11 +32,10 @@ The following package list is necessary to run g5webapp.
 
 *   [PHP][3]
 
-    Version 5.4.1 or higher is needed.
+    Version 5.3.3 or higher is needed.
 
-*   [MongoDB][4]
+*   [MySQL][4]
 
-    The Mongo DB itself is needed and the [Mongo DB driver][5] for PHP is also necessary.
 
 3) Configuration
 ----------------
@@ -43,7 +47,6 @@ Create a new user to enter the secured area.
 
 Enjoy!
 
-[1]:  http://www.g5network.org/
 [2]:  https://getcomposer.org/
 [3]:  http://www.php.net/
 [4]:  http://www.mongodb.org/
