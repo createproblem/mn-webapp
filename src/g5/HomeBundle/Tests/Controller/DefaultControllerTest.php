@@ -13,6 +13,6 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        $this->assertTrue($crawler->filter('html:contains("Node.js")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Welcome to Movie Nightmare")')->count() > 0);
     }
 }
