@@ -95,7 +95,9 @@ abstract class g5WebTestCase extends WebTestCase
         $movie->setTitle('Power Rangers');
         $movie->setReleaseDate(new DateTime(1995));
         $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_9070.txt'));
-        $movie->setCoverUrl('/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg');
+        $movie->setPosterPath('/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg');
+        $movie->setBackdropPath('/u5jVc4Ks48ldQ4hvHos0JxCDhg4.jpg');
+        $movie->setCreatedAt(new \DateTime());
         $movie->setUser($user);
 
         if (true === $save) {

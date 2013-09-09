@@ -8,6 +8,12 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('g5HomeBundle:Default:index.html.twig');
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
+        $result = $tmdbApi->getMovie(277);
+        // var_dump($tmdbApi->dumpUrl());
+        // var_dump($tmdbApi->getImageUrl('w300').$result['backdrop_path']);
+        // var_dump($result);
+
+        return $this->render('g5HomeBundle:Default:test.html.twig');
     }
 }

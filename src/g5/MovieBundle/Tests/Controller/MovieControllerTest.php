@@ -43,7 +43,7 @@ class MovieControllerTest extends \g5WebTestCase
 
         $crawler = $this->client->request('GET', '/movie');
 
-        $this->assertEquals(20, $crawler->filter('h4')->count());
+        $this->assertEquals(4, $crawler->filter('h4')->count());
     }
 
     public function testNewAction()

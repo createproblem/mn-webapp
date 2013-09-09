@@ -1,8 +1,15 @@
 <?php
 
-namespace g5\MovieBundle\Entity;
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
-use Doctrine\ORM\Mapping as ORM;
+namespace g5\MovieBundle\Entity;
 
 use g5\MovieBundle\Entity\Model\MovieAbstract as MovieBase;
 
@@ -32,11 +39,6 @@ class Movie extends MovieBase
     private $overview;
 
     /**
-     * @var string
-     */
-    private $cover_url;
-
-    /**
      * @var \DateTime
      */
     private $release_date;
@@ -50,6 +52,21 @@ class Movie extends MovieBase
      * @var \g5\AccountBundle\Entity\User
      */
     private $user;
+
+    /**
+     * @var string
+     */
+    private $backdrop_path;
+
+    /**
+     * @var string
+     */
+    private $poster_path;
+
+    /**
+     * @var \DateTime
+     */
+    private $created_at;
 
     /**
      * Constructor
@@ -139,29 +156,6 @@ class Movie extends MovieBase
     }
 
     /**
-     * Set cover_url
-     *
-     * @param string $coverUrl
-     * @return Movie
-     */
-    public function setCoverUrl($coverUrl)
-    {
-        $this->cover_url = $coverUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get cover_url
-     *
-     * @return string
-     */
-    public function getCoverUrl()
-    {
-        return $this->cover_url;
-    }
-
-    /**
      * Set release_date
      *
      * @param \DateTime $releaseDate
@@ -238,5 +232,74 @@ class Movie extends MovieBase
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set backdrop_path
+     *
+     * @param string $backdropPath
+     * @return Movie
+     */
+    public function setBackdropPath($backdropPath)
+    {
+        $this->backdrop_path = $backdropPath;
+
+        return $this;
+    }
+
+    /**
+     * Get backdrop_path
+     *
+     * @return string
+     */
+    public function getBackdropPath()
+    {
+        return $this->backdrop_path;
+    }
+
+    /**
+     * Set poster_path
+     *
+     * @param string $posterPath
+     * @return Movie
+     */
+    public function setPosterPath($posterPath)
+    {
+        $this->poster_path = $posterPath;
+
+        return $this;
+    }
+
+    /**
+     * Get poster_path
+     *
+     * @return string
+     */
+    public function getPosterPath()
+    {
+        return $this->poster_path;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Movie
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
 }

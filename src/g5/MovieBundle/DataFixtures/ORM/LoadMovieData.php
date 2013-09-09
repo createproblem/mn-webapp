@@ -39,24 +39,24 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function load(ObjectManager $manager)
     {
-        $fh = fopen(dirname(__DIR__).'/../../../../app/Resources/meta/TestData/movies.csv', 'r');
-        $user = $this->getReference('test-user');
+        $dataFiles = array(
+            dirname(__DIR__).'/../../../../app/Resources/meta/TestData/1562.json',
+            dirname(__DIR__).'/../../../../app/Resources/meta/TestData/26587.json',
+            dirname(__DIR__).'/../../../../app/Resources/meta/TestData/277.json',
+            dirname(__DIR__).'/../../../../app/Resources/meta/TestData/550.json',
+        );
 
+        $user = $this->getReference('test-user');
         $labels = array('horror', 'action', 'top-hits');
 
-        while (($data = fgetcsv($fh)) !== false) {
+        foreach ($dataFiles as $file) {
             $labelN = $labels[array_rand($labels)];
             $label = $this->getReference('label-'.$labelN);
 
-            $movie = new Movie();
-
-            $movie->setTmdbId($data[1]);
-            $movie->setTitle($data[2]);
-            $movie->setReleaseDate(new \DateTime($data[3]));
-            $movie->setCoverUrl($data[4]);
-            $movie->setOverview($data[5]);
-            $movie->setUser($user);
+            $data = file_get_contents($file);
+            $movie = $this->createMovieFromData(json_decode($data, true));
             $movie->addLabel($label);
+            $movie->setUser($user);
 
             $manager->persist($movie);
         }
@@ -70,5 +70,20 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
     public function getOrder()
     {
         return 3;
+    }
+
+    private function createMovieFromData($data)
+    {
+        $movie = new Movie();
+
+        $movie->setTmdbId($data['id']);
+        $movie->setOverview($data['overview']);
+        $movie->setTitle($data['original_title']);
+        $movie->setPosterPath($data['poster_path']);
+        $movie->setBackdropPath($data['backdrop_path']);
+        $movie->setReleaseDate(new \DateTime($data['release_date']));
+        $movie->setCreatedAt(new \DateTime());
+
+        return $movie;
     }
 }

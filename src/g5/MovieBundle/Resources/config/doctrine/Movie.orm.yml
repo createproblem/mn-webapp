@@ -8,10 +8,6 @@ g5\MovieBundle\Entity\Movie:
         id:
             type: integer
             generator: { strategy: auto }
-        # tmdb_id:
-        #     type: integer
-        # user_id:
-        #     type: integer
 
     fields:
         tmdb_id:
@@ -20,10 +16,14 @@ g5\MovieBundle\Entity\Movie:
             type: string
         overview:
             type: text
-        cover_url:
+        poster_path:
+            type: string
+        backdrop_path:
             type: string
         release_date:
             type: date
+        created_at:
+            type: datetime
 
     uniqueConstraints:
         user_tmdb_idx:

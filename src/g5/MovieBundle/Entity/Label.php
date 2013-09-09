@@ -1,8 +1,15 @@
 <?php
 
-namespace g5\MovieBundle\Entity;
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
-use Doctrine\ORM\Mapping as ORM;
+namespace g5\MovieBundle\Entity;
 
 use g5\MovieBundle\Entity\Model\LabelAbstract as LabelBase;
 
@@ -35,6 +42,11 @@ class Label extends LabelBase
      * @var \g5\AccountBundle\Entity\User
      */
     private $user;
+
+    /**
+     * @var integer
+     */
+    private $movie_count = 0;
 
     /**
      * Constructor
@@ -154,5 +166,28 @@ class Label extends LabelBase
     public function getNameNorm()
     {
         return $this->name_norm;
+    }
+
+    /**
+     * Set movie_count
+     *
+     * @param integer $movieCount
+     * @return Label
+     */
+    public function setMovieCount($movieCount)
+    {
+        $this->movie_count = $movieCount;
+
+        return $this;
+    }
+
+    /**
+     * Get movie_count
+     *
+     * @return integer
+     */
+    public function getMovieCount()
+    {
+        return $this->movie_count;
     }
 }

@@ -14,6 +14,8 @@ g5\MovieBundle\Entity\Label:
             type: string
         name_norm:
             type: string
+        movie_count:
+            type: integer
 
     manyToOne:
         user:

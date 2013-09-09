@@ -60,8 +60,10 @@ class MovieManager
         $movie->setTmdbid($tmdbId);
         $movie->setOverview($res['overview']);
         $movie->setTitle($res['original_title']);
-        $movie->setCoverUrl($res['poster_path']);
+        $movie->setPosterPath($res['poster_path']);
+        $movie->setBackdropPath($res['backdrop_path']);
         $movie->setReleaseDate(new \DateTime($res['release_date']));
+        $movie->setCreatedAt(new \DateTime());
 
         return $movie;
     }
