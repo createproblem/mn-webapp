@@ -1,9 +1,19 @@
 <?php
 
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
 namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use g5\MovieBundle\Entity\Label;
+use g5\AccountBundle\Entity\User;
 
 /**
  * MovieRepository
@@ -27,6 +37,40 @@ class MovieRepository extends EntityRepository
         if ($limit !== null) {
             $qb->setMaxResults($limit);
         }
+
+        $q = $qb->getQuery();
+
+        return $q->getResult();
+    }
+
+    /**
+     * Loads random movies by user
+     *
+     * @param  User    $user
+     *
+     * @return array
+     */
+    public function findMovieIdsByUser(User $user)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select('m.id')
+            ->where('m.user = :user')
+            ->setParameter(':user', $user);
+
+        $q = $qb->getQuery();
+
+        return $q->getResult();
+    }
+
+    /**
+     * @param  array  $movieIds
+     *
+     * @return array
+     */
+    public function findMoviesByIds(array $movieIds)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->where($qb->expr()->in('m.id', $movieIds));
 
         $q = $qb->getQuery();
 

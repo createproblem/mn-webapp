@@ -98,4 +98,9 @@ class LabelManager
         $this->em->remove($label);
         $this->em->flush();
     }
+
+    public function LoadTopLabels(\g5\AccountBundle\Entity\User $user, $limit = 5)
+    {
+        return $this->findLabelsBy(array('user' => $user), array('movie_count' => 'DESC'), $limit);
+    }
 }

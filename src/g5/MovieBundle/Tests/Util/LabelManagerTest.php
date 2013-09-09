@@ -106,4 +106,19 @@ class LabelManagerTest extends \KernelAwareTest
 
         $this->deleteLabel($expectedLabel);
     }
+
+    public function testLoadTopLabels()
+    {
+        $label = $this->createTestLabel();
+        $user = $this->loadTestUser();
+
+        $label->setMovieCount(99);
+        $this->lm->updateLabel($label);
+
+        $labels = $this->lm->loadTopLabels($user);
+
+        $this->assertEquals($labels[0]->getId(), $label->getId());
+
+        $this->deleteLabel($label);
+    }
 }

@@ -20,6 +20,7 @@ g5\MovieBundle\Entity\Label:
     manyToOne:
         user:
             targetEntity: g5\AccountBundle\Entity\User
+            inversedBy: labels
             joinColumn:
                 name: user_id
                 referencedColumnName: id

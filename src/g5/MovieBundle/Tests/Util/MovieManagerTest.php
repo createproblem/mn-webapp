@@ -122,4 +122,27 @@ class MovieManagerTest extends \KernelAwareTest
         $this->deleteLabel($label);
         $this->deleteMovie($movie);
     }
+
+    public function testLoadLatestMovies()
+    {
+        $user = $this->loadTestUser();
+        $movie = $this->createTestMovie();
+        $movies = $this->mm->loadLatestMovies($user);
+
+        $this->assertEquals($movies[0]->getId(), $movie->getId());
+
+        $this->deleteMovie($movie);
+    }
+
+    public function testLoadRandomMovies()
+    {
+        $user = $this->loadTestUser();
+        $movies = $this->mm->loadRandomMovies($user, 1);
+
+        $this->assertEquals(1, count($movies));
+
+        $movies = $this->mm->loadRandomMovies($user, 5);
+
+        $this->assertEquals(5, count($movies));
+    }
 }

@@ -132,4 +132,35 @@ class MovieManager
         $this->em->remove($movie);
         $this->em->flush();
     }
+
+    /**
+     * @param  User     $user
+     * @param  int      $limit
+     *
+     * @return array
+     */
+    public function loadLatestMovies(\g5\AccountBundle\Entity\User $user, $limit = 12)
+    {
+        return $this->findMoviesBy(array('user' => $user), array('created_at' => 'DESC'), $limit);
+    }
+
+    public function loadRandomMovies(\g5\AccountBundle\Entity\User $user, $limit = 5)
+    {
+        $ids = $this->repository->findMovieIdsByUser($user);
+
+        $randomIds = array_rand($ids, $limit);
+        if (!is_array($randomIds)) {
+            $randomIds = array($randomIds);
+        }
+
+        $movieIds = array();
+
+        foreach($randomIds as $id) {
+            array_push($movieIds, $ids[$id]['id']);
+        }
+
+        $movies = $this->repository->findMoviesByIds($movieIds);
+
+        return $movies;
+    }
 }

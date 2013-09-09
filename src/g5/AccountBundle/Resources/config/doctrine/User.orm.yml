@@ -11,3 +11,7 @@ g5\AccountBundle\Entity\User:
         movies:
             targetEntity: g5\MovieBundle\Entity\Movie
             mappedBy: user
+
+        labels:
+            targetEntity: g5\MovieBundle\Entity\Label
+            mappedBy: user

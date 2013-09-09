@@ -23,6 +23,11 @@ class User extends BaseUser
      */
     private $movies;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $labels;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -70,5 +75,38 @@ class User extends BaseUser
     public function getMovies()
     {
         return $this->movies;
+    }
+
+    /**
+     * Add labels
+     *
+     * @param \g5\MovieBundle\Entity\Label $labels
+     * @return User
+     */
+    public function addLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels[] = $labels;
+
+        return $this;
+    }
+
+    /**
+     * Remove labels
+     *
+     * @param \g5\MovieBundle\Entity\Label $labels
+     */
+    public function removeLabel(\g5\MovieBundle\Entity\Label $labels)
+    {
+        $this->labels->removeElement($labels);
+    }
+
+    /**
+     * Get labels
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLabels()
+    {
+        return $this->labels;
     }
 }
