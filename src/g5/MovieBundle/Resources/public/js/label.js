@@ -176,6 +176,23 @@ g5.label.unlinkLabel = function(label, labelId, movieId)
 };
 
 /**
+ *  Deletes a Label permanently
+ *
+ * @param  int labelId
+ */
+g5.label.deleteLabel = function(labelId)
+{
+    g5.ajaxRequest({
+        type: "GET",
+        url: Routing.generate('g5_movie_api_label_delete', { labelId: labelId })
+    }, function(response) {
+        if (response.status === 'OK') {
+            console.log(response);
+        }
+    });
+};
+
+/**
  * @param  Object       formContainer
  * @param  string|int   uid             Unituqe id (need for multiple implemenation)
  */
@@ -222,5 +239,11 @@ $(document).ready(function() {
         var labelId = label.attr('data-labelId');
         var movieId = $(this).parent(".label").attr('data-movieId');
         g5.label.unlinkLabel(label, labelId, movieId);
+    });
+
+    // bind label delete button on label view
+    $("#btnDeleteLabel").bind('click', function() {
+        var labelId = $(this).attr("data-labelId");
+        g5.label.deleteLabel(labelId);
     });
 });

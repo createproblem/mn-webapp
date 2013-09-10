@@ -50,5 +50,6 @@ $(document).ready(function() {
     $("#gui-control").bind("click", function() {
         $("[id|='label-trigger']").toggle();
         $(".label .label-remove").toggle();
+        $("#btnDeleteLabel").toggle();
     });
 });

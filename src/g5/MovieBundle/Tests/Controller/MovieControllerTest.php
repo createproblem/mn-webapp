@@ -218,7 +218,7 @@ class MovieControllerTest extends \g5WebTestCase
 
         $crawler = $this->client->request('GET', '/movie/unlabeled');
 
-        $this->assertEquals(1, $crawler->filter('h4')->count());
+        $this->assertGreaterThan(0, $crawler->filter('h4')->count());
 
         $this->deleteMovie($movie);
     }

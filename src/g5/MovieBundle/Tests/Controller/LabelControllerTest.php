@@ -56,4 +56,13 @@ class LabelControllerTest extends \g5WebTestCase
         $this->mm->removeMovie($movie);
         $this->lm->removeLabel($label);
     }
+
+    public function testIndexAction404()
+    {
+        $this->login($this->client);
+
+        $this->client->request('GET', '/movie/label/test097698');
+
+        $this->assertFalse($this->client->getResponse()->isSuccessful());
+    }
 }

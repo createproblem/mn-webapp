@@ -283,6 +283,33 @@ class ApiControllerTest extends \g5WebTestCase
         $this->deleteLabel($label);
     }
 
+    public function testLabelDeleteAction()
+    {
+        $this->login($this->client);
+        $label = $this->createTestLabel();
+
+        $expected = 'OK';
+
+        $this->apiRequest('GET', '/label/delete', array('labelId' => $label->getId()));
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expected, $compare['status']);
+    }
+
+    public function testLabelDeleteActionError()
+    {
+        $this->login($this->client);
+
+        $expected = 'ERROR';
+
+        $this->apiRequest('GET', '/label/delete', array('labelId' => 999987457));
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expected, $compare['status']);
+    }
+
     private function apiRequest($mehtod, $action, $data)
     {
         $this->client->request($mehtod, '/movie/api'.$action,

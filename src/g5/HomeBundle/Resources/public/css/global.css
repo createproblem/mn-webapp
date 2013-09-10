@@ -37,3 +37,16 @@
     text-decoration: none;
     margin-right: 3px;
 }
+
+.movie-thumbnail-sm
+{
+    max-height: 135px;
+}
+
+.margin-left-xs {
+    margin-left: 3px;
+}
+
+.margin-bottom-xs {
+    margin-bottom: 3px;
+}

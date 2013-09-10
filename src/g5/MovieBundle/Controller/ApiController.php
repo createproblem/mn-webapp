@@ -96,6 +96,37 @@ class ApiController extends Controller
     }
 
     /**
+     * Delets a label permanently
+     *
+     * @param  Request $request
+     *
+     * @return JsonResponse
+     */
+    public function labelDeleteAction(Request $request)
+    {
+        $user = $this->getUser();
+        $lm = $this->get('g5_movie.label_manager');
+        $labelId = $request->query->get('labelId');
+
+        $label = $lm->findLabelBy(array('id' => $labelId, 'user' => $user));
+
+        if (null !== $label) {
+            $lm->removeLabel($label);
+            $jsonData = array(
+                'status' => 'OK',
+                'message' => 'Label deleted.',
+            );
+        } else {
+            $jsonData = array(
+                'status' => 'ERROR',
+                'message' => 'Label could not be deleted.',
+            );
+        }
+
+        return new JsonResponse($jsonData);
+    }
+
+    /**
      * Unlinks a Label from a Movie
      *
      * @return JsonResponse

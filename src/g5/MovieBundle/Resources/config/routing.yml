@@ -18,6 +18,12 @@ g5_movie_api_label_add:
     options:
         expose: true
 
+g5_movie_api_label_delete:
+    pattern: /api/label/delete
+    defaults: { _controller: g5MovieBundle:Api:labelDelete }
+    options:
+        expose: true
+
 g5_movie_api_unlink:
     pattern: /api/unlink
     defaults: { _controller: g5MovieBundle:Api:unlink }

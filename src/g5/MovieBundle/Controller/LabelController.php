@@ -28,6 +28,10 @@ class LabelController extends Controller
 
         $label = $lm->findLabelBy(array('user' => $user, 'name_norm' => $name));
 
+        if (null === $label) {
+            throw $this->createNotFoundException('Label does not exist.');
+        }
+
         $movieCount = count($label->getMovies());
         $limit = 20;
         $offset = ($page - 1) * $limit;
@@ -53,6 +57,7 @@ class LabelController extends Controller
             'movies' => $movies,
             'imgUrl' => $tmdbApi->getImageUrl('w185'),
             'pagination' => $pagination,
+            'curLabel' => $label,
         ));
     }
 }

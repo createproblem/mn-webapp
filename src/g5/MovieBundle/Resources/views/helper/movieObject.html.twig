@@ -9,7 +9,12 @@
         <div id="label-form-{{ uid }}" style="display: none;"></div>
         <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}
-                {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
+                {#% if curLabel is not defined %}
+                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
+                {% elseif curLabel.getNameNorm() != label.getNameNorm() %}
+                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
+                {% endif %#}
+                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
             {% endfor %}
         </div>
         <br>

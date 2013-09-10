@@ -20,18 +20,14 @@ class DefaultController extends Controller
         $text = "Hello World"; //10
         $truncated = (strlen($text) > 5) ? substr($text, 0, 20) . '...' : $text;
 
-        $movies = $user->getMovies();
-        $labels = $user->getLabels();
+        $labels = $lm->findLabelsBy(array('user' => $user), array('movie_count' => 'DESC'));
         $latestMovies = $mm->loadLatestMovies($user);
-        $topLabels = $lm->loadTopLabels($user);
-        $randomMovies = $mm->loadRandomMovies($user);
+        $randomMovies = $mm->loadRandomMovies($user, 25);
         shuffle($randomMovies);
 
         return $this->render('g5HomeBundle:Default:test.html.twig', array(
-            'movies' => $movies,
             'latestMovies' => $latestMovies,
             'labels' => $labels,
-            'topLabels' => $topLabels,
             'randomMovies' => $randomMovies,
             'imgUrl_w1280' => $tmdbApi->getImageUrl('w1280'),
             'imgUrl_w92' => $tmdbApi->getImageUrl('w92'),
