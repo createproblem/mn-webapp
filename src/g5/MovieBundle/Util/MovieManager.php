@@ -144,23 +144,37 @@ class MovieManager
         return $this->findMoviesBy(array('user' => $user), array('created_at' => 'DESC'), $limit);
     }
 
+    /**
+     * @param  g5AccountBundleEntityUser $user
+     * @param  integer                   $limit
+     *
+     * @return array
+     */
     public function loadRandomMovies(\g5\AccountBundle\Entity\User $user, $limit = 5)
     {
         $ids = $this->repository->findMovieIdsByUser($user);
 
-        $randomIds = array_rand($ids, $limit);
-        if (!is_array($randomIds)) {
-            $randomIds = array($randomIds);
+        $limit = (count($ids) > $limit ? $limit : count($ids));
+
+        $randomIdKeys = array_rand($ids, $limit);
+
+        if (!is_array($randomIdKeys)) {
+            $randomIdKeys = array($randomIdKeys);
+        }
+        $randomIds = array();
+
+        foreach ($randomIdKeys as $id) {
+            array_push($randomIds, $ids[$id]);
         }
 
-        $movieIds = array();
 
-        foreach($randomIds as $id) {
-            array_push($movieIds, $ids[$id]['id']);
-        }
-
-        $movies = $this->repository->findMoviesByIds($movieIds);
+        $movies = $this->repository->findMoviesByIds($randomIds);
 
         return $movies;
+    }
+
+    public function findMoviesWithoutLabel(\g5\AccountBundle\Entity\User $user, $limit = null, $offset = null)
+    {
+        return $this->repository->findBy(array('user' => $user, 'label_count' => 0), array(), $limit, $offset);
     }
 }

@@ -65,6 +65,7 @@ class ApiControllerTest extends \g5WebTestCase
     public function testLabelAddAction()
     {
         $this->login($this->client);
+        $label = $this->createTestLabel();
 
         // pre setup
         $movie = $this->createTestMovie();
@@ -80,7 +81,7 @@ class ApiControllerTest extends \g5WebTestCase
         $this->client->request('POST', '/movie/api/label/add',
             array(
                 'link' => array(
-                    'name' => 'test1',
+                    'name' => $label->getNameNorm(),
                     '_token' => $token,
                     'movie_id' => $movie->getId(),
                 ),
@@ -96,6 +97,7 @@ class ApiControllerTest extends \g5WebTestCase
         $compare = json_decode($this->client->getResponse()->getContent(), true);
         $this->assertEquals($expected, $compare['status']);
 
+        $this->deleteLabel($label);
         $this->deleteMovie($movie);
     }
 

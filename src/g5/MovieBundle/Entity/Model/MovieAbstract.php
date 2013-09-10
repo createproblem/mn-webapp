@@ -39,6 +39,7 @@ abstract class MovieAbstract
     public function addLabel(\g5\MovieBundle\Entity\Label $label)
     {
         $label->setMovieCount($label->getMovieCount() + 1);
+        $this->setLabelCount($this->getLabelCount() + 1);
 
         $movieLabel = new MovieLabel();
         $movieLabel->setMovie($this);
@@ -75,6 +76,7 @@ abstract class MovieAbstract
         foreach ($this->getMovieLabels() as $movieLabel) {
             if ($label->getId() === $movieLabel->getLabel()->getId()) {
                 $label->setMovieCount($label->getMovieCount() - 1);
+                $this->setLabelCount($this->getLabelCount() - 1);
                 $this->removeMovieLabel($movieLabel);
             }
         }

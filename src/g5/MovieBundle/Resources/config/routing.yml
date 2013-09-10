@@ -40,6 +40,12 @@ g5_movie_index:
     requirements:
         page: "\d+"
 
+g5_movie_unlabeled:
+    pattern: /unlabeled/{page}
+    defaults: { _controller: g5MovieBundle:Movie:unlabeled, page: 1 }
+    requirements:
+        page: "\d+"
+
 g5_movie_new:
     pattern: /new
     defaults: { _controller: g5MovieBundle:Movie:new }

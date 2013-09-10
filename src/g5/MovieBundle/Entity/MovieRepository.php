@@ -59,7 +59,14 @@ class MovieRepository extends EntityRepository
 
         $q = $qb->getQuery();
 
-        return $q->getResult();
+        $idsRaw = $q->getResult();
+        $ids = array();
+        // var_dump($idsRaw);
+        foreach ($idsRaw as $id) {
+            array_push($ids, $id['id']);
+        }
+
+        return $ids;
     }
 
     /**

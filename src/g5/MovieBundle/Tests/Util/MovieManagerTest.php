@@ -141,8 +141,23 @@ class MovieManagerTest extends \KernelAwareTest
 
         $this->assertEquals(1, count($movies));
 
-        $movies = $this->mm->loadRandomMovies($user, 5);
+        $movies = $this->mm->loadRandomMovies($user, 4);
 
-        $this->assertEquals(5, count($movies));
+        $this->assertEquals(4, count($movies));
+    }
+
+    public function testFindMoviesWithoutLabel()
+    {
+        $user = $this->loadTestUser();
+        $movies = $this->mm->findMoviesWithoutLabel($user);
+
+        $this->assertEquals(0, count($movies));
+
+        $movie = $this->createTestMovie();
+        $movies = $this->mm->findMoviesWithoutLabel($user);
+
+        $this->assertEquals(1, count($movies));
+
+        $this->deleteMovie($movie);
     }
 }

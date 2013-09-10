@@ -44,6 +44,39 @@ class MovieController extends Controller
         ));
     }
 
+    public function unlabeledAction($page)
+    {
+        $user = $this->getUser();
+        $mm = $this->get('g5_movie.movie_manager');
+        $movieCount = count($mm->findMoviesWithoutLabel($user));
+
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+        $lastPage = ceil($movieCount / $limit);
+
+        $movies = $mm->findMoviesWithoutLabel($user, $limit, $offset);
+
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
+
+        $pagination = array(
+            'page' => $page,
+            'page_items' => $limit,
+            'item_count' => $movieCount,
+            'url' => array(
+                'route' => 'g5_movie_unlabeled',
+                'params' => array(
+                    ':page' => 'page',
+                ),
+            ),
+        );
+
+        return $this->render('g5MovieBundle:Movie:index.html.twig', array(
+            'movies' => $movies,
+            'imgUrl' => $tmdbApi->getImageUrl('w185'),
+            'pagination' => $pagination,
+        ));
+    }
+
     public function newAction()
     {
         $form = $this->createForm(new SearchType());

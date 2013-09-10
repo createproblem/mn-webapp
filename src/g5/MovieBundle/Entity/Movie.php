@@ -69,6 +69,11 @@ class Movie extends MovieBase
     private $created_at;
 
     /**
+     * @var integer
+     */
+    private $label_count = 0;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -301,5 +306,28 @@ class Movie extends MovieBase
     public function getCreatedAt()
     {
         return $this->created_at;
+    }
+
+    /**
+     * Set label_count
+     *
+     * @param integer $labelCount
+     * @return Movie
+     */
+    public function setLabelCount($labelCount)
+    {
+        $this->label_count = $labelCount;
+
+        return $this;
+    }
+
+    /**
+     * Get label_count
+     *
+     * @return integer
+     */
+    public function getLabelCount()
+    {
+        return $this->label_count;
     }
 }

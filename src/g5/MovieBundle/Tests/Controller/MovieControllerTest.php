@@ -201,4 +201,25 @@ class MovieControllerTest extends \g5WebTestCase
         $client->request('POST', '/movie/loadTmdb', array('tmdbId' => 550));
         $this->assertTrue($client->getResponse()->isSuccessful());
     }
+
+    public function testUnlabeledAction()
+    {
+        $this->login($this->client);
+        $movie = $this->createTestMovie();
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->once())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
+
+        $this->client->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+
+        $crawler = $this->client->request('GET', '/movie/unlabeled');
+
+        $this->assertEquals(1, $crawler->filter('h4')->count());
+
+        $this->deleteMovie($movie);
+    }
 }
