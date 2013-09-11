@@ -1,5 +1,13 @@
 <?php
-// /src/g5/MovieBundle/Controller/MovieController
+
+/*
+* This file is part of the mn-webapp package.
+*
+* (c) createproblem <https://github.com/createproblem/>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
 namespace g5\MovieBundle\Controller;
 
@@ -12,7 +20,46 @@ use g5\MovieBundle\Entity\Movie;
 
 class MovieController extends Controller
 {
-    public function indexAction($page)
+    /**
+     * Shows the movie detail view. The movie with the given id will be loaded
+     * with the user as criteria. Only a movie owned by the current user can be displayed.
+     * If the movie cannot be loaded a 404 is thrown.
+     *
+     * @param  int      $id     The Movie Id
+     *
+     * @throws NotFoundException If the movie cannot be loaded
+     *
+     * @return Response
+     */
+    public function indexAction($id)
+    {
+        $mm = $this->get('g5_movie.movie_manager');
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
+        $user = $this->getUser();
+
+        $movie = $mm->loadMovieById($id, $user);
+
+        if (!$movie) {
+            throw $this->createNotFoundException('The requests movie was not found.');
+        }
+
+        return $this->render('g5MovieBundle:Movie:index.html.twig', array(
+            'movie' => $movie,
+            'imgUrl_w185' => $tmdbApi->getImageUrl('w185'),
+            'imgUrl_w300' => $tmdbApi->getImageUrl('w300'),
+            'imgUrl_w780' => $tmdbApi->getImageUrl('w780'),
+            'imgUrl_w342' => $tmdbApi->getImageUrl('w342'),
+        ));
+    }
+
+    /**
+     * List all movies the user owns
+     *
+     * @param  int $page
+     *
+     * @return Response
+     */
+    public function listAction($page)
     {
         $user = $this->getUser();
         $mm = $this->get('g5_movie.movie_manager');
@@ -30,14 +77,14 @@ class MovieController extends Controller
             'page_items' => $limit,
             'item_count' => $movieCount,
             'url' => array(
-                'route' => 'g5_movie_index',
+                'route' => 'g5_movie_list',
                 'params' => array(
                     ':page' => 'page',
                 ),
             ),
         );
 
-        return $this->render('g5MovieBundle:Movie:index.html.twig', array(
+        return $this->render('g5MovieBundle:Movie:list.html.twig', array(
             'movies' => $movies,
             'imgUrl' => $tmdbApi->getImageUrl('w185'),
             'pagination' => $pagination,
@@ -70,7 +117,7 @@ class MovieController extends Controller
             ),
         );
 
-        return $this->render('g5MovieBundle:Movie:index.html.twig', array(
+        return $this->render('g5MovieBundle:Movie:list.html.twig', array(
             'movies' => $movies,
             'imgUrl' => $tmdbApi->getImageUrl('w185'),
             'pagination' => $pagination,

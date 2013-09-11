@@ -29,6 +29,45 @@ class MovieControllerTest extends \g5WebTestCase
     public function testIndexAction()
     {
         $this->login($this->client);
+        $movie = $this->createTestMovie();
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->any())
+            ->method('getImageUrl')
+            ->will($this->returnValue(''))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
+
+        $crawler = $this->client->request('GET', '/movie/'.$movie->getId());
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertEquals(1, $crawler->filter('html:contains("'.$movie->getTitle().'")')->count());
+
+        // Reset MovieManager
+        $mm = $this->mm;
+        static::$kernel->setKernelModifier(function($kernel) use ($mm) {
+            $kernel->getContainer()->set('g5_movie.movie_manager', $mm);
+        });
+        static::$kernel->boot();
+
+        $this->deleteMovie($movie);
+    }
+
+    public function testIndexAction404()
+    {
+        $this->login($this->client);
+
+        $this->client->request('GET', '/movie/987238');
+
+        $this->assertFalse($this->client->getResponse()->isSuccessful());
+    }
+
+    public function testListAction()
+    {
+        $this->login($this->client);
 
         $tmdbMock = $this->getTmdbMock();
         $tmdbMock->expects($this->once())
@@ -41,7 +80,7 @@ class MovieControllerTest extends \g5WebTestCase
             $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
         });
 
-        $crawler = $this->client->request('GET', '/movie');
+        $crawler = $this->client->request('GET', '/movie/list');
 
         $this->assertGreaterThan(1, $crawler->filter('h4')->count());
     }

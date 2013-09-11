@@ -1,11 +1,13 @@
 {% set uid = movie.getId() %}
-<div class="media movie">
+<div class="media margin-bottom-sd">
     <button style="display: none;" id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
         <span class="glyphicon glyphicon-tag"></span>
     </button>
-    <img class="pull-left media-object" src="{{ imgUrl }}{{ movie.getPosterPath() }}">
+    <a class="pull-left" href="{{ path('g5_movie_index', {id: uid}) }}">
+        <img class="media-object" src="{{ imgUrl }}{{ movie.getPosterPath() }}">
+    </a>
     <div class="media-body">
-        <h4 class="media-heading">{{ movie.getTitle() }}</h4>
+        <h4 class="media-heading">{{ movie.getTitle() }} <span class="text-muted">({{ movie.getReleaseDate()|date('Y') }})</span></h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
         <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}

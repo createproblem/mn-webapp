@@ -1,15 +1,7 @@
-{# /src/g5/MovieBundle/Resources/views/Label/index.html.twig #}
+{# /src/g5/MovieBundle/Resources/views/Movie/index.html.twig #}
 {% extends '::base.html.twig' %}
 {% block body %}
 
-<div class="row">
-    <h3>{{ curLabel.getName() }} <span class="badge">{{ curLabel.getMovieCount() }}</span>
-        <button id="btnDeleteLabel" data-labelId="{{ curLabel.getId() }}" class="btn btn-sm btnMore" style="display: none;">
-            <span class="glyphicon glyphicon-remove"></span>
-        </button>
-    </h3>
-</div>
-<br>
 {% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies, "imgUrl": imgUrl } %}
 
 <div class="row">
@@ -18,8 +10,7 @@
     </div>
 </div>
 
-{% endblock body %}
-
+{% endblock %}
 {% block javascripts %}
     {{ parent() }}
     {% javascripts '@g5MovieBundle/Resources/public/js/label.js' %}

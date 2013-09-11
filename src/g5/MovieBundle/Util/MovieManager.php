@@ -14,6 +14,7 @@ namespace g5\MovieBundle\Util;
 use g5\MovieBundle\Entity\Movie;
 use g5\MovieBundle\Entity\Label;
 use g5\MovieBundle\Entity\MovieLabel;
+use g5\AccountBundle\Entity\User;
 
 class MovieManager
 {
@@ -90,21 +91,23 @@ class MovieManager
     }
 
     /**
-     * @param  integer                       $id
-     * @param  \g5\AccountBundle\Entity\User $user
+     * Returns the movie with the given id. If the user is not accoiated
+     * with the user id, the movie cannot be loaded.
+     *
+     * @param  int      $id
+     * @param  User     $user
      *
      * @return Movie|null
      */
-    public function loadMovieById($id, \g5\AccountBundle\Entity\User $user = null)
+    public function loadMovieById($id, User $user = null)
     {
         $criteria = array('id' => $id);
-        if ($user !== null) {
-            $filter['user'] = $user;
+        if (null !== $user) {
+            $criteria['user'] = $user;
         }
 
         $movie = $this->repository->findOneBy($criteria);
 
-        // exception
         return $movie;
     }
 

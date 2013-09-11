@@ -41,8 +41,14 @@ g5_movie_label_index:
 # MovieController
 
 g5_movie_index:
-    pattern: /{page}
-    defaults: { _controller: g5MovieBundle:Movie:index, page: 1 }
+    pattern: /{id}
+    defaults: { _controller: g5MovieBundle:Movie:index }
+    requirements:
+        id: "\d+"
+
+g5_movie_list:
+    pattern: /list/{page}
+    defaults: { _controller: g5MovieBundle:Movie:list, page: 1 }
     requirements:
         page: "\d+"
 

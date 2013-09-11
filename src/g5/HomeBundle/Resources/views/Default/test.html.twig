@@ -62,7 +62,7 @@
                 <div class="row">
                     {% for movie in latestMovies %}
                         <div class="col-xs-2 col-md-2">
-                            <a href="{{ path('g5_movie_index') }}" class="thumbnail movie-thumbnail-sm">
+                            <a href="{{ path('g5_movie_index', { id: movie.getId() }) }}" class="thumbnail movie-thumbnail-sm">
                                 <img src="{{ imgUrl_w92 }}{{ movie.getPosterPath() }}">
                             </a>
                         </div>
