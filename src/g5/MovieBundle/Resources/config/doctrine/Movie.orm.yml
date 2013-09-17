@@ -26,6 +26,8 @@ g5\MovieBundle\Entity\Movie:
             type: datetime
         label_count:
             type: integer
+        favorite:
+            type: boolean
 
     uniqueConstraints:
         user_tmdb_idx:

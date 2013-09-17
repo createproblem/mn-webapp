@@ -1,6 +1,11 @@
 {% extends '::base.html.twig' %}
 {% block body %}
 {% set uid = movie.getId() %}
+{% if movie.isFavorite() %}
+    {% set btnFavoriteClass = "btn-favorite-active" %}
+{% else %}
+    {% set btnFavoriteClass = "btn-favorite" %}
+{% endif %}
 <div class="media">
     <button style="display: none;" id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
         <span class="glyphicon glyphicon-tag"></span>
@@ -9,6 +14,9 @@
     <div class="media-body">
         <h4 class="media-heading">
             {{ movie.getTitle() }} <span class="text-muted">({{ movie.getReleaseDate()|date('Y') }})</span>
+            <button id="favorite-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-xs {{ btnFavoriteClass }}">
+                <span class="glyphicon glyphicon-star"></span>
+            </button>
         </h4>
         <strong>overview</strong><br>
         {{ movie.getOverview() }}
@@ -54,7 +62,9 @@
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts '@g5MovieBundle/Resources/public/js/label.js' %}
+    {% javascripts '@g5MovieBundle/Resources/public/js/label.js'
+        '@g5MovieBundle/Resources/public/js/movie.js'
+    %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

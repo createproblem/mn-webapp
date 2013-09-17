@@ -180,4 +180,22 @@ class MovieManager
     {
         return $this->repository->findBy(array('user' => $user, 'label_count' => 0), array(), $limit, $offset);
     }
+
+    /**
+     * Returns all favorite movies or all movie that are no favorite
+     *
+     * @param  User    $user
+     * @param  boolean $favorite
+     *
+     * @return array
+     */
+    public function loadMoviesByFavorite(User $user, $favorite = true, $limit = null, $offset = null)
+    {
+        $criteria = array(
+            'user' => $user,
+            'favorite' => $favorite,
+        );
+
+        return $this->repository->findBy($criteria, array('title' => 'ASC'), $limit, $offset);
+    }
 }

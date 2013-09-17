@@ -30,6 +30,12 @@ g5_movie_api_unlink:
     options:
         expose: true
 
+g5_movie_api_movie_update_favorite:
+    pattern: /api/movie/updateFavorite
+    defaults: { _controller: g5MovieBundle:Api:movieUpdateFavorite }
+    options:
+        expose: true
+
 # LabelController
 
 g5_movie_label_index:
@@ -49,6 +55,12 @@ g5_movie_index:
 g5_movie_list:
     pattern: /list/{page}
     defaults: { _controller: g5MovieBundle:Movie:list, page: 1 }
+    requirements:
+        page: "\d+"
+
+g5_movie_favorite:
+    pattern: /favorite/{page}
+    defaults: { _controller: g5MovieBundle:Movie:favorite, page: 1 }
     requirements:
         page: "\d+"
 

@@ -1,4 +1,10 @@
 {% set uid = movie.getId() %}
+{% if movie.isFavorite() %}
+    {% set btnFavoriteClass = "btn-favorite-active" %}
+{% else %}
+    {% set btnFavoriteClass = "btn-favorite" %}
+{% endif %}
+
 <div class="media margin-bottom-sd">
     <button style="display: none;" id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
         <span class="glyphicon glyphicon-tag"></span>
@@ -7,7 +13,12 @@
         <img class="media-object" src="{{ imgUrl }}{{ movie.getPosterPath() }}">
     </a>
     <div class="media-body">
-        <h4 class="media-heading">{{ movie.getTitle() }} <span class="text-muted">({{ movie.getReleaseDate()|date('Y') }})</span></h4>
+        <h4 class="media-heading">
+            {{ movie.getTitle() }} <span class="text-muted">({{ movie.getReleaseDate()|date('Y') }})</span>
+            <button id="favorite-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-xs {{ btnFavoriteClass }}">
+                <span class="glyphicon glyphicon-star"></span>
+            </button>
+        </h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
         <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}

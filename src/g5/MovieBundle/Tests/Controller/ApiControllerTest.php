@@ -310,6 +310,35 @@ class ApiControllerTest extends \g5WebTestCase
         $this->assertEquals($expected, $compare['status']);
     }
 
+    public function testMovieUpdateFavoriteAction()
+    {
+        $this->login($this->client);
+        $movie = $this->createTestMovie();
+
+        $expected = 'OK';
+
+        $this->apiRequest('GET', '/movie/updateFavorite', array('movieId' => $movie->getId()));
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expected, $compare['status']);
+
+        $this->deleteMovie($movie);
+    }
+
+    public function testMovieUpdateFavoriteActionError()
+    {
+        $this->login($this->client);
+
+        $expected = 'ERROR';
+
+        $this->apiRequest('GET', '/movie/updateFavorite', array('movieId' => 90879687));
+
+        $compare = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals($expected, $compare['status']);
+    }
+
     private function apiRequest($mehtod, $action, $data)
     {
         $this->client->request($mehtod, '/movie/api'.$action,

@@ -22,7 +22,9 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {% javascripts '@g5MovieBundle/Resources/public/js/label.js' %}
+    {% javascripts '@g5MovieBundle/Resources/public/js/label.js'
+        '@g5MovieBundle/Resources/public/js/movie.js'
+    %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

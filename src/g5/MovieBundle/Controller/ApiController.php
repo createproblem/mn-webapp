@@ -158,4 +158,32 @@ class ApiController extends Controller
 
         return new JsonResponse($data);
     }
+
+    public function movieUpdateFavoriteAction(Request $request)
+    {
+        $movieId = $request->query->get('movieId');
+        $user = $this->getUser();
+        $mm = $this->get('g5_movie.movie_manager');
+
+        $movie = $mm->loadMovieById($movieId, $user);
+
+        if (!$movie) {
+            $jsonData = array(
+                'status' => 'ERROR',
+                'message' => 'Movie does not exist.',
+            );
+        } else {
+            $favorite = ($movie->isFavorite() ? false : true);
+            $movie->setFavorite($favorite);
+            $mm->updateMovie($movie);
+
+            $jsonData = array(
+                'status' => 'OK',
+                'message' => 'Movie favorite status changed.',
+                'data' => $movie->isFavorite(),
+            );
+        }
+
+        return new JsonResponse($jsonData);
+    }
 }

@@ -160,4 +160,19 @@ class MovieManagerTest extends \KernelAwareTest
 
         $this->deleteMovie($movie);
     }
+
+    public function testLoadMoviesByFavorite()
+    {
+        $user = $this->loadTestUser();
+        $movie = $this->createTestMovie();
+
+        $movie->setFavorite(true);
+        $this->mm->updateMovie($movie);
+
+        $movies = $this->mm->loadMoviesByFavorite($user);
+
+        $this->assertGreaterThan(0, count($movies));
+
+        $this->deleteMovie($movie);
+    }
 }

@@ -74,6 +74,11 @@ class Movie extends MovieBase
     private $label_count = 0;
 
     /**
+     * @var boolean
+     */
+    private $favorite = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -329,5 +334,28 @@ class Movie extends MovieBase
     public function getLabelCount()
     {
         return $this->label_count;
+    }
+
+    /**
+     * Set favorite
+     *
+     * @param boolean $favorite
+     * @return Movie
+     */
+    public function setFavorite($favorite)
+    {
+        $this->favorite = $favorite;
+
+        return $this;
+    }
+
+    /**
+     * Get favorite
+     *
+     * @return boolean
+     */
+    public function isFavorite()
+    {
+        return $this->favorite;
     }
 }

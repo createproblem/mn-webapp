@@ -261,4 +261,28 @@ class MovieControllerTest extends \g5WebTestCase
 
         $this->deleteMovie($movie);
     }
+
+    public function testFavoriteAction()
+    {
+        $this->login($this->client);
+        $movie = $this->createTestMovie();
+
+        $movie->setFavorite(true);
+        $this->mm->updateMovie($movie);
+
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->once())
+            ->method('getImageUrl')
+            ->with('w185')
+            ->will($this->returnValue(''))
+        ;
+
+        $this->client->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        $crawler = $this->client->request('GET', '/movie/favorite');
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertGreaterThan(0, $crawler->filter('h4')->count());
+
+        $this->deleteMovie($movie);
+    }
 }

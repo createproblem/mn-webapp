@@ -54,3 +54,19 @@
 .margin-bottom-sd {
     margin-bottom: 5px;
 }
+
+.btn-favorite {
+    color: #FFF;
+}
+
+.btn-favorite:hover {
+    color: #AA0000;
+}
+
+.btn-favorite-active {
+    color: #AA0000;
+}
+
+.btn-favorite-active:hover {
+    color: #FFF;
+}

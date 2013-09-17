@@ -91,6 +91,46 @@ class MovieController extends Controller
         ));
     }
 
+    /**
+     * Show all favorite movies
+     *
+     * @param  int $page [description]
+     *
+     * @return Response
+     */
+    public function favoriteAction($page)
+    {
+        $user = $this->getUser();
+        $mm = $this->get('g5_movie.movie_manager');
+        $movies = $mm->loadMoviesByFavorite($user);
+        $movieCount = count($movies);
+
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+        $lastPage = ceil($movieCount / $limit);
+
+        $movies = $mm->loadMoviesByFavorite($user, true, $limit, $offset);
+        $tmdbApi = $this->get('g5_tools.tmdb.api');
+
+        $pagination = array(
+            'page' => $page,
+            'page_items' => $limit,
+            'item_count' => $movieCount,
+            'url' => array(
+                'route' => 'g5_movie_list',
+                'params' => array(
+                    ':page' => 'page',
+                ),
+            ),
+        );
+
+        return $this->render('g5MovieBundle:Movie:list.html.twig', array(
+            'movies' => $movies,
+            'imgUrl' => $tmdbApi->getImageUrl('w185'),
+            'pagination' => $pagination,
+        ));
+    }
+
     public function unlabeledAction($page)
     {
         $user = $this->getUser();
