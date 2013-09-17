@@ -29,6 +29,16 @@ class DefaultControllerTest extends \g5WebTestCase
         $client = static::createClient();
         $this->login($client);
 
+        $tmdbMock = $this->getTmdbMock();
+        $tmdbMock->expects($this->any())
+            ->method('getImageUrl')
+            ->will($this->returnValue(''))
+        ;
+
+        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
+            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
+        });
+
         $crawler = $client->request('GET', '/');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
