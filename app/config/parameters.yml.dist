@@ -13,6 +13,6 @@ parameters:
     mailer_password:   ~
 
     locale:            en
-    secret:            ThisTokenIsNotSoSecretChangeIt
+    secret:            106d9e49e7c48d1007acf14b4163e6d93b
 
     tmdb_api_key:      ~
