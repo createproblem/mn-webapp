@@ -4,11 +4,12 @@
 <div class="alert alert-info">
     <b>Info:</b> If you don't have an account <a href="{{ path('fos_user_registration_register') }}">create one</a>!
 </div>
-{% if error %}
-    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
-{% endif %}
 
 <div class="col-md-offset-4 col-md-3">
+    {% if error %}
+        <div class="text-danger">{{ error|trans({}, 'FOSUserBundle') }}</div>
+    {% endif %}
+
     <form role="form" action="{{ path("fos_user_security_check") }}" method="post">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
