@@ -18,6 +18,10 @@ body {
   font-size: 21px;
 }
 
+.margin-top-xs {
+    margin-top: 50px;
+}
+
 /* custom */
 .footer {
     margin-top: 20px;
