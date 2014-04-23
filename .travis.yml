@@ -14,6 +14,7 @@ matrix:
 branches:
     except:
         - experimental
+        - redesign
 
 before_script:
     # - pecl install -f mongo-1.3.7
