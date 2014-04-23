@@ -23,7 +23,7 @@ class DefaultController extends Controller
 
         return $this->render('g5HomeBundle:Default:test.html.twig', array(
             'latestMovies' => $latestMovies,
-            'imgUrl_w1280' => $tmdbApi->getImageUrl('w1280'),
+            'imgUrl_w1280' => $tmdbApi->getImageUrl('w780'),
         ));
     }
 }
