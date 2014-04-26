@@ -53,6 +53,13 @@
 
     <script type="text/javascript">window.jQuery || document.write('{% javascripts '@g5HomeBundle/Resources/public/js/jquery.min.js' %}<script type="text/javascript" src="{{ asset_url }}"><\/script>{% endjavascripts %}');</script>
 
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    {% javascripts
+        '@g5HomeBundle/Resources/public/js/global.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
     {% block javascripts %}{% endblock %}
   </body>
