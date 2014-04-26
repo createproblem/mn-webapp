@@ -25,7 +25,8 @@
         "g5/tools-bundle": "dev-master",
         "doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "jms/serializer-bundle": "dev-master"
+        "jms/serializer-bundle": "dev-master",
+        "guzzle/guzzle": "~3.8"
     },
     "scripts": {
         "post-install-cmd": [
