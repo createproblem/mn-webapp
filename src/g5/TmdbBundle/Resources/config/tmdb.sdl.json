@@ -1,0 +1,81 @@
+{
+    "name": "Tmdb",
+    "apiVersion": "3",
+    "baseUrl": "https://api.themoviedb.org/3",
+    "description": "Tmdb REST API client",
+    "operations": {
+        "GetConfiguration": {
+            "httpMethod": "GET",
+            "uri": "configuration",
+            "summary": "Get the system wide configuration information.",
+            "responseClass": "GetConfigurationOutput"
+        },
+        "GetSearchMovie": {
+            "httpMethod": "GET",
+            "uri": "search/movie",
+            "summary": "Search for movies by title.",
+            "responseClass": "GetSearchMovieOutput",
+            "parameters": {
+                "query": {
+                    "location": "query",
+                    "required": true
+                }
+            }
+        },
+        "GetMovie": {
+            "httpMethod": "GET",
+            "uri": "movie/{id}",
+            "summary": "Get the basic movie information for a specific movie id.",
+            "responseClass": "GetMovieOutput",
+            "parameters": {
+                "id": {
+                    "location": "uri",
+                    "type": "integer",
+                    "required": true
+                },
+                "append_to_response": {
+                    "location": "query"
+                }
+            }
+        },
+        "GetMovieImages": {
+            "httpMethod": "GET",
+            "uri": "movie/{id}/images",
+            "summary": "Get the images (posters and backdrops) for a specific movie id.",
+            "responseClass": "GetMovieImagesOutput",
+            "parameters": {
+                "id": {
+                    "location": "uri",
+                    "type": "integer",
+                    "required": true
+                }
+            }
+        }
+    },
+    "models": {
+        "GetConfigurationOutput": {
+            "type": "object",
+            "additionalProperties": {
+                "location": "json"
+            }
+        },
+        "GetSearchMovieOutput": {
+            "type": "object",
+            "additionalProperties": {
+                "location": "json"
+            }
+        },
+        "GetMovieOutput": {
+            "type": "object",
+            "additionalProperties": {
+                "location": "json"
+            }
+        },
+        "GetMovieImagesOutput": {
+            "type": "object",
+            "additionalProperties": {
+                "location": "json"
+            }
+        }
+    }
+}

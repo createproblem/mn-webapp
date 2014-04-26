@@ -1,0 +1,10 @@
+parameters:
+    tmdb_class: g5\TmdbBundle\Components\Api\TmdbApiClient
+
+services:
+    g5_tmdb.api.default:
+        class: "%tmdb_class%"
+        factory_class: "%tmdb_class%"
+        factory_method: factory
+        arguments:
+            - { "api_key": "%g5_tmdb.api_key%" }

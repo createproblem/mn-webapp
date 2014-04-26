@@ -98,6 +98,9 @@ g5_tools:
     tmdb:
         api_key: "%tmdb_api_key%"
 
+g5_tmdb:
+    api_key: "%tmdb_api_key%"
+
 jms_serializer:
     metadata:
         auto_detection: true
