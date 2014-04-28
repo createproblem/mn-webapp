@@ -18,3 +18,4 @@ composer.phar
 *.sublime-project
 db.sh
 phpunit.xml
+cache.sh
