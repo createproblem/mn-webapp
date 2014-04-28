@@ -1,10 +1,20 @@
 parameters:
-    tmdb_class: g5\TmdbBundle\Components\Api\TmdbApiClient
+    g5_tmdb.api.class: g5\TmdbBundle\Components\Api\TmdbApiClient
+    g5_tmdb.logger.class: g5\TmdbBundle\Logger\TmdbLogger
+    g5_tmdb.data_collector.class: g5\TmdbBundle\DataCollector\TmdbDataCollector
 
 services:
     g5_tmdb.api.default:
-        class: "%tmdb_class%"
-        factory_class: "%tmdb_class%"
+        class: "%g5_tmdb.api.class%"
+        factory_class: "%g5_tmdb.api.class%"
         factory_method: factory
+        calls:
+            - [setLogger, [@g5_tmdb.logger]]
         arguments:
             - { "api_key": "%g5_tmdb.api_key%" }
+
+    g5_tmdb.logger:
+        class: "%g5_tmdb.logger.class%"
+        arguments: [ "@logger", "%kernel.debug%" ]
+        tags:
+            - { name: monolog.logger, channel: tmdb }

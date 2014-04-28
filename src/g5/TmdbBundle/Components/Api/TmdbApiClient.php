@@ -14,9 +14,20 @@ namespace g5\TmdbBundle\Components\Api;
 use Guzzle\Service\Client as BaseClient;
 use Guzzle\Common\Collection;
 use Guzzle\Service\Description\ServiceDescription;
+use g5\TmdbBundle\Logger\TmdbLogger;
 
 class TmdbApiClient extends BaseClient
 {
+    /**
+     * @var array
+     */
+    private static $configuration;
+
+    /**
+     * @var TmdbLogger
+     */
+    private $logger;
+
     /**
      * @{inheritDoc}
      */
@@ -47,5 +58,44 @@ class TmdbApiClient extends BaseClient
         });
 
         return $client;
+    }
+
+    /**
+     * @param TmdbLogger $logger
+     */
+    public function setLogger(TmdbLogger $logger)
+    {
+        $this->logger = $logger;
+        $this->getEventDispatcher()->addListener('command.after_send', function(\Guzzle\Common\Event $e) use ($logger) {
+            $request = $e['command']->getRequest();
+            $method = $request->getMethod();
+            $url = $request->getUrl();
+            $scheme = $request->getScheme();
+            $path = str_replace('/3', '', $request->getPath());
+            $query = $request->getQuery();
+            $time = $e['command']->getResponse()->getInfo()['total_time'];
+            unset($query['api_key']);
+
+            $logger->logQuery($url, $time, $path, $method, $scheme, $query->toArray());
+        });
+    }
+
+    public function getImageBaseUrl($size)
+    {
+        $this->loadConfiguration();
+
+        return self::$configuration['images']['base_url'].$size;
+    }
+
+    /**
+     * @return array
+     */
+    public function loadConfiguration()
+    {
+        if (null === self::$configuration) {
+            self::$configuration = $this->getConfiguration();
+        }
+
+        return self::$configuration;
     }
 }
