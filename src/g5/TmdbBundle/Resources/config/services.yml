@@ -18,3 +18,9 @@ services:
         arguments: [ "@logger", "%kernel.debug%" ]
         tags:
             - { name: monolog.logger, channel: tmdb }
+
+    g5_tmdb.data_collector:
+        class: "%g5_tmdb.data_collector.class%"
+        arguments: [ "@g5_tmdb.logger" ]
+        tags:
+            - { name: data_collector, template: g5TmdbBundle:Collector:tmdb, id: tmdb }
