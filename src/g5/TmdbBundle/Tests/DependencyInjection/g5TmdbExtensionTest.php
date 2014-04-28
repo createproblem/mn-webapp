@@ -28,15 +28,6 @@ class g5TmdbExtensionTest extends \PHPUnit_Framework_TestCase
         $container = $this->load(array('g5_tmdb' => array('api_key' => '123')));
 
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\ContainerBuilder', $container);
-        $this->assertEquals('123', $container->getParameter('g5_tmdb.api_key'));
-    }
-
-    public function testTmdbApiService()
-    {
-        $container = $this->load(array('g5_tmdb.api.default' => array('api_key' => '123')));
-        $tmdb = $container->get('g5_tmdb.api.default');
-
-        $this->assertInstanceOf('g5\TmdbBundle\Components\Api\TmdbApiClient', $tmdb);
     }
 
     private function load(array $configs)

@@ -14,6 +14,7 @@ namespace g5\MovieBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 use g5\MovieBundle\Form\Type\SearchType;
 use g5\MovieBundle\Entity\Movie;
@@ -164,9 +165,21 @@ class MovieController extends Controller
         ));
     }
 
-    public function newAction()
+    public function newAction(Request $request)
     {
         $form = $this->createForm(new SearchType());
+
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
+
+            if ($form->isValid()) {
+                $query = $form->get('search')->getData();
+                $api = $this->get('g5_tmdb.api.default');
+                var_dump($api->getSearchMovie(array('query' => $query)));
+                $api->getSearchMovie(array('query' => 'Fight Club'));
+                var_dump($query);
+            }
+        }
 
         return $this->render('g5MovieBundle:Movie:new.html.twig', array(
             'form' => $form->createView(),

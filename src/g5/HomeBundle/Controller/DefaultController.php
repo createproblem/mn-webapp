@@ -18,7 +18,8 @@ class DefaultController extends Controller
 
         // $text = "Hello World"; //10
         // $truncated = (strlen($text) > 5) ? substr($text, 0, 20) . '...' : $text;
-
+        $logger = $this->get('g5_tmdb.logger');
+        $logger->logQuery('+++++++++++++ TEST +++++++++++++++');
         $latestMovies = $mm->loadLatestMovies($user);
 
         return $this->render('g5HomeBundle:Default:test.html.twig', array(

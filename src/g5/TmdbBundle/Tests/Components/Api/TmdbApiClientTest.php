@@ -15,6 +15,7 @@ use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
 
 use g5\TmdbBundle\Components\Api\TmdbApiClient;
+use g5\TmdbBundle\g5TmdbSettings;
 
 class TmdbApiClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,6 +95,14 @@ class TmdbApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Guzzle\Service\Resource\Model', $result);
         $this->assertEquals(550, $result['id']);
         $this->assertArrayHasKey('backdrops', $result);
+    }
+
+    public function testGetImageBaseUrl()
+    {
+        $client = $this->getTmdbApiClient(file_get_contents($this->fixtures.'/configuration.json'));
+        $url = $this->tmdbApi->getImageBaseUrl(g5TmdbSettings::IMAGE_BACKDROP_W300);
+
+        $this->assertEquals('http://image.tmdb.org/t/p/w300', $url);
     }
 
     private function getTmdbApiClient($body, $status = 200)
