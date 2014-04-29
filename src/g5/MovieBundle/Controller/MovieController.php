@@ -168,6 +168,7 @@ class MovieController extends Controller
     public function newAction(Request $request)
     {
         $form = $this->createForm(new SearchType());
+        $result = array();
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
@@ -175,14 +176,13 @@ class MovieController extends Controller
             if ($form->isValid()) {
                 $query = $form->get('search')->getData();
                 $api = $this->get('g5_tmdb.api.default');
-                var_dump($api->getSearchMovie(array('query' => $query)));
-                $api->getSearchMovie(array('query' => 'Fight Club'));
-                var_dump($query);
+                $result = $api->getSearchMovie(array('query' => $query));
             }
         }
 
         return $this->render('g5MovieBundle:Movie:new.html.twig', array(
             'form' => $form->createView(),
+            'searchResult' => $result,
         ));
     }
 
