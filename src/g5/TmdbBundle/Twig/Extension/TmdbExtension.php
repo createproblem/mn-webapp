@@ -51,14 +51,14 @@ class TmdbExtension extends \Twig_Extension
      */
     public function __call($method, $arguments)
     {
-        $function = $this->convertFunctionNameToFilterName($method);
+        $filter = $this->convertFunctionNameToFilterName($method);
 
-        if (!in_array($function, $this->getFilterNames())) {
-            throw new \BadMethodCallException("Filter '{$function}' does not exist.");
+        if (!in_array($filter, $this->getFilterNames())) {
+            throw new \BadMethodCallException("Filter '{$filter}' does not exist.");
         }
 
         if (count($arguments) !== 1) {
-            throw new \InvalidArgumentException("Filter '{$function}' allows only one argument as string.");
+            throw new \InvalidArgumentException("Filter '{$filter}' allows only one argument as string.");
         }
 
         return $this->getImageBaseUrl($method, $arguments[0]);
