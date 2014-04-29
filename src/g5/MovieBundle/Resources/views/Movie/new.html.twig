@@ -14,7 +14,9 @@
 <div class="row">
     <div class="col-xs-2"></div>
     <div class="col-xs-10" id="searchResult">
-        {% include 'g5MovieBundle:Movie:searchResult.html.twig' with { "movies": searchResult['results'] } %}
+        {% if searchResult['results'] is defined %}
+            {% include 'g5MovieBundle:Movie:searchResult.html.twig' with { "movies": searchResult['results'] } %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}
