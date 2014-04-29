@@ -16,6 +16,7 @@ use Guzzle\Plugin\Mock\MockPlugin;
 
 use g5\TmdbBundle\Components\Api\TmdbApiClient;
 use g5\TmdbBundle\g5TmdbSettings;
+use g5\TmdbBundle\Logger\TmdbLogger;
 
 class TmdbApiClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,9 +27,11 @@ class TmdbApiClientTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
+        $logger = new TmdbLogger($this->getMockLogger(), true);
 
         $this->fixtures = dirname(__FILE__).'/../../../Resources/fixtures/response';
         $this->tmdbApi = TmdbApiClient::factory(array('api_key' => $_SERVER['tmdb.api_key']));
+        $this->tmdbApi->setLogger($this->getMockLogger());
         $this->useRealApi = (bool) $_SERVER['tmdb.use_real_api'];
     }
 
@@ -121,9 +124,23 @@ class TmdbApiClientTest extends \PHPUnit_Framework_TestCase
         $plugin = new MockPlugin();
         $response = new Response($status);
         $response->setBody($body);
+        $response->setInfo(array('total_time' => 0.1));
 
         $plugin->addResponse($response);
 
         return $plugin;
+    }
+
+    private function getMockLogger()
+    {
+        $mock = $this->getMockBuilder('g5\TmdbBundle\Logger\TmdbLogger')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock->expects($this->any())
+            ->method('logQuery')
+        ;
+
+        return $mock;
     }
 }
