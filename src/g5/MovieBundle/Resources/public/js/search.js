@@ -1,82 +1,47 @@
-"use strict";
-/*global $, g5, Routing */
-/*jshint jquery:true, globalstrict:true */
+/* jshint strict: true, undef: true, browser: true, debug: false */
+/* globals $, g5AjaxQueue, Routing */
 
-////////////////////////
-// helper functions ////
-////////////////////////
+/**
+ * Tmdb Search Result functions
+ */
+var g5TmdbSearchResult = (function() {
+    'use strict';
 
-function bindMoreButtons()
-{
-    $(".btnMore").each(function() {
-        var tmdbId = $(this).attr('data-tmdbId');
-        var data = {
-            "tmdbId": tmdbId
-        };
+    /**
+     * PUBLIC
+     */
+    return {
+        /**
+         * Binds the load more event
+         *
+         * @param  object triggerElement  The trigger button to load more event.
+         * @param  object resultElement   The result element where the data will be displayed.
+         */
+        bindMoreEvent: function(triggerElement, resultElement) {
+            $(triggerElement).on('click', function() {
+                var tmdbId = $(triggerElement).attr('data-tmdbid');
 
-        $(this).bind('click', data, requestMore);
-    });
-}
-
-function bindAddButtons()
-{
-    $(".btnAdd").each(function() {
-        var tmdbId = $(this).attr('data-tmdbId');
-        var data = {
-            "tmdbId": tmdbId
-        };
-
-        $(this).bind('click', data, requestAdd);
-    });
-}
-
-function requestAdd(event)
-{
-    g5.loading();
-
-    var url = Routing.generate('g5_movie_add');
-    var tmdbId = event.data.tmdbId;
-    var data = {
-        "tmdbId": tmdbId
+                // load more movie data
+                g5AjaxQueue.ajaxSingle('load-more', {
+                    'type': 'GET',
+                    'url': Routing.generate('g5_movie_api_load_additional_data'),
+                    'data': { 'tmdbId': tmdbId }
+                }, function(response) {
+                    $(resultElement).html(response.overview);
+                    $(triggerElement).hide();
+                });
+            });
+        }
     };
-
-    $.post(url, data, function(response) {
-        console.log(response);
-        g5.doneLoading();
-    });
-}
-
-function requestMore(event)
-{
-    g5.loading();
-
-    var url = Routing.generate('g5_movie_loadTmdbData');
-    var tmdbId = event.data.tmdbId;
-    var data = {
-        "tmdbId": tmdbId
-    };
-
-    $.post(url, data, function(response) {
-        var overview = $("#overview"+tmdbId);
-        overview.html(response.overview);
-        g5.doneLoading();
-    });
-}
+}());
 
 $(document).ready(function() {
-    // Search TmdbApi
-    $("#btnSearch").bind('click', function() {
-        g5.loading();
-        var data = $("#formSearch").serialize();
-        var url = Routing.generate("g5_movie_search_tmdb");
+    'use strict';
 
-        $.post(url, data, function(response) {
-            $("#searchResult").html(response);
-            bindMoreButtons();
-            bindAddButtons();
-            g5.doneLoading();
-        });
+    $('.btnMore').each(function(index, el) {
+        // Extract tmdbId
+        var tmdbId = $(el).attr('data-tmdbid');
 
-        return false;
+        g5TmdbSearchResult.bindMoreEvent(el, $('#overview'+tmdbId));
     });
 });

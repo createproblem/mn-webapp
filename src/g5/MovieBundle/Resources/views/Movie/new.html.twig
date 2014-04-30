@@ -4,6 +4,7 @@
 <div class="row">
     <div class="col-xs-offset-4 col-xs-8 col-md-7">
         <form role="form" id="formSearch" class="form-inline" action="{{ path('g5_movie_new') }}" method="post">
+                {{ form_errors(form) }}
                 {{ form_widget(form.search) }}
                 {{ form_rest(form) }}
             <button id="btnSearch" type="submit" class="btn btn-primary">Search</button>
@@ -22,8 +23,8 @@
 {% endblock %}
 
 {% block javascripts %}
-    {# {{ parent() }}
+    {{ parent() }}
     {% javascripts '@g5MovieBundle/Resources/public/js/search.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %} #}
+    {% endjavascripts %}
 {% endblock %}
