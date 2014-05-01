@@ -1,5 +1,6 @@
 parameters:
     g5_movie.movie_manager.class: g5\MovieBundle\Util\MovieManager
+    g5_movie.label_manager.class: g5\MovieBundle\Util\LabelManager
 
 services:
     g5_movie.repository.movie:
@@ -21,8 +22,8 @@ services:
         arguments: [ "@g5_movie.repository.movie", "@doctrine.orm.entity_manager" ]
 
     g5_movie.label_manager:
-        class: g5\MovieBundle\Util\LabelManager
-        arguments: [@doctrine]
+        class: "%g5_movie.label_manager.class%"
+        arguments: [ "@g5_movie.repository.label", "@doctrine.orm.entity_manager" ]
 
     g5_movie.link.form.type:
         class: g5\MovieBundle\Form\Type\LinkType

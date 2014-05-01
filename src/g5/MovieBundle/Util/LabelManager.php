@@ -25,10 +25,16 @@ class LabelManager
      */
     private $repository;
 
-    public function __construct($doctrine)
+    /**
+     * Constructor.
+     *
+     * @param Doctrine\ORM\EntityRepository $repository
+     * @param Doctrine\ORM\EntityManager    $em
+     */
+    public function __construct($repository, $em)
     {
-        $this->em = $doctrine->getManager();
-        $this->repository = $this->em->getRepository('g5MovieBundle:Label');
+        $this->repository = $repository;
+        $this->em = $em;
     }
 
     /**

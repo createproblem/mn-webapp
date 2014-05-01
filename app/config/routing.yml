@@ -17,6 +17,13 @@ g5_movie_api:
     options:
         expose: true
 
+g5_movie_label_api:
+    type:     rest
+    resource: g5\MovieBundle\Controller\LabelApiController
+    prefix: /label/api2
+    options:
+        expose: true
+
 # FOSJsRouting
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"

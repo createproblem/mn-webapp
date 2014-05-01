@@ -3,6 +3,18 @@
 
 var g5MovieLabel = (function() {
     /**
+     * PRIVATE
+     */
+    var addLabel = function(movieId, labelId) {
+        g5AjaxQueue.ajaxSingle('add-label', {
+            'type': 'POST',
+            'url': '#'
+        }, function(response) {
+            console.log(response);
+        });
+    }
+
+    /**
      * PUBLIC
      */
     return {
@@ -19,7 +31,30 @@ var g5MovieLabel = (function() {
                     $(resultElement).html(response).show();
 
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
-                    labelInput.autocomplete({ source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ] });
+                    labelInput.autocomplete({
+                        source: function(request, response) {
+                            // do search lookup
+                            var term = request.term;
+                            g5AjaxQueue.ajaxSingle('label-loopup', {
+                                'type': 'GET',
+                                'url': Routing.generate('get_labels', {'q': term})
+                            }, function (result) {
+                                var data = [];
+
+                                $.each(result, function(index, label) {
+                                    data.push({
+                                        'label': label.name,
+                                        'value': label.id
+                                    });
+                                });
+
+                                response(data);
+                            });
+                        },
+                        select: function(event, ui) {
+                            console.log(ui);
+                        }
+                    });
                     labelInput.focus();
                 });
             });

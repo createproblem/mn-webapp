@@ -17,11 +17,6 @@ use g5\MovieBundle\Entity\Movie;
 class MovieManager
 {
     /**
-     * @var integer
-     */
-    private $tmdbApi;
-
-    /**
      * @var Doctrine\ORM\EntityManager
      */
     private $em;
