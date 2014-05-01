@@ -5,13 +5,39 @@ var g5MovieLabel = (function() {
     /**
      * PRIVATE
      */
-    var addLabel = function(movieId, labelId) {
-        g5AjaxQueue.ajaxSingle('add-label', {
-            'type': 'POST',
-            'url': '#'
-        }, function(response) {
-            console.log(response);
-        });
+    var addLabel = function(id) {
+        console.log(id);
+        // g5AjaxQueue.ajaxSingle('add-label', {
+        //     'type': 'POST',
+        //     'url': '#'
+        // }, function(response) {
+        //     console.log(response);
+        // });
+    },
+
+    bindLabelAutocomplete = function(el) {
+        $(el).autocomplete({
+            source: function(request, response) {
+                var term = request.term;
+                g5AjaxQueue.ajaxSingle('label-loopup', {
+                    'type': 'GET',
+                    'url': Routing.generate('get_labels', {'q': term})
+                }, function(result) {
+                    var data = [];
+                    $.each(result, function(index, label) {
+                        data.push({
+                            'label': label.name,
+                            'value': label.name,
+                            'id': label.id
+                        });
+                    });
+                    response(data);
+                });
+            },
+            select: function(event, ui) {
+                addLabel(ui.item.id);
+            }
+        }).focus();
     }
 
     /**
@@ -23,6 +49,7 @@ var g5MovieLabel = (function() {
             var movieId = $(triggerElement).attr('data-movieid');
 
             // get label form
+            var self = this;
             $(triggerElement).on('click', function() {
                 g5AjaxQueue.ajaxSingle('label-form', {
                     'type': 'GET',
@@ -31,31 +58,7 @@ var g5MovieLabel = (function() {
                     $(resultElement).html(response).show();
 
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
-                    labelInput.autocomplete({
-                        source: function(request, response) {
-                            // do search lookup
-                            var term = request.term;
-                            g5AjaxQueue.ajaxSingle('label-loopup', {
-                                'type': 'GET',
-                                'url': Routing.generate('get_labels', {'q': term})
-                            }, function (result) {
-                                var data = [];
-
-                                $.each(result, function(index, label) {
-                                    data.push({
-                                        'label': label.name,
-                                        'value': label.id
-                                    });
-                                });
-
-                                response(data);
-                            });
-                        },
-                        select: function(event, ui) {
-                            console.log(ui);
-                        }
-                    });
-                    labelInput.focus();
+                    bindLabelAutocomplete(labelInput);
                 });
             });
         }
