@@ -45,6 +45,15 @@ body {
     z-index: 999;
 }
 
+.margin-bottom-md {
+    margin-bottom: 5px;
+}
+
+/* movie stuff */
+.movie-img-md {
+    max-height: 278px;
+}
+
 /* custom */
 .footer {
     margin-top: 20px;
@@ -84,9 +93,7 @@ body {
     margin-left: 3px;
 }
 
-.margin-bottom-xs {
-    margin-bottom: 3px;
-}
+
 
 .margin-bottom-sd {
     margin-bottom: 5px;

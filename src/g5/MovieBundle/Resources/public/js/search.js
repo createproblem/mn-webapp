@@ -53,7 +53,11 @@ var g5TmdbSearchResult = (function() {
                         });
                         g5Message.showMessage(msg);
                     } else {
-                        g5Message.showMessage('Movie added.');
+                        var title = response.title;
+                        var release_date = new Date(response.release_date).getFullYear();
+                        var msg = title + ' (' + release_date + ') added.';
+
+                        g5Message.showMessage(msg);
                     }
                 });
             });

@@ -38,6 +38,7 @@ class TmdbExtension extends \Twig_Extension
             new \Twig_SimpleFilter('img_backdrop_w1280', array($this, 'imageBackdropW1280Filter')),
             new \Twig_SimpleFilter('img_backdrop_original', array($this, 'imageBackdropOriginalFilter')),
             new \Twig_SimpleFilter('img_poster_w185', array($this, 'imagePosterW185Filter')),
+            new \Twig_SimpleFilter('img_poster_w342', array($this, 'imagePosterW342Filter')),
         );
     }
 
