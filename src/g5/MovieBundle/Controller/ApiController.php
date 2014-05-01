@@ -126,4 +126,43 @@ class ApiController extends Controller
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
+
+    /**
+     * @RestAnnotation\RequestParam(
+     *     name="labelId",
+     *     strict=false,
+     *     requirements="^\d+$"
+     * )
+     */
+    public function postMovieLabelAction($id, ParamFetcher $paramFetcher)
+    {
+        $labelManager = $this->get('g5_movie.label_manager');
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $validator = $this->get('validator');
+
+        $params = $paramFetcher->all();
+        $labelId = $params['labelId'];
+
+        $label = $labelManager->findByUser($labelId, $this->getUser());
+        $movie = $movieManager->find($id);
+
+        $movieLabel = $movie->addLabel($label);
+
+        $errors = $validator->validate($movieLabel);
+        if (count($errors) === 0) {
+            $movieManager->updateMovie($movie);
+            $data = array('label' => $label);
+        } else {
+            $data = array('errors' => $errors);
+        }
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+
+        $view = View::create($data)
+            ->setStatusCode($status)
+            ->setTemplate('g5MovieBundle:Label:label.html.twig')
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
 }

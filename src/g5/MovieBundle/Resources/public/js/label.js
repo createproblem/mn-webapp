@@ -1,21 +1,30 @@
 /* jshint strict: true, undef: true, browser: true, debug: false */
-/* globals $ */
+/* globals $, g5AjaxQueue, Routing */
 
 var g5MovieLabel = (function() {
+    'use strict';
+
     /**
      * PRIVATE
      */
-    var addLabel = function(id) {
-        console.log(id);
-        // g5AjaxQueue.ajaxSingle('add-label', {
-        //     'type': 'POST',
-        //     'url': '#'
-        // }, function(response) {
-        //     console.log(response);
-        // });
+    var addLabel = function(labelId, movieId) {
+        g5AjaxQueue.ajaxSingle('add-label', {
+            'type': 'POST',
+            'url': Routing.generate('post_movie_label', {'id': movieId, '_format': 'html'}),
+            'data': {
+                'labelId': labelId
+            }
+        }, function(response) {
+            if(response.indexOf('Label already assigned.') > -1) {
+                g5Message.showMessage(response);
+            } else {
+                $('#label-box-'+movieId).append(response);
+            }
+            $('#label-form-' + movieId + ' input#link_name').hide();
+        });
     },
 
-    bindLabelAutocomplete = function(el) {
+    bindLabelAutocomplete = function(el, movieId) {
         $(el).autocomplete({
             source: function(request, response) {
                 var term = request.term;
@@ -35,10 +44,10 @@ var g5MovieLabel = (function() {
                 });
             },
             select: function(event, ui) {
-                addLabel(ui.item.id);
+                addLabel(ui.item.id, movieId);
             }
         }).focus();
-    }
+    };
 
     /**
      * PUBLIC
@@ -49,7 +58,6 @@ var g5MovieLabel = (function() {
             var movieId = $(triggerElement).attr('data-movieid');
 
             // get label form
-            var self = this;
             $(triggerElement).on('click', function() {
                 g5AjaxQueue.ajaxSingle('label-form', {
                     'type': 'GET',
@@ -58,7 +66,7 @@ var g5MovieLabel = (function() {
                     $(resultElement).html(response).show();
 
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
-                    bindLabelAutocomplete(labelInput);
+                    bindLabelAutocomplete(labelInput, movieId);
                 });
             });
         }
@@ -67,6 +75,8 @@ var g5MovieLabel = (function() {
 
 
 $(document).ready(function() {
+    'use strict';
+
     $('.btnLabelAdd').each(function(index, el) {
         // Extract movieId
         var movieId = $(el).attr('data-movieid');

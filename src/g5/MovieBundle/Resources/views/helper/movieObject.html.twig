@@ -20,14 +20,9 @@
             </button>
         </h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
-        <div id="label-box-{{ uid }}" style="display: none;">
+        <div id="label-box-{{ uid }}">
             {% for label in movie.getLabels() %}
-                {#% if curLabel is not defined %}
-                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
-                {% elseif curLabel.getNameNorm() != label.getNameNorm() %}
-                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
-                {% endif %#}
-                    {# {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %} #}
+                {% include 'g5MovieBundle:Label:label.html.twig' with { 'label': label } %}
             {% endfor %}
         </div>
         <br>

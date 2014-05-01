@@ -82,7 +82,7 @@ class LabelManager
      *
      * @return \g5\MovieBundle\Entity\Label
      */
-    public function loadLabelById($id, \g5\AccountBundle\Entity\User $user)
+    public function findByUser($id, \g5\AccountBundle\Entity\User $user)
     {
         return $this->repository->findOneBy(array('id' => $id, 'user' => $user));
     }

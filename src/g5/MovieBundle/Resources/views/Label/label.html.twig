@@ -1,22 +1,9 @@
-{% if movieId is not defined %}
-    {% set movieId = 0 %}
+{% if label is defined %}
+    <span class="label label-default">{{ label.name }} <i class="label-remove glyphicon glyphicon-remove"></i></span>
 {% endif %}
 
-{% if control is not defined %}
-    {% set control = true %}
+{% if errors is defined %}
+    {% for error in errors %}
+        {{ error.message }}
+    {% endfor %}
 {% endif %}
-
-{% if counter is not defined %}
-    {% set counter = false %}
-{% endif %}
-
-<span class="label label-default" data-labelId="{{ label.getId() }}" data-movieId="{{ movieId }}">
-    <a href="{{ path('g5_movie_label_index', { name: label.getNameNorm() }) }}">{{ label.getName() }}</a>
-    {% if control %}
-        <span style="display: none;" class="label-remove glyphicon glyphicon-remove"></span>
-    {% endif %}
-    {% if counter %}
-        {{ label.getMovieCount() }}
-    {% endif %}
-</span>
-

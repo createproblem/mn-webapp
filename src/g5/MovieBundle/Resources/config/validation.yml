@@ -9,5 +9,6 @@ g5\MovieBundle\Entity\Movie:
 g5\MovieBundle\Entity\MovieLabel:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            - movie
-            - label
+            fields: [movie, label]
+            errorPath: label
+            message: "Label already assigned."
