@@ -1,11 +1,7 @@
 {# /src/g5/MovieBundle/Resources/views/Label/new.html.twig #}
 
-<div class="g5_movie_label_messageBox" style="display: none;"></div>
-<form role="form"class="g5movie_label_new_form form-horizontal" onsubmit="return false;">
-    <div class="input-group col-xs-6 col-md-9 input-group-sm">
-        {{ form_widget(form.name) }}
-        {{ form_rest(form) }}
-    </div>
-    <div class="clearfix"></div>
+{% form_theme form 'g5MovieBundle:Form:link.html.twig' %}
+
+<form role="form"class="form-inline" onsubmit="return false;">
+    {{ form_widget(form) }}
 </form>
-<br>

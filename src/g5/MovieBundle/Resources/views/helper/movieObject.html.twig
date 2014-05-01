@@ -6,7 +6,7 @@
 {% endif %}
 
 <div class="media margin-bottom-sd">
-    <button style="display: none;" id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
+    <button id="label-trigger-{{ uid }}" data-movieid="{{ uid }}" class="btnLabelAdd btn btn-sm pull-right" >
         <span class="glyphicon glyphicon-tag"></span>
     </button>
     <a class="pull-left" href="#">
@@ -20,7 +20,7 @@
             </button>
         </h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
-        <div id="label-box-{{ uid }}">
+        <div id="label-box-{{ uid }}" style="display: none;">
             {% for label in movie.getLabels() %}
                 {#% if curLabel is not defined %}
                     {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}

@@ -92,6 +92,11 @@ class MovieManager
         return $this->findMoviesBy($criteria, $orderBy, $limit, $offset);
     }
 
+    public function find($id)
+    {
+        return $this->repository->find($id);
+    }
+
     /**
      * @param  \g5\MovieBundle\Entity\Movie $movie
      *

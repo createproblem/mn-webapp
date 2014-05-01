@@ -18,6 +18,8 @@ use FOS\RestBundle\Request\ParamFetcher;
 use FOS\RestBundle\Controller\Annotations as RestAnnotation;
 use FOS\RestBundle\View\View;
 
+use g5\MovieBundle\Form\Model\Link;
+
 class ApiController extends Controller
 {
 
@@ -100,6 +102,26 @@ class ApiController extends Controller
         $view = View::create()
             ->setStatusCode($status)
             ->setData($data)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    public function getMovieLabelFormAction($id)
+    {
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $movie = $movieManager->find($id);
+
+        $link = new Link();
+        $link->setMovieId($movie->getId());
+
+        $form = $this->createForm('link', $link);
+        $data = array('form' => $form->createView());
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create($data)
+            ->setStatusCode($status)
+            ->setTemplate('g5MovieBundle:Label:new.html.twig')
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
