@@ -37,6 +37,7 @@
     {% include '::nav.html.twig' %}
 
     <div class="container-fluid">
+      <div id="messageInfo"></div>
       {% block body %}{% endblock %}
       <div id="loadingInfo" style="display: none;">
         <img src="{{ asset('bundles/g5home/img/ajax-loader.gif') }}" alt="Loading...">
@@ -60,7 +61,7 @@
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     {% javascripts
         '@g5HomeBundle/Resources/public/js/g5_ajax.js'
-        '@g5HomeBundle/Resources/public/js/global.js'
+        '@g5HomeBundle/Resources/public/js/g5_message.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

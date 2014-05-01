@@ -36,7 +36,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'GET',
-            '/movie/api/load_additional_data',
+            '/movie/api2/movies/550/tmdb',
             array('tmdbId' => 550),
             array(),
             array('HTTP_X-Requested-With' => 'XMLHttpRequest')
@@ -45,16 +45,16 @@ class ApiControllerTest extends \g5WebTestCase
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
-    public function testLoadAdditionalDataActionWrongRequest()
-    {
-        $this->login($this->client);
+    // public function testLoadAdditionalDataActionWrongRequest()
+    // {
+    //     $this->login($this->client);
 
-        $this->client->request(
-            'GET',
-            '/movie/api/load_additional_data',
-            array('tmdbId' => 550)
-        );
+    //     $this->client->request(
+    //         'GET',
+    //         '/movie/api/load_additional_data',
+    //         array('tmdbId' => 550)
+    //     );
 
-        $this->assertFalse($this->client->getResponse()->isSuccessful());
-    }
+    //     $this->assertFalse($this->client->getResponse()->isSuccessful());
+    // }
 }

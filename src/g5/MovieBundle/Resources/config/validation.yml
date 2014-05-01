@@ -2,12 +2,12 @@
 g5\MovieBundle\Entity\Movie:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            - user
-            - tmdb_id
+            fields: [user, tmdb_id]
+            errorPath: tmdb_id
+            message: "Movie already in your database."
 
 g5\MovieBundle\Entity\MovieLabel:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             - movie
             - label
-

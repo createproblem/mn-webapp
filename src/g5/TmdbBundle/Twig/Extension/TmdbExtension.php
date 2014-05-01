@@ -74,6 +74,10 @@ class TmdbExtension extends \Twig_Extension
      */
     private function getImageBaseUrl($function, $suffix)
     {
+        if (strlen($suffix) === 0) {
+            return null;
+        }
+
         $url = $this->tmdbApiClient->getImageBaseUrl($this->convertFunctionNameToConstant($function));
         $url .= $suffix;
 

@@ -1,16 +1,8 @@
-# ApiController
-g5_movie_api_load_additional_data:
-    pattern: /api/load_additional_data
-    defaults: { _controller: g5MovieBundle:Api:loadAdditionalData }
-    requirements:
-        _method: GET
-    options:
-        expose: true
-
-# LabelController
-
-
 # MovieController
+g5_movie_index:
+    pattern: /
+    defaults: { _controller: g5MovieBundle:Movie:index }
+
 g5_movie_new:
     pattern: /new
     defaults: { _controller: g5MovieBundle:Movie:new }

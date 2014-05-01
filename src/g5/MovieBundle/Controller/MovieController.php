@@ -21,6 +21,14 @@ use g5\MovieBundle\Entity\Movie;
 
 class MovieController extends Controller
 {
+    public function indexAction()
+    {
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $movies = $movieManager->findMoviesByUser($this->getUser());
+
+        return $this->render('g5MovieBundle:Movie:index.html.twig');
+    }
+
     /**
      * Search for new Movie
      *

@@ -1,10 +1,18 @@
 parameters:
-#    g5_movie.example.class: g5\MovieBundle\Example
+    g5_movie.repository.movie.class: Doctrine\ORM\EntityRepository
+    g5_movie.movie_manager.class: g5\MovieBundle\Util\MovieManager
 
 services:
+    g5_movie.repository.movie:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method: getRepository
+        arguments: [ "g5MovieBundle:Movie" ]
+        public: false
+
     g5_movie.movie_manager:
-        class: g5\MovieBundle\Util\MovieManager
-        arguments: [@g5_tools.tmdb.api, @doctrine]
+        class: "%g5_movie.movie_manager.class%"
+        arguments: [ "@g5_movie.repository.movie", "@doctrine.orm.entity_manager" ]
 
     g5_movie.label_manager:
         class: g5\MovieBundle\Util\LabelManager

@@ -22,12 +22,6 @@ body {
     margin-top: 50px;
 }
 
-/* custom */
-.footer {
-    margin-top: 20px;
-    padding: 30px 0;
-    text-align: center;
-}
 
 #loadingInfo {
     background: #AA0000;
@@ -38,6 +32,24 @@ body {
     bottom: 50px;
     right: 5px;
     z-index: 999;
+}
+
+.messageInfo {
+    background: #AA0000;
+    border-radius: 3px;
+    color: #FFF;
+    padding: 8px 20px;
+    position: fixed;
+    bottom: 50px;
+    right: 5px;
+    z-index: 999;
+}
+
+/* custom */
+.footer {
+    margin-top: 20px;
+    padding: 30px 0;
+    text-align: center;
 }
 
 .label-remove

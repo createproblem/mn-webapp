@@ -13,29 +13,95 @@ namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations as RestAnnotation;
+use FOS\RestBundle\View\View;
 
 class ApiController extends Controller
 {
+
     /**
-     * Loads additional movie data.
+     * Get movie data from Tmdb.
      *
-     * @param  Request $request
+     * @ApiDoc(
+     *     description="Get movie data from Tmdb.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
+     * )
      *
-     * @return JsonResponse
+     * @param  Request  $request
+     * @param  integer  $tmdbId  The movie tmdbId.
      */
-    public function loadAdditionalDataAction(Request $request)
+    public function getMovieTmdbAction(Request $request, $tmdbId)
     {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('Wrong Request Type.');
-        }
+        // if (!$request->isXmlHttpRequest()) {
+        //     throw $this->createNotFoundException('Wrong Request Type.');
+        // }
 
         $tmdbApi = $this->get('g5_tmdb.api.default');
-        $tmdbId = (int)$request->query->get('tmdbId');
+        $movieResult = $tmdbApi->getMovie(array('id' => (int)$tmdbId));
 
-        $movieResult = $tmdbApi->getMovie(array('id' => $tmdbId));
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $data = $movieResult->toArray();
 
-        $response = new JsonResponse($movieResult->toArray());
-        return $response;
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($data)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    /**
+     * Adds a new movie from tmdb.
+     *
+     * @param string $tmdbId integer with the page number (requires param_fetcher_listener: force)
+     *
+     * @ApiDoc(
+     *     description="Adds a new movie from tmdb.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
+     * )
+     *
+     * @RestAnnotation\RequestParam(
+     *     name="tmdbId",
+     *     description="TmdbId of the movie.",
+     *     strict=true,
+     *     nullable=false,
+     *     requirements="^\d+$"
+     * )
+     *
+     */
+    public function postMovieAction(ParamFetcher $paramFetcher)
+    {
+        $tmdbApi = $this->get('g5_tmdb.api.default');
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $validator = $this->get('validator');
+
+        $params = $paramFetcher->all();
+
+        $result = $tmdbApi->getMovie(array('id' => (int)$params['tmdbId']));
+        $movie = $movieManager->createMovieFromTmdb($result);
+        $movie->setUser($this->getUser());
+
+        $errors = $validator->validate($movie);
+
+        if (count($errors) === 0) {
+            $movieManager->updateMovie($movie);
+            $data = $movie;
+        } else {
+            $data = $errors;
+        }
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($data)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 }

@@ -12,17 +12,11 @@ class DefaultController extends Controller
             return $this->render('g5HomeBundle:Default:index.html.twig');
         }
 
-        $mm = $this->get('g5_movie.movie_manager');
-        $user = $this->getUser();
-        $tmdbApi = $this->get('g5_tools.tmdb.api');
-
-        // $text = "Hello World"; //10
-        // $truncated = (strlen($text) > 5) ? substr($text, 0, 20) . '...' : $text;
-        $latestMovies = $mm->loadLatestMovies($user);
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $movies = $movieManager->findMoviesByUser($this->getUser());
 
         return $this->render('g5HomeBundle:Default:test.html.twig', array(
-            'latestMovies' => $latestMovies,
-            'imgUrl_w1280' => $tmdbApi->getImageUrl('w780'),
+            'movies' => $movies
         ));
     }
 }

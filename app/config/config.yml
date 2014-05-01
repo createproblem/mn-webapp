@@ -94,6 +94,15 @@ fos_user:
     #         type: g5_registration_form_type
     #         handler: g5.registration.form.handler
 
+# NelmioApiDocBundle
+nelmio_api_doc: ~
+
+# FOSRestBundle
+fos_rest:
+    param_fetcher_listener: true
+    routing_loader:
+        default_format: json
+
 g5_tools:
     tmdb:
         api_key: "%tmdb_api_key%"
