@@ -41,7 +41,7 @@ class LinkType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'g5\MovieBundle\Form\Model\Link',
-            'csrf_protection' => false,
+            'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'intention'       => 'g5_movie_link',
         ));

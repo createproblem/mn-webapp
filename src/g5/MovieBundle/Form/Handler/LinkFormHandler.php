@@ -22,24 +22,14 @@ use g5\ToolsBundle\Util\Normalizer;
 class LinkFormHandler
 {
     /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var Form
-     */
-    protected $form;
-
-    /**
      * @var LabelManager
      */
-    protected $lm;
+    protected $labelManager;
 
     /**
      * @var MovieManager
      */
-    protected $mm;
+    protected $movieManager;
 
     /**
      * @var Normalizer
@@ -47,58 +37,70 @@ class LinkFormHandler
     protected $normalizer;
 
     /**
-     * Initialize the handler
-     *
-     * @param Request $request
-     * @param Form    $form
+     * @var array
      */
-    public function __construct(Request $request, Form $form, LabelManager $lm, MovieManager $mm, Normalizer $normalizer)
+    private $errors = array();
+
+    /**
+     * Constructor.
+     *
+     * @param LabelManager $labelManager
+     * @param MovieManager $movieManager
+     * @param Normalizer   $normalizer
+     */
+    public function __construct(LabelManager $labelManager, MovieManager $movieManager, Normalizer $normalizer)
     {
-        $this->request = $request;
-        $this->form = $form;
-        $this->lm = $lm;
-        $this->mm = $mm;
+        $this->labelManager = $labelManager;
+        $this->movieManager = $movieManager;
         $this->normalizer = $normalizer;
     }
 
     /**
-     * Handle the Link
+     * Handle the Form
      *
-     * @param  Link   $link [description]
+     * @param Form  $form
+     * @param User  $user
      *
-     * @return [type]       [description]
+     * @return Label|boolean
      */
-    public function process(Link $link, User $user)
+    public function process(Form $form, User $user)
     {
-        $this->form->setData($link);
-        $this->form->bind($this->request);
+        if ($form->isValid()) {
+            $link = $form->getData();
+            $movie = $this->movieManager->find($link->getMovieId(), $user);
 
-        if ($this->form->isValid()) {
-            $movie = $this->mm->loadMovieById($link->getMovieId(), $user);
             if (!$movie) {
                 return false;
             }
+
             $labelNameNorm = $this->normalizer->normalizeUtf8String($link->getName());
-            $label = $this->lm->findLabelBy(array('user' => $user, 'name_norm' => $labelNameNorm));
+            $label = $this->labelManager->findLabelBy(array('user' => $user, 'name_norm' => $labelNameNorm));
+
             if (!$label) {
-                $label = $this->lm->createLabel();
+                $label = $this->labelManager->createLabel();
                 $label->setName($link->getName());
                 $label->setNameNorm($labelNameNorm);
                 $label->setUser($user);
-                $this->lm->updateLabel($label);
+                $this->labelManager->updateLabel($label);
 
                 $movie->addLabel($label);
             } elseif ($movie->hasLabel($label)) {
+                $this->errors['error'] = 'Label already assigned.';
                 return false;
             } else {
                 $movie->addLabel($label);
             }
 
-            $this->mm->updateMovie($movie);
+            $this->movieManager->updateMovie($movie);
             return $label;
         }
-
+        $this->errors = $form->getErrors();
         return false;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
     }
 
 }

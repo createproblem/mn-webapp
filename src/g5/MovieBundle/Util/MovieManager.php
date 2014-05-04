@@ -87,9 +87,15 @@ class MovieManager
         return $this->findMoviesBy($criteria, $orderBy, $limit, $offset);
     }
 
-    public function find($id)
+    public function find($id, User $user = null)
     {
-        return $this->repository->find($id);
+        $criteria['id'] = $id;
+
+        if (null !== $user) {
+            $criteria['user'] = $user;
+        }
+
+        return $this->repository->findOneBy($criteria);
     }
 
     /**

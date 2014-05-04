@@ -2,6 +2,6 @@
 
 {% form_theme form 'g5MovieBundle:Form:link.html.twig' %}
 
-<form role="form"class="form-inline" onsubmit="return false;">
+<form role="form"class="form-inline" onsubmit="g5MovieLabel.submitForm(this); return false">
     {{ form_widget(form) }}
 </form>

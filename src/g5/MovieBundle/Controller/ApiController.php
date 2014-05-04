@@ -128,39 +128,50 @@ class ApiController extends Controller
     }
 
     /**
-     * @RestAnnotation\RequestParam(
-     *     name="labelId",
-     *     strict=false,
-     *     requirements="^\d+$"
+     * @ApiDoc(
+     *     description="Legt einen neuen User an",
+     *     input="g5\MovieBundle\Form\Type\LinkType",
+     *     output="g5\MovieBundle\Entity\Label"
      * )
+     *
+     * @param Request $request
      */
-    public function postMovieLabelAction($id, ParamFetcher $paramFetcher)
+    public function postMovieLabelAction(Request $request, $id)
     {
         $labelManager = $this->get('g5_movie.label_manager');
         $movieManager = $this->get('g5_movie.movie_manager');
         $validator = $this->get('validator');
 
-        $params = $paramFetcher->all();
-        $labelId = $params['labelId'];
+        $form = $this->createForm('link');
+        $handler = $this->get('g5_movie.link.form.handler');
 
-        $label = $labelManager->findByUser($labelId, $this->getUser());
-        $movie = $movieManager->find($id);
+        $form->bind($request);
+        $label = $handler->process($form, $this->getUser());
 
-        $movieLabel = $movie->addLabel($label);
-
-        $errors = $validator->validate($movieLabel);
-        if (count($errors) === 0) {
-            $movieManager->updateMovie($movie);
-            $data = array('label' => $label);
+        if (!$label) {
+            $data = $handler->getErrors();
         } else {
-            $data = array('errors' => $errors);
+            $data = $label;
         }
-
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        // $labelId = $params['labelId'];
+
+        // $label = $labelManager->findByUser($labelId, $this->getUser());
+        // $movie = $movieManager->find($id);
+
+        // $movieLabel = $movie->addLabel($label);
+
+        // $errors = $validator->validate($movieLabel);
+        // if (count($errors) === 0) {
+        //     $movieManager->updateMovie($movie);
+        //     $data = array('label' => $label);
+        // } else {
+        //     $data = array('errors' => $errors);
+        // }
+
 
         $view = View::create($data)
             ->setStatusCode($status)
-            ->setTemplate('g5MovieBundle:Label:label.html.twig')
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
