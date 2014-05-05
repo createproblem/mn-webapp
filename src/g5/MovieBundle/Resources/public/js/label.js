@@ -137,6 +137,13 @@ var g5MovieLabel = (function() {
         });
     },
 
+    /**
+     * Renders the item for autocomplete.
+     *
+     * @param  {[object]} ul
+     * @param  {[object]} item
+     * @return {[object]}
+     */
     renderItem = function(ul, item) {
         var text;
 
