@@ -1,9 +1,5 @@
 /* jshint strict: true, undef: true, browser: true, debug: false */
-/* globals $, Backbone, _, g5AjaxQueue, Routing, g5Message */
-
-// Backbone.sync = function(method, model, success, error) {
-//     // success();
-// }
+/* globals $, Backbone, _, g5AjaxQueue, Routing, g5Message, labels */
 
 var g5MovieLabel = (function() {
     'use strict';
@@ -141,6 +137,22 @@ var g5MovieLabel = (function() {
         });
     },
 
+    renderItem = function(ul, item) {
+        var text;
+
+        if (item.id === 0) {
+            text = '<a><i class="glyphicon glyphicon-plus"></i> ' + item.label + '</a>';
+        } else {
+            text = '<a>' + item.label + '</a>';
+        }
+
+        return $('<li>')
+            .attr('data-value', item.value)
+            .html(text)
+            .appendTo(ul)
+        ;
+    },
+
     /**
      * Bind autocomplete on input.
      *
@@ -157,20 +169,33 @@ var g5MovieLabel = (function() {
                     'url': Routing.generate('get_labels', {'q': term})
                 }, function(result) {
                     var data = [];
+                    var pushItem = true;
                     $.each(result, function(index, label) {
+                        if (term === label.name)
+                            pushItem = false;
+
                         data.push({
                             'label': label.name,
                             'value': label.name,
                             'id': label.id
                         });
                     });
+                    if (pushItem) {
+                        data.push({
+                            'label': term,
+                            'value': term,
+                            'id': 0
+                        });
+                    }
                     response(data);
                 });
             },
             select: function(event, ui) {
                 submitForm(form, movieId);
             }
-        }).focus();
+        }).data("ui-autocomplete")._renderItem = renderItem;
+
+        $(input).focus();
     };
 
 
