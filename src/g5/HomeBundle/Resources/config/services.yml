@@ -1,3 +1,8 @@
 parameters:
+    g5_home.twig.js_extension.class: g5\HomeBundle\Twig\Extension\JSExtension
 
 services:
+    g5_home.twig.js_extension:
+        class: "%g5_home.twig.js_extension.class%"
+        tags:
+            - { name: twig.extension }
