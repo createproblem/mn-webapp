@@ -1,5 +1,5 @@
 {% if label is defined %}
-    <span class="label label-default">{{ label.name }} <i class="label-remove glyphicon glyphicon-remove"></i></span>
+    <span data-labelname="{{ label.name }}" data-labelid="{{ label.id }}" class="label label-default">{{ label.name }} <i class="label-remove glyphicon glyphicon-remove"></i></span>
 {% endif %}
 
 {% if errors is defined %}

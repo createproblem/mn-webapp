@@ -9,7 +9,7 @@
         {# {{ paginationBar(pagination) }} #}
     </div>
 </div>
-
+{{ toJS('labels', labels) }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

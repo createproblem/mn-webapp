@@ -176,4 +176,36 @@ class ApiController extends Controller
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
+
+    /**
+     * @RestAnnotation\QueryParam(
+     *     name="labelId",
+     *     description="The label id.",
+     *     strict=true,
+     *     nullable=false,
+     *     requirements="^\d+$"
+     * )
+     */
+    public function deleteMovieLabelAction($id, ParamFetcher $paramFetcher)
+    {
+        $labelManager = $this->get('g5_movie.label_manager');
+        $movieManager = $this->get('g5_movie.movie_manager');
+
+        $params = $paramFetcher->all();
+
+        $movie = $movieManager->find($id);
+        $label = $labelManager->find($params['labelId']);
+
+        $movie->removeLabel($label);
+        $movieManager->updateMovie($movie);
+
+        $data = array('status' => 'ok');
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create($data)
+            ->setStatusCode($status)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
 }

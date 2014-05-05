@@ -20,10 +20,10 @@
             </button>
         </h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
-        <div id="label-box-{{ uid }}">
-            {% for label in movie.getLabels() %}
+        <div id="label-box-{{ uid }}" class="label-box" data-movieid="{{ uid }}">
+            {# {% for label in movie.getLabels() %}
                 {% include 'g5MovieBundle:Label:label.html.twig' with { 'label': label } %}
-            {% endfor %}
+            {% endfor %} #}
         </div>
         <br>
         {{ movie.getOverview() }}

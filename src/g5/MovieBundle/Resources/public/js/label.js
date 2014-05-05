@@ -1,15 +1,122 @@
 /* jshint strict: true, undef: true, browser: true, debug: false */
-/* globals $, g5AjaxQueue, Routing, g5Message */
+/* globals $, Backbone, _, g5AjaxQueue, Routing, g5Message */
+
+// Backbone.sync = function(method, model, success, error) {
+//     // success();
+// }
 
 var g5MovieLabel = (function() {
     'use strict';
+    var Label = Backbone.Model.extend({}),
+
+    LabelCollection = Backbone.Collection.extend({
+        model: Label
+    }),
+
+    LabelView = Backbone.View.extend({
+        tagName: 'span',
+        className: 'label label-default',
+
+        events: {
+            'click i.label-remove': 'remove'
+        },
+
+        /**
+         * Constructor.
+         */
+        initialize: function() {
+            _.bindAll(this, 'render', 'unrender');
+            this.model.bind('remove', this.unrender);
+        },
+
+        /**
+         * Removes the label
+         */
+        remove: function() {
+            this.model.url = Routing.generate('delete_movie_label', {
+                id: this.model.get('movieId'),
+                labelId: this.model.get('id')
+            });
+            this.model.destroy();
+        },
+
+        /**
+         * Removes the label from DOM
+         */
+        unrender: function() {
+            $(this.el).remove();
+        },
+
+        /**
+         * Renders a Label model.
+         *
+         * @return {[object]} The view itself.
+         */
+        render: function() {
+            $(this.el).html(this.model.get('name') + ' <i class="label-remove glyphicon glyphicon-remove"></i>');
+            return this;
+        }
+    }),
+
+    LabelBoxView = Backbone.View.extend({
+        /**
+         * Constructor.
+         */
+        initialize: function() {
+            _.bindAll(this, 'render', 'addLabel', 'appendLabel');
+
+            this.collection = new LabelCollection();
+            this.collection.bind('add', this.appendLabel);
+
+            this.render();
+        },
+
+        /**
+         * Renders the whole collection
+         */
+        render: function() {
+            var self = this;
+
+            _(this.collection.models).each(function(label) {
+                self.appendLabel(label);
+            }, this);
+        },
+
+        /**
+         * Adds a label.
+         *
+         * @param {[object]} labelData {name: 'name', id: 123}
+         */
+        addLabel: function(labelData) {
+            var label = new Label({
+                id: labelData.id,
+                name: labelData.name,
+                movieId: labelData.movieId
+            });
+            this.collection.add(label);
+        },
+
+        /**
+         * Renders a single label.
+         *
+         * @param  {[object]} label Label model.
+         */
+        appendLabel: function(label) {
+            var labelView = new LabelView({
+                model: label
+            });
+
+            $(this.el).append(labelView.render().el);
+        }
+    }),
 
     /**
-     * Submits the form
+     * Submits the autocomplete form.
      *
-     * @param  object form
+     * @param  {[object]}  form
+     * @param  {[integer]} movieId
      */
-    var submitForm = function(form, movieId) {
+    submitForm = function(form, movieId) {
         var data = {};
         $.each($(form).serializeArray(), function(index, rawData) {
             data[rawData.name] = rawData.value;
@@ -25,14 +132,17 @@ var g5MovieLabel = (function() {
             if('error' in response) {
                 g5Message.showMessage(response.error);
             } else {
-                $('#label-box-'+movieId).append(response);
+                top.labelViews[movieId].addLabel({
+                    id: response.id,
+                    name: response.name,
+                    movieId: movieId
+                });
             }
-            $('#label-form-' + movieId + ' input#link_name').hide();
         });
     },
 
     /**
-     * Bind autocomplete.
+     * Bind autocomplete on input.
      *
      * @param  {[object]}  input
      * @param  {[integer]} movieId
@@ -63,21 +173,20 @@ var g5MovieLabel = (function() {
         }).focus();
     };
 
+
     /**
      * PUBLIC
      */
     return {
         /**
-         * Bind form event.
+         * Binds the addLabel event for autocomplete.
          *
-         * @param  {[object]} triggerElement
-         * @param  {[object]} resultElement
+         * @param  {[object]}  triggerElement
+         * @param  {[integer]} movieId
          */
-        bindLabelEvent: function(triggerElement, resultElement) {
-            // Extract movieId
-            var movieId = $(triggerElement).attr('data-movieid');
+        bindLabelEvent: function(triggerElement, movieId) {
+            var resultElement = $('#label-form-'+movieId);
 
-            // get label form
             $(triggerElement).on('click', function() {
                 g5AjaxQueue.ajaxSingle('label-form', {
                     'type': 'GET',
@@ -87,18 +196,20 @@ var g5MovieLabel = (function() {
 
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
                     var labelForm = $('#label-form-' + movieId + ' form');
+
                     bindLabelAutocomplete(labelInput, movieId, labelForm);
                 });
             });
         },
 
         /**
-         * Submit form.
+         * Initialize the label box view which contains all labels.
          *
-         * @param  {[object]} form
+         * @param  {[object]} data
+         * @return {[object]}
          */
-        submitForm: function(form) {
-            submitForm(form);
+        createView: function(data) {
+            return new LabelBoxView(data);
         }
     };
 }());
@@ -107,10 +218,32 @@ var g5MovieLabel = (function() {
 $(document).ready(function() {
     'use strict';
 
+    top.labelViews = {};
+
+    // bind label autocomplete form and events
     $('.btnLabelAdd').each(function(index, el) {
         // Extract movieId
         var movieId = $(el).attr('data-movieid');
 
-        g5MovieLabel.bindLabelEvent(el, $('#label-form-'+movieId));
+        g5MovieLabel.bindLabelEvent(el, movieId);
+    });
+
+    // Bind label box events for
+    // controlling
+    $('.label-box').each(function(index, labelBox) {
+        // extract movieId
+        var movieId = $(labelBox).attr('data-movieid');
+        var labelView = g5MovieLabel.createView({
+            el: $(labelBox)
+        });
+        $.each(labels[movieId], function(index, label) {
+            labelView.addLabel({
+                id: label.id,
+                name: label.name,
+                movieId: movieId
+            });
+        });
+
+        top.labelViews[movieId] = labelView;
     });
 });

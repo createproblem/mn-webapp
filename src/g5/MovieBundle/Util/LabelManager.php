@@ -82,9 +82,15 @@ class LabelManager
      *
      * @return \g5\MovieBundle\Entity\Label
      */
-    public function findByUser($id, \g5\AccountBundle\Entity\User $user)
+    public function find($id, \g5\AccountBundle\Entity\User $user = null)
     {
-        return $this->repository->findOneBy(array('id' => $id, 'user' => $user));
+        $criteria['id'] = $id;
+
+        if (null !== $user) {
+            $criteria['user'] = $user;
+        }
+
+        return $this->repository->findOneBy($criteria);
     }
 
     /**
