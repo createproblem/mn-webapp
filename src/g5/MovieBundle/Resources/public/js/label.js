@@ -11,7 +11,7 @@ var g5MovieLabel = (function() {
 
     LabelView = Backbone.View.extend({
         tagName: 'span',
-        className: 'label label-default',
+        className: 'label label-default margin-right-xs',
 
         events: {
             'click i.label-remove': 'remove'
@@ -135,6 +135,7 @@ var g5MovieLabel = (function() {
                 });
             }
         });
+        $(form).hide();
     },
 
     /**
@@ -228,6 +229,10 @@ var g5MovieLabel = (function() {
 
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
                     var labelForm = $('#label-form-' + movieId + ' form');
+
+                    $(labelInput).on('blur', function() {
+                        $(labelForm).remove();
+                    });
 
                     bindLabelAutocomplete(labelInput, movieId, labelForm);
                 });
