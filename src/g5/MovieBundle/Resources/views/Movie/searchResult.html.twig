@@ -19,9 +19,7 @@
                 <br>
                 Release: {{ movie.release_date|date("Y") }}<br>
                 Tmdb-ID: {{ movie.id }}<br><br>
-                <div id="overview{{ movie.id }}">
-                    {{ dump(movie) }}
-                </div>
+                <div id="overview{{ movie.id }}"></div>
             </div>
         </div>
     {% endfor %}
