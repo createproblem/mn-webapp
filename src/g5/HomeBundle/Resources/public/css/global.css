@@ -1,7 +1,25 @@
-.footer {
-    margin-top: 20px;
-    padding: 30px 0;
-    text-align: center;
+/*
+ * Base structure
+ */
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+}
+
+/* Bootstrap overrides */
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+}
+
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+
+.margin-top-xs {
+    margin-top: 50px;
 }
 
 #loadingInfo {
@@ -15,27 +33,37 @@
     z-index: 999;
 }
 
-.label-remove
-{
-    line-height: 1;
+.messageInfo {
+    background: #AA0000;
+    border-radius: 3px;
+    color: #FFF;
+    padding: 8px 20px;
+    position: fixed;
+    bottom: 50px;
+    right: 5px;
+    z-index: 999;
 }
 
+.margin-bottom-md {
+    margin-bottom: 5px;
+}
+
+/* movie stuff */
+.movie-img-md {
+    max-height: 278px;
+}
+
+/* label stuff */
 .label-remove:hover
 {
     cursor: pointer;
 }
 
-.label
-{
-    line-height: 0;
-    margin: 0 0 0 3px;
-}
-
-.label a
-{
-    color: #FFFFFF;
-    text-decoration: none;
-    margin-right: 3px;
+/* custom */
+.footer {
+    margin-top: 20px;
+    padding: 30px 0;
+    text-align: center;
 }
 
 .movie-thumbnail-sm
@@ -47,9 +75,11 @@
     margin-left: 3px;
 }
 
-.margin-bottom-xs {
-    margin-bottom: 3px;
+.margin-right-xs {
+    margin-right: 3px;
 }
+
+
 
 .margin-bottom-sd {
     margin-bottom: 5px;

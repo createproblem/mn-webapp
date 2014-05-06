@@ -3,14 +3,11 @@
 {% extends '::base.html.twig' %}
 {% block title %}Home{% endblock %}
 {% block body %}
+<!-- Jumbotron -->
 <div class="jumbotron">
-    <div class="container">
-        <h1>Welcome to Movie Nightmare</h1>
-        <p>Movie Nightmare is a platform for your private moviethek. Catalogue your entire movie collection and keep track of it anytime and anywhere.</p>
-        <p>
-            <a class="btn btn-primary btn-lg">Let's Go &raquo;</a>
-        </p>
-    </div>
+    <h1>Movie Nightmare</h1>
+    <p class="lead">Get your own private library and share it with your friends, or something like that.</p>
+    <p><a class="btn btn-lg btn-success" href="{{ path('fos_user_security_login') }}" role="button">Get started today</a></p>
 </div>
 
 <div class="container">

@@ -12,178 +12,200 @@
 namespace g5\MovieBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations as RestAnnotation;
+use FOS\RestBundle\View\View;
 
-use g5\MovieBundle\Entity\Label;
-use g5\MovieBundle\Entity\MovieLabel;
 use g5\MovieBundle\Form\Model\Link;
 
 class ApiController extends Controller
 {
+
     /**
-     * Request Label form
+     * Get movie data from Tmdb.
      *
-     * @return Response
+     * @ApiDoc(
+     *     description="Get movie data from Tmdb.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
+     * )
+     *
+     * @param  Request  $request
+     * @param  integer  $tmdbId  The movie tmdbId.
      */
-    public function labelNewAction()
+    public function getMovieTmdbAction(Request $request, $tmdbId)
     {
-        if (!$this->getRequest()->isXmlHttpRequest()) {
-            throw $this->createNotFoundException('Wrong Request Type.');
-        }
+        // if (!$request->isXmlHttpRequest()) {
+        //     throw $this->createNotFoundException('Wrong Request Type.');
+        // }
 
-        $form = $this->get('g5_movie.link.form');
+        $tmdbApi = $this->get('g5_tmdb.api.default');
+        $movieResult = $tmdbApi->getMovie(array('id' => (int)$tmdbId));
 
-        return $this->render('g5MovieBundle:Label:new.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $data = $movieResult->toArray();
+
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($data)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
-     * Label lookup function for typeahead
+     * Adds a new movie from tmdb.
      *
-     * @return JsonResponse [description]
+     * @param string $tmdbId integer with the page number (requires param_fetcher_listener: force)
+     *
+     * @ApiDoc(
+     *     description="Adds a new movie from tmdb.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
+     * )
+     *
+     * @RestAnnotation\RequestParam(
+     *     name="tmdbId",
+     *     description="TmdbId of the movie.",
+     *     strict=true,
+     *     nullable=false,
+     *     requirements="^\d+$"
+     * )
+     *
      */
-    public function labelFindAction()
+    public function postMovieAction(ParamFetcher $paramFetcher)
     {
-        $request = $this->getRequest();
-        $user = $this->getUser();
-        $name = $request->query->get('query');
+        $tmdbApi = $this->get('g5_tmdb.api.default');
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $validator = $this->get('validator');
 
+        $params = $paramFetcher->all();
+
+        $result = $tmdbApi->getMovie(array('id' => (int)$params['tmdbId']));
+        $movie = $movieManager->createMovieFromTmdb($result);
+        $movie->setUser($this->getUser());
+
+        $errors = $validator->validate($movie);
+
+        if (count($errors) === 0) {
+            $movieManager->updateMovie($movie);
+            $data = $movie;
+        } else {
+            $data = $errors;
+        }
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($data)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    public function getMovieLabelFormAction($id)
+    {
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $movie = $movieManager->find($id);
+
+        $link = new Link();
+        $link->setMovieId($movie->getId());
+
+        $form = $this->createForm('link', $link);
+        $data = array('form' => $form->createView());
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create($data)
+            ->setStatusCode($status)
+            ->setTemplate('g5MovieBundle:Label:new.html.twig')
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    /**
+     * @ApiDoc(
+     *     description="Legt einen neuen User an",
+     *     input="g5\MovieBundle\Form\Type\LinkType",
+     *     output="g5\MovieBundle\Entity\Label"
+     * )
+     *
+     * @param Request $request
+     */
+    public function postMovieLabelAction(Request $request, $id)
+    {
         $labelManager = $this->get('g5_movie.label_manager');
-        $labels = $labelManager->findLabelsByNameWithLike($name, $user);
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $validator = $this->get('validator');
 
-        $serializer = $this->get('jms_serializer');
-        $data = $serializer->serialize(array('labels' => $labels), 'json');
+        $form = $this->createForm('link');
+        $handler = $this->get('g5_movie.link.form.handler');
 
-        $response = new JsonResponse();
-        $response->setContent($data);
+        $form->bind($request);
+        $label = $handler->process($form, $this->getUser());
 
-        return $response;
-    }
-
-    /**
-     * Adds a new Label or Binds an existing label to a movie
-     *
-     * @return JsonResponse
-     */
-    public function labelAddAction()
-    {
-        $formHandler = $this->get('g5_movie.link.form_handler');
-        $serializer = $this->get('jms_serializer');
-
-        $label = $formHandler->process(new Link(), $this->getUser());
-        if (false !== $label) {
-            $jsonData = array(
-                'status' => 'OK',
-                'message' => 'Label added.',
-                'label' => $label,
-            );
+        if (!$label) {
+            $data = $handler->getErrors();
         } else {
-            $jsonData = array(
-                'status' => 'ERROR',
-                'message' => 'Label could not be added.',
-            );
+            $data = $label;
         }
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        // $labelId = $params['labelId'];
 
-        $data = $serializer->serialize($jsonData, 'json');
+        // $label = $labelManager->findByUser($labelId, $this->getUser());
+        // $movie = $movieManager->find($id);
 
-        $response = new JsonResponse();
-        $response->setContent($data);
+        // $movieLabel = $movie->addLabel($label);
 
-        return $response;
+        // $errors = $validator->validate($movieLabel);
+        // if (count($errors) === 0) {
+        //     $movieManager->updateMovie($movie);
+        //     $data = array('label' => $label);
+        // } else {
+        //     $data = array('errors' => $errors);
+        // }
+
+
+        $view = View::create($data)
+            ->setStatusCode($status)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 
     /**
-     * Delets a label permanently
-     *
-     * @param  Request $request
-     *
-     * @return JsonResponse
+     * @RestAnnotation\QueryParam(
+     *     name="labelId",
+     *     description="The label id.",
+     *     strict=true,
+     *     nullable=false,
+     *     requirements="^\d+$"
+     * )
      */
-    public function labelDeleteAction(Request $request)
+    public function deleteMovieLabelAction($id, ParamFetcher $paramFetcher)
     {
-        $user = $this->getUser();
-        $lm = $this->get('g5_movie.label_manager');
-        $labelId = $request->query->get('labelId');
-
-        $label = $lm->findLabelBy(array('id' => $labelId, 'user' => $user));
-
-        if (null !== $label) {
-            $lm->removeLabel($label);
-            $jsonData = array(
-                'status' => 'OK',
-                'message' => 'Label deleted.',
-            );
-        } else {
-            $jsonData = array(
-                'status' => 'ERROR',
-                'message' => 'Label could not be deleted.',
-            );
-        }
-
-        return new JsonResponse($jsonData);
-    }
-
-    /**
-     * Unlinks a Label from a Movie
-     *
-     * @return JsonResponse
-     */
-    public function unlinkAction()
-    {
-        $request = $this->getRequest();
         $labelManager = $this->get('g5_movie.label_manager');
-        $mm = $this->get('g5_movie.movie_manager');
-        $em = $this->getDoctrine()->getManager();
+        $movieManager = $this->get('g5_movie.movie_manager');
 
+        $params = $paramFetcher->all();
 
-        $user = $this->getUser();
+        $movie = $movieManager->find($id);
+        $label = $labelManager->find($params['labelId']);
 
-        $labelId = $request->query->get('labelId');
-        $movieId = $request->query->get('movieId');
+        $movie->removeLabel($label);
+        $movieManager->updateMovie($movie);
 
-        $label = $labelManager->loadLabelById($labelId, $user);
-        $movie = $mm->loadMovieById($movieId, $user);
-        if ($label && $movie) {
-            $movie->removeLabel($label);
-            $mm->updateMovie($movie);
+        $data = array('status' => 'ok');
 
-            $data['status'] = 'OK';
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        $view = View::create($data)
+            ->setStatusCode($status)
+        ;
 
-            return new JsonResponse($data);
-        }
-        $data['status'] = 'ERROR';
-
-        return new JsonResponse($data);
-    }
-
-    public function movieUpdateFavoriteAction(Request $request)
-    {
-        $movieId = $request->query->get('movieId');
-        $user = $this->getUser();
-        $mm = $this->get('g5_movie.movie_manager');
-
-        $movie = $mm->loadMovieById($movieId, $user);
-
-        if (!$movie) {
-            $jsonData = array(
-                'status' => 'ERROR',
-                'message' => 'Movie does not exist.',
-            );
-        } else {
-            $favorite = ($movie->isFavorite() ? false : true);
-            $movie->setFavorite($favorite);
-            $mm->updateMovie($movie);
-
-            $jsonData = array(
-                'status' => 'OK',
-                'message' => 'Movie favorite status changed.',
-                'data' => $movie->isFavorite(),
-            );
-        }
-
-        return new JsonResponse($jsonData);
+        return $this->get('fos_rest.view_handler')->handle($view);
     }
 }

@@ -358,4 +358,14 @@ class Movie extends MovieBase
     {
         return $this->favorite;
     }
+
+    /**
+     * Get favorite
+     *
+     * @return boolean 
+     */
+    public function getFavorite()
+    {
+        return $this->favorite;
+    }
 }

@@ -1,25 +1,20 @@
 <?php
 
-/*
-* This file is part of the mn-webaoo package.
-*
-* (c) createproblem <https://github.com/createproblem/>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+/**
+ * This file is part of the mn-webapp package.
+ *
+ * (c) createproblem <https://github.com/createproblem/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace g5\MovieBundle\Tests\Util;
 
 require_once dirname(__DIR__).'/../../../../app/KernelAwareTest.php';
 
-use g5\MovieBundle\Util\MovieManager;
-
 class MovieManagerTest extends \KernelAwareTest
 {
-    /**
-     * @var g5\MovieBundle\Util\MovieManager
-     */
     private $mm;
 
     public function setUp()
@@ -29,150 +24,88 @@ class MovieManagerTest extends \KernelAwareTest
         $this->mm = $this->container->get('g5_movie.movie_manager');
     }
 
+    public function testCreateMovie()
+    {
+        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $this->mm->createMovie());
+    }
+
     public function testCreateMovieFromTmdb()
     {
-        $tmdbMock = $this->getMockBuilder('g5\ToolsBundle\Tmdb\TmdbApi')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $data = array(
+            'id' => 123,
+            'overview' => 'Test Overview',
+            'original_title' => 'Test Movie Title',
+            'poster_path' => '/poster.jpg',
+            'backdrop_path' => '/backdrop.jpg',
+            'release_date' => '2014-05-05'
+        );
+        $model = new \Guzzle\Service\Resource\Model($data);
+        $movie = $this->mm->createMovieFromTmdb($model);
 
-        $tmdbMock->expects($this->once())
-            ->method('getMovie')
-            ->with(550)
-            ->will($this->returnValue(json_decode($this->getTestDataDir().'/tmdb_movie_response.json'), true))
-        ;
-
-        $doctrine = $this->container->get('doctrine');
-
-        $movieManager = new MovieManager($tmdbMock, $doctrine);
-        $movie = $movieManager->createMovieFromTmdb(550);
-
-        $this->assertEquals(550, $movie->getTmdbId());
+        $this->assertEquals($data['id'], $movie->getTmdbId());
+        $this->assertEquals($data['overview'], $movie->getOverview());
+        $this->assertEquals($data['original_title'], $movie->getTitle());
+        $this->assertEquals($data['poster_path'], $movie->getPosterPath());
+        $this->assertEquals($data['backdrop_path'], $movie->getBackdropPath());
     }
 
     public function testFindMoviesBy()
     {
-        $expectedMovie = $this->createTestMovie();
-        $movies = $this->mm->findMoviesBy(array('id' => $expectedMovie));
+        $movies = $this->mm->findMoviesBy(array('tmdb_id' => 550));
 
-        $this->assertTrue(is_array($movies));
-        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movies[0]);
-        $this->assertEquals($expectedMovie->getId(), $movies[0]->getId());
-
-        $this->deleteMovie($expectedMovie);
+        $this->assertArrayHasKey(0, $movies);
+        $this->assertEquals(550, $movies[0]->getTmdbId());
     }
 
-    public function testLoadMovieByIdWithoutException()
+    public function testFindMoviesByUser()
     {
-        $expectedMovie = $this->createTestMovie();
-
-        $movie = $this->mm->loadMovieById($expectedMovie->getId());
-
-        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movie);
-        $this->assertEquals($expectedMovie->getId(), $movie->getId());
-
         $user = $this->loadTestUser();
 
-        $movie = $this->mm->loadMovieById($expectedMovie->getId(), $user);
+        $movies = $this->mm->findMoviesByUser($user);
 
-        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $movie);
-        $this->assertEquals($expectedMovie->getId(), $movie->getId());
-        $this->assertEquals($expectedMovie->getUser()->getId(), $movie->getUser()->getId());
-
-        $this->deleteMovie($expectedMovie);
+        $this->assertArrayHasKey(0, $movies);
     }
 
-    public function testRemoveMovie()
+    public function testFind()
     {
-        $expectedMovie = $this->createTestMovie();
+        $user = $this->loadTestUser();
+        $expected = $user->getMovies()[0];
 
-        $this->mm->removeMovie($expectedMovie);
+        $movie = $this->mm->find($expected->getId(), $user);
 
-        $this->assertNull($expectedMovie->getId());
-
-        $this->deleteMovie($expectedMovie);
+        $this->assertEquals($expected->getId(), $movie->getId());
     }
 
     public function testUpdateMovie()
     {
-        $expectedMovie = $this->createTestMovie();
+        $data = array(
+            'id' => 123,
+            'overview' => 'Test Overview',
+            'original_title' => 'Test Movie Title',
+            'poster_path' => '/poster.jpg',
+            'backdrop_path' => '/backdrop.jpg',
+            'release_date' => '2014-05-05'
+        );
+        $model = new \Guzzle\Service\Resource\Model($data);
+        $movie = $this->mm->createMovieFromTmdb($model);
+        $movie->setUser($this->loadTestUser());
 
-        $expectedMovie->setTitle('Test123');
-        $this->mm->updateMovie($expectedMovie);
-
-        $this->assertEquals('Test123', $expectedMovie->getTitle());
-
-        $this->deleteMovie($expectedMovie);
-    }
-
-    public function testFindMoviesByLabel()
-    {
-        $label = $this->createTestLabel();
-        $movie = $this->createTestMovie();
-
-        $movie->addLabel($label);
         $this->mm->updateMovie($movie);
 
-        $movies = $this->mm->findMoviesByLabel($label);
-        $this->assertEquals(1, count($movies));
+        $this->assertGreaterThan(0, $movie->getId());
 
-        $movies = $this->mm->findMoviesByLabel($label, null, 1, 0);
-        $this->assertEquals(1, count($movies));
-
-        $this->deleteLabel($label);
-        $this->deleteMovie($movie);
+        return $movie->getId();
     }
 
-    public function testLoadLatestMovies()
+    /**
+     * @depends testUpdateMovie
+     */
+    public function testRemoveMovie($id)
     {
-        $user = $this->loadTestUser();
-        $movie = $this->createTestMovie();
-        $movies = $this->mm->loadLatestMovies($user);
+        $movie = $this->mm->find($id);
 
-        $this->assertEquals($movies[0]->getId(), $movie->getId());
+        $this->mm->removeMovie($movie);
 
-        $this->deleteMovie($movie);
-    }
-
-    public function testLoadRandomMovies()
-    {
-        $user = $this->loadTestUser();
-        $movies = $this->mm->loadRandomMovies($user, 1);
-
-        $this->assertEquals(1, count($movies));
-
-        $movies = $this->mm->loadRandomMovies($user, 4);
-
-        $this->assertEquals(4, count($movies));
-    }
-
-    public function testFindMoviesWithoutLabel()
-    {
-        $user = $this->loadTestUser();
-        $movies = $this->mm->findMoviesWithoutLabel($user);
-
-        $this->assertEquals(0, count($movies));
-
-        $movie = $this->createTestMovie();
-        $movies = $this->mm->findMoviesWithoutLabel($user);
-
-        $this->assertEquals(1, count($movies));
-
-        $this->deleteMovie($movie);
-    }
-
-    public function testLoadMoviesByFavorite()
-    {
-        $user = $this->loadTestUser();
-        $movie = $this->createTestMovie();
-
-        $movie->setFavorite(true);
-        $this->mm->updateMovie($movie);
-
-        $movies = $this->mm->loadMoviesByFavorite($user);
-
-        $this->assertGreaterThan(0, count($movies));
-
-        $this->deleteMovie($movie);
+        $this->assertNull($movie->getId());
     }
 }

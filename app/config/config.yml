@@ -24,12 +24,15 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    form:
+        resources:
+            - 'g5HomeBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "g5MovieBundle" ]
+    bundles:        [ "g5MovieBundle", "g5HomeBundle" ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -91,9 +94,22 @@ fos_user:
     #         type: g5_registration_form_type
     #         handler: g5.registration.form.handler
 
+# NelmioApiDocBundle
+nelmio_api_doc: ~
+
+# FOSRestBundle
+fos_rest:
+    param_fetcher_listener: force
+    routing_loader:
+        default_format: json
+
 g5_tools:
     tmdb:
         api_key: "%tmdb_api_key%"
+
+g5_tmdb:
+    api_key: "%tmdb_api_key%"
+    fixture_dir: "%kernel.root_dir%/../src/g5/TmdbBundle/Resources/fixtures/response"
 
 jms_serializer:
     metadata:

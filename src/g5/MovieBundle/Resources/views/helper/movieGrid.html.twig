@@ -1,20 +1,10 @@
-{# /src/g5/MovieBundle/Resources/views/helper/movieGrid.html.twig #}
-{% set max = movies|length %}
-{% for movie in movies %}
-    {% if loop.index % 2 > 0 %}
-        <div class="row">
-    {% endif %}
-
-    <div class="col-xs-12 col-md-6">
-        {% include 'g5MovieBundle:helper:movieObject.html.twig' with { "movie": movie, "imgUrl": imgUrl } %}
-        <div class="clearfix visible-xs"></div>
-    </div>
-
-    {% if loop.index % 2 == 0 %}
-        </div><br>
-    {% endif %}
-
-    {% if max == loop.index and max % 2 > 0 %}
+<div class="row">
+    {% for movie in movies %}
+        <div class="col-xs-12 col-md-6">
+            {% include 'g5MovieBundle:helper:movieObject.html.twig' with { 'movie': movie } %}
         </div>
-    {% endif %}
-{% endfor %}
+        {% if loop.index0 is odd %}
+            <div class="col-xs-12"></div>
+        {% endif %}
+    {% endfor %}
+</div>

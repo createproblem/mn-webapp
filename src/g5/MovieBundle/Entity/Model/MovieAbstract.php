@@ -46,6 +46,8 @@ abstract class MovieAbstract
         $movieLabel->setLabel($label);
 
         $this->addMovieLabel($movieLabel);
+
+        return $movieLabel;
     }
 
     /**

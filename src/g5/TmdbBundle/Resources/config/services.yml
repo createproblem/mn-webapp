@@ -1,0 +1,39 @@
+parameters:
+    g5_tmdb.api.default.class: g5\TmdbBundle\Components\Api\TmdbApiClient
+    g5_tmdb.api.helper.class: g5\TmdbBundle\Helper\TmdbTestHelper
+    g5_tmdb.logger.class: g5\TmdbBundle\Logger\TmdbLogger
+    g5_tmdb.data_collector.class: g5\TmdbBundle\DataCollector\TmdbDataCollector
+    g5_tmdb.twig.tmdb_extension.class: g5\TmdbBundle\Twig\Extension\TmdbExtension
+
+services:
+    g5_tmdb.api.default:
+        class: "%g5_tmdb.api.default.class%"
+        factory_class: "%g5_tmdb.api.default.class%"
+        factory_method: factory
+        calls:
+            - [ "setLogger", [ "@g5_tmdb.logger" ]]
+        arguments:
+            - { "api_key": "%g5_tmdb.api_key%" }
+
+    g5_tmdb.api.helper:
+        class: "%g5_tmdb.api.helper.class%"
+        arguments: [ "%g5_tmdb.fixture_dir%" ]
+
+    g5_tmdb.logger:
+        class: "%g5_tmdb.logger.class%"
+        arguments: [ "@logger", "%kernel.debug%" ]
+        public: false
+        tags:
+            - { name: monolog.logger, channel: tmdb }
+
+    g5_tmdb.data_collector:
+        class: "%g5_tmdb.data_collector.class%"
+        arguments: [ "@g5_tmdb.logger" ]
+        tags:
+            - { name: data_collector, template: g5TmdbBundle:Collector:tmdb, id: tmdb }
+
+    g5_tmdb.twig.tmdb_extension:
+        class: "%g5_tmdb.twig.tmdb_extension.class%"
+        arguments: [ "@g5_tmdb.api.default" ]
+        tags:
+            - { name: twig.extension }

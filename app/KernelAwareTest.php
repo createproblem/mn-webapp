@@ -2,6 +2,7 @@
 // /app/KernelAwareTest.php
 
 require_once dirname(__DIR__).'/app/AppKernel.php';
+require_once dirname(__DIR__).'/app/TestHelper.php';
 
 /**
 * Test case class helpful with Entity tests requiring the database interaction.
@@ -138,5 +139,10 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         $this->kernel->shutdown();
 
         parent::tearDown();
+    }
+
+    public function get($identifier)
+    {
+        return $this->container->get($identifier);
     }
 }

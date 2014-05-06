@@ -25,10 +25,16 @@ class LabelManager
      */
     private $repository;
 
-    public function __construct($doctrine)
+    /**
+     * Constructor.
+     *
+     * @param Doctrine\ORM\EntityRepository $repository
+     * @param Doctrine\ORM\EntityManager    $em
+     */
+    public function __construct($repository, $em)
     {
-        $this->em = $doctrine->getManager();
-        $this->repository = $this->em->getRepository('g5MovieBundle:Label');
+        $this->repository = $repository;
+        $this->em = $em;
     }
 
     /**
@@ -76,9 +82,15 @@ class LabelManager
      *
      * @return \g5\MovieBundle\Entity\Label
      */
-    public function loadLabelById($id, \g5\AccountBundle\Entity\User $user)
+    public function find($id, \g5\AccountBundle\Entity\User $user = null)
     {
-        return $this->repository->findOneBy(array('id' => $id, 'user' => $user));
+        $criteria['id'] = $id;
+
+        if (null !== $user) {
+            $criteria['user'] = $user;
+        }
+
+        return $this->repository->findOneBy($criteria);
     }
 
     /**

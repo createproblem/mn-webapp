@@ -4,7 +4,7 @@
     {% for movie in movies %}
         <div class="media">
             {% if movie.poster_path != null %}
-                <img class="pull-left media-object" src="{{ imgUrl }}{{ movie.poster_path }}">
+                <img class="pull-left media-object" src="{{ movie.poster_path|img_poster_w185 }}">
             {% endif %}
             <div class="media-body">
                 <h4 class="media-heading">{{ movie.original_title }}</h4>

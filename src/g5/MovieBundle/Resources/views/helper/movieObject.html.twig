@@ -6,29 +6,24 @@
 {% endif %}
 
 <div class="media margin-bottom-sd">
-    <button style="display: none;" id="label-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-sm pull-right">
+    <button id="label-trigger-{{ uid }}" data-movieid="{{ uid }}" class="btnLabelAdd btn btn-sm pull-right" >
         <span class="glyphicon glyphicon-tag"></span>
     </button>
-    <a class="pull-left" href="{{ path('g5_movie_index', {id: uid}) }}">
-        <img class="media-object" src="{{ imgUrl }}{{ movie.getPosterPath() }}">
+    <a class="pull-left" href="#">
+        <img class="media-object movie-img-md" src="{{ movie.posterPath|img_poster_w185 }}">
     </a>
     <div class="media-body">
         <h4 class="media-heading">
-            {{ movie.getTitle() }} <span class="text-muted">({{ movie.getReleaseDate()|date('Y') }})</span>
+            {{ movie.title }} <span class="text-muted">({{ movie.releaseDate|date('Y') }})</span>
             <button id="favorite-trigger-{{ uid }}" data-id="{{ uid }}" class="btn btn-xs {{ btnFavoriteClass }}">
                 <span class="glyphicon glyphicon-star"></span>
             </button>
         </h4>
         <div id="label-form-{{ uid }}" style="display: none;"></div>
-        <div id="label-box-{{ uid }}">
-            {% for label in movie.getLabels() %}
-                {#% if curLabel is not defined %}
-                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
-                {% elseif curLabel.getNameNorm() != label.getNameNorm() %}
-                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
-                {% endif %#}
-                    {% include 'g5MovieBundle:Label:label.html.twig' with { label: label, movieId: movie.getId() } %}
-            {% endfor %}
+        <div id="label-box-{{ uid }}" class="label-box" data-movieid="{{ uid }}">
+            {# {% for label in movie.getLabels() %}
+                {% include 'g5MovieBundle:Label:label.html.twig' with { 'label': label } %}
+            {% endfor %} #}
         </div>
         <br>
         {{ movie.getOverview() }}

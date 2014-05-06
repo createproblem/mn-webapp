@@ -1,0 +1,154 @@
+{
+  "adult": false,
+  "backdrop_path": "/5HvNSQYyY4FEAcwInXRS29Tqz2W.jpg",
+  "belongs_to_collection": null,
+  "budget": 15000000,
+  "genres": [
+    {
+      "id": 14,
+      "name": "Fantasy"
+    },
+    {
+      "id": 878,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 10751,
+      "name": "Family"
+    }
+  ],
+  "homepage": "",
+  "id": 9070,
+  "imdb_id": "tt0113820",
+  "original_title": "Mighty Morphin Power Rangers: The Movie",
+  "overview": "Four athletically able teenagers along with their brainy friend Billy are selected by Zordon to fight the evil of Rita Repulsa, her monsters and her minions after the witch is accidentally released from imprisonment in an intergalactic dumpster on the moon. Later in the series, the rangers are joined by Tommy, the once evil Green Ranger designed for Rita's evil, but later was deprogrammed and spent two portions of the series briefly as the Green Ranger. Over time, some rangers had to pass their powers to others as well. Action scenes and scenes with Rita were edited from footage based on Japanese action sagas. Replacement villain Lord Zedd was designed in the U.S.",
+  "popularity": "0.784860206834231",
+  "poster_path": "/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg",
+  "production_companies": [],
+  "production_countries": [
+    {
+      "iso_3166_1": "JP",
+      "name": "Japan"
+    },
+    {
+      "iso_3166_1": "US",
+      "name": "United States of America"
+    }
+  ],
+  "release_date": "1995-06-30",
+  "revenue": 0,
+  "runtime": 92,
+  "spoken_languages": [
+    {
+      "iso_639_1": "en",
+      "name": "English"
+    }
+  ],
+  "status": "Released",
+  "tagline": "The Power Is On!",
+  "title": "Mighty Morphin Power Rangers: The Movie",
+  "vote_average": 5.4,
+  "vote_count": 18,
+  "images": {
+    "backdrops": [
+      {
+        "aspect_ratio": 1.78,
+        "file_path": "/5HvNSQYyY4FEAcwInXRS29Tqz2W.jpg",
+        "height": 1080,
+        "iso_639_1": null,
+        "vote_average": 5.3125,
+        "vote_count": 1,
+        "width": 1920
+      },
+      {
+        "aspect_ratio": 1.78,
+        "file_path": "/u5jVc4Ks48ldQ4hvHos0JxCDhg4.jpg",
+        "height": 720,
+        "iso_639_1": null,
+        "vote_average": "5.31024531024531",
+        "vote_count": 3,
+        "width": 1280
+      },
+      {
+        "aspect_ratio": 1.78,
+        "file_path": "/lqCtjjdh1K9Qx6J2oGlboMyY3Gu.jpg",
+        "height": 1080,
+        "iso_639_1": null,
+        "vote_average": "5.24542124542125",
+        "vote_count": 2,
+        "width": 1920
+      },
+      {
+        "aspect_ratio": 1.78,
+        "file_path": "/yuHHXo3awL2rGJZvQqkblZdD1oM.jpg",
+        "height": 720,
+        "iso_639_1": null,
+        "vote_average": "5.06751954513149",
+        "vote_count": 4,
+        "width": 1280
+      }
+    ],
+    "posters": [
+      {
+        "aspect_ratio": 0.67,
+        "file_path": "/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg",
+        "height": 1500,
+        "id": "4f38571e760ee34c38005ee2",
+        "iso_639_1": "en",
+        "vote_average": 5.3125,
+        "vote_count": 1,
+        "width": 1000
+      },
+      {
+        "aspect_ratio": 0.67,
+        "file_path": "/4chIyJDx6RIDIjaZmLsYj4PjnII.jpg",
+        "height": 1500,
+        "id": "4ea5fe3b34f8633bdc002db7",
+        "iso_639_1": "en",
+        "vote_average": "5.26739926739927",
+        "vote_count": 2,
+        "width": 1000
+      },
+      {
+        "aspect_ratio": 0.73,
+        "file_path": "/hWOXsBWimdoB3PeRlLQG9Fiq1Xe.jpg",
+        "height": 1092,
+        "id": "4ea5fe3434f8633bdc002db1",
+        "iso_639_1": "en",
+        "vote_average": "5.17857142857143",
+        "vote_count": 1,
+        "width": 800
+      },
+      {
+        "aspect_ratio": 0.7,
+        "file_path": "/z9JdjfE402qoj2VxWABqSt2atoC.jpg",
+        "height": 720,
+        "id": "4ea5fe3e34f8633bdc002db9",
+        "iso_639_1": "fr",
+        "vote_average": 0,
+        "vote_count": 0,
+        "width": 505
+      },
+      {
+        "aspect_ratio": 0.67,
+        "file_path": "/qTSuQhzysg9KixezUnj8ZoR0sy2.jpg",
+        "height": 1500,
+        "id": "4f92020519c29518b300d32d",
+        "iso_639_1": "de",
+        "vote_average": 0,
+        "vote_count": 0,
+        "width": 1000
+      },
+      {
+        "aspect_ratio": 0.74,
+        "file_path": "/apXKNWzuZnytWNCJU2GNIXq8OkE.jpg",
+        "height": 937,
+        "id": "4f08e138760ee330c1001b5c",
+        "iso_639_1": "pt",
+        "vote_average": 0,
+        "vote_count": 0,
+        "width": 697
+      }
+    ]
+  }
+}

@@ -16,3 +16,6 @@ composer.phar
 *~
 *.sublime-workspace
 *.sublime-project
+db.sh
+phpunit.xml
+cache.sh

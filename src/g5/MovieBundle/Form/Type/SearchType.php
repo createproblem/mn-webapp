@@ -30,17 +30,18 @@ class SearchType extends AbstractType
                 'class' => 'form-control',
             ),
             'required' => true,
+            'mapped' => false
         ));
 
-        $searchFieldValidator = function(FormEvent $event) {
-            $form = $event->getForm();
-            $searchField = $form->get('search')->getData();
-            if (empty($searchField)) {
-                $form['search']->addError(new FormError('Search must not be empty'));
-            }
-        };
+        // $searchFieldValidator = function(FormEvent $event) {
+        //     $form = $event->getForm();
+        //     $searchField = $form->get('search')->getData();
+        //     if (strlen($searchField) === 0) {
+        //         $form['search']->addError(new FormError('Search must not be empty'));
+        //     }
+        // };
 
-        $builder->addEventListener(FormEvents::POST_BIND, $searchFieldValidator);
+        // $builder->addEventListener(FormEvents::POST_BIND, $searchFieldValidator);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -48,7 +49,6 @@ class SearchType extends AbstractType
         $resolver->setDefaults(array(
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            // a unique key to help generate the secret token
             'intention'       => 'g5_movie_search',
         ));
     }

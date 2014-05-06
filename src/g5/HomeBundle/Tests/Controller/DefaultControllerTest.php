@@ -17,32 +17,21 @@ class DefaultControllerTest extends \g5WebTestCase
 {
     public function testIndex()
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/');
 
-        $crawler = $client->request('GET', '/');
-
-        $this->assertTrue($crawler->filter('html:contains("Welcome to Movie Nightmare")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Movie Nightmare")')->count() > 0);
     }
 
     public function testIndexLogedIn()
     {
-        $client = static::createClient();
-        $this->login($client);
+        $this->login($this->client);
 
-        $tmdbMock = $this->getTmdbMock();
-        $tmdbMock->expects($this->any())
-            ->method('getImageUrl')
-            ->will($this->returnValue(''))
-        ;
+        $tmdbTestHelper = $this->get('g5_tmdb.api.helper');
+        $api = $this->helper->getTmdbApi(array($tmdbTestHelper->getFixture('configuration.json')));
+        $this->client->getContainer()->set('g5_tmdb.api.default', $api);
 
-        static::$kernel->setKernelModifier(function($kernel) use ($tmdbMock) {
-            $kernel->getContainer()->set('g5_tools.tmdb.api', $tmdbMock);
-        });
-
-        $crawler = $client->request('GET', '/');
-
-        $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('html:contains("Top Labels")')->count());
-        $this->assertEquals(1, $crawler->filter('html:contains("Latest Movies")')->count());
+        $crawler = $this->client->request('GET', '/');
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertEquals(1, $crawler->filter('h4:contains("Fight Club")')->count());
     }
 }

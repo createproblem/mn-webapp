@@ -16,8 +16,34 @@ use Symfony\Component\Finder\Finder;
 
 use g5\MovieBundle\Entity\Movie;
 
+require_once dirname(__DIR__).'/app/TestHelper.php';
+
 abstract class g5WebTestCase extends WebTestCase
 {
+    /**
+     * @var TestHelper
+     */
+    protected $helper;
+
+    /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->client = static::createClient();
+        $this->helper = new TestHelper($this->client->getContainer());
+        $this->container = $this->client->getContainer();
+    }
+
     protected function login(&$client)
     {
         $this->loginAs($client, 'test');
@@ -91,7 +117,7 @@ abstract class g5WebTestCase extends WebTestCase
         $user = $this->loadUser($um, 'test');
         $movie = $mm->createMovie();
 
-        $movie->setTmdbId(9070);
+        $movie->setTmdbId(uniqid());
         $movie->setTitle('Power Rangers');
         $movie->setReleaseDate(new DateTime(1995));
         $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_9070.txt'));
@@ -214,5 +240,10 @@ abstract class g5WebTestCase extends WebTestCase
     protected function getTestDataDir()
     {
         return static::$kernel->getRootDir().'/Resources/meta/TestData';
+    }
+
+    protected function get($identifier)
+    {
+        return $this->client->getContainer()->get($identifier);
     }
 }

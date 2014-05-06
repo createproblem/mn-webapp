@@ -13,6 +13,11 @@
     syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php.cache" >
 
+    <php>
+        <server name="tmdb.api_key" value="123" />
+        <server name="tmdb.use_real_api" value="false" />
+    </php>
+
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>../src/*/*Bundle/Tests</directory>

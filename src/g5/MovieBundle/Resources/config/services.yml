@@ -1,25 +1,35 @@
 parameters:
-#    g5_movie.example.class: g5\MovieBundle\Example
+    g5_movie.movie_manager.class: g5\MovieBundle\Util\MovieManager
+    g5_movie.label_manager.class: g5\MovieBundle\Util\LabelManager
 
 services:
+    g5_movie.repository.movie:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method: getRepository
+        arguments: [ "g5MovieBundle:Movie" ]
+        public: false
+
+    g5_movie.repository.label:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method: getRepository
+        arguments: [ "g5MovieBundle:Label" ]
+        public: false
+
     g5_movie.movie_manager:
-        class: g5\MovieBundle\Util\MovieManager
-        arguments: [@g5_tools.tmdb.api, @doctrine]
+        class: "%g5_movie.movie_manager.class%"
+        arguments: [ "@g5_movie.repository.movie", "@doctrine.orm.entity_manager" ]
 
     g5_movie.label_manager:
-        class: g5\MovieBundle\Util\LabelManager
-        arguments: [@doctrine]
+        class: "%g5_movie.label_manager.class%"
+        arguments: [ "@g5_movie.repository.label", "@doctrine.orm.entity_manager" ]
 
-    g5_movie.link.form_type:
+    g5_movie.link.form.type:
         class: g5\MovieBundle\Form\Type\LinkType
+        tags:
+            - { name: form.type, alias: link }
 
-    g5_movie.link.form:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
-        arguments: ["link", @g5_movie.link.form_type]
-
-    g5_movie.link.form_handler:
+    g5_movie.link.form.handler:
         class: g5\MovieBundle\Form\Handler\LinkFormHandler
-        scope: request
-        arguments: [@request, @g5_movie.link.form, @g5_movie.label_manager, @g5_movie.movie_manager, @g5_tools.normalizer]
+        arguments: [ "@g5_movie.label_manager", "@g5_movie.movie_manager", "@g5_tools.normalizer" ]

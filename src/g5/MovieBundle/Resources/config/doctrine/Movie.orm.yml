@@ -2,7 +2,6 @@
 g5\MovieBundle\Entity\Movie:
     type: entity
     table: movie
-    repositoryClass: g5\MovieBundle\Entity\MovieRepository
 
     id:
         id:
@@ -16,10 +15,13 @@ g5\MovieBundle\Entity\Movie:
             type: string
         overview:
             type: text
+            nullable: true
         poster_path:
             type: string
+            nullable: true
         backdrop_path:
             type: string
+            nullable: true
         release_date:
             type: date
         created_at:
