@@ -241,4 +241,9 @@ abstract class g5WebTestCase extends WebTestCase
     {
         return static::$kernel->getRootDir().'/Resources/meta/TestData';
     }
+
+    protected function get($identifier)
+    {
+        return $this->client->getContainer()->get($identifier);
+    }
 }

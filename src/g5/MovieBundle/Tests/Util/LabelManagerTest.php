@@ -1,13 +1,13 @@
 <?php
 
-/*
-* This file is part of the mn-webapp package.
-*
-* (c) createproblem <https://github.com/createproblem/>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+/**
+ * This file is part of the mn-webapp package.
+ *
+ * (c) createproblem <https://github.com/createproblem/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace g5\MovieBundle\Tests\Util;
 
@@ -71,19 +71,6 @@ class LabelManagerTest extends \KernelAwareTest
         $this->deleteLabel($expectedLabel);
     }
 
-    public function testLoadLabelById()
-    {
-        $expectedLabel = $this->createTestLabel();
-        $user = $this->loadTestUser();
-
-        $label = $this->lm->loadLabelById($expectedLabel->getId(), $user);
-
-        $this->assertEquals($expectedLabel->getId(), $label->getId());
-        $this->assertEquals($expectedLabel->getUser()->getId(), $label->getUser()->getId());
-
-        $this->deleteLabel($expectedLabel);
-    }
-
     public function testRemoveLabel()
     {
         $expectedLabel = $this->createTestLabel();
@@ -91,20 +78,6 @@ class LabelManagerTest extends \KernelAwareTest
         $this->lm->removeLabel($expectedLabel);
 
         $this->assertNull($expectedLabel->getId());
-    }
-
-    public function testUpdateLabel()
-    {
-        $expectedLabel = $this->createTestLabel();
-        $expectedLabel->setName("Test-AAAA");
-        $user = $this->loadTestUser();
-        $this->lm->updateLabel($expectedLabel);
-
-        $label = $this->lm->loadLabelById($expectedLabel->getId(), $user);
-
-        $this->assertEquals('Test-AAAA', $label->getName());
-
-        $this->deleteLabel($expectedLabel);
     }
 
     public function testLoadTopLabels()
@@ -120,5 +93,15 @@ class LabelManagerTest extends \KernelAwareTest
         $this->assertEquals($labels[0]->getId(), $label->getId());
 
         $this->deleteLabel($label);
+    }
+
+    public function testFind()
+    {
+        $user = $this->loadTestUser();
+        $expected = $user->getLabels()[0];
+
+        $label = $this->lm->find($expected->getId(), $user);
+
+        $this->assertEquals($expected, $label);
     }
 }

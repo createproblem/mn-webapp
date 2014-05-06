@@ -140,4 +140,9 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
 
         parent::tearDown();
     }
+
+    public function get($identifier)
+    {
+        return $this->container->get($identifier);
+    }
 }

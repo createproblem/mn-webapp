@@ -109,6 +109,7 @@ g5_tools:
 
 g5_tmdb:
     api_key: "%tmdb_api_key%"
+    fixture_dir: "%kernel.root_dir%/../src/g5/TmdbBundle/Resources/fixtures/response"
 
 jms_serializer:
     metadata:

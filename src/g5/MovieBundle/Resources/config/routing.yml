@@ -1,8 +1,4 @@
 # MovieController
-g5_movie_index:
-    pattern: /
-    defaults: { _controller: g5MovieBundle:Movie:index }
-
 g5_movie_new:
     pattern: /new
     defaults: { _controller: g5MovieBundle:Movie:new }

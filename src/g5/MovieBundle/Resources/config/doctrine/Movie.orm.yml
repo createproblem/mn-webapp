@@ -2,7 +2,6 @@
 g5\MovieBundle\Entity\Movie:
     type: entity
     table: movie
-    repositoryClass: g5\MovieBundle\Entity\MovieRepository
 
     id:
         id:

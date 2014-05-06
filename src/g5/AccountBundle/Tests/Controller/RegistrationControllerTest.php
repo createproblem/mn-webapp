@@ -34,7 +34,7 @@ class RegistrationControllerTest extends \g5WebTestCase
 
         $crawler = $client->submit($form);
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertTrue($crawler->filter('html:contains("The user has been created successfully")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Congrats test1, your account is now activated.")')->count() > 0);
 
         $this->deleteUser($client, 'test1');
     }

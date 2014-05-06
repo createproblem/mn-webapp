@@ -44,6 +44,15 @@ class SearchType extends AbstractType
         // $builder->addEventListener(FormEvents::POST_BIND, $searchFieldValidator);
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'intention'       => 'g5_movie_search',
+        ));
+    }
+
     public function getName()
     {
         return 'g5_movie_search';

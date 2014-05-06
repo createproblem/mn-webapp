@@ -26,5 +26,6 @@ class g5TmdbExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('g5_tmdb.api_key', $config['api_key']);
+        $container->setParameter('g5_tmdb.fixture_dir', $config['fixture_dir']);
     }
 }

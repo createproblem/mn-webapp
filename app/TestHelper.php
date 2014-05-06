@@ -40,22 +40,24 @@ final class TestHelper
         return $movie;
     }
 
-    public function getTmdbApi($returnValue)
+    public function getTmdbApi($responseStack = array())
     {
         $api = $this->container->get('g5_tmdb.api.default');
-        $api->addSubscriber($this->getMockResponsePlugin($returnValue, 200));
+        $api->addSubscriber($this->getMockResponsePlugin($responseStack));
 
         return $api;
     }
 
-    private function getMockResponsePlugin($body, $status)
+    private function getMockResponsePlugin($responseStack)
     {
         $plugin = new \Guzzle\Plugin\Mock\MockPlugin();
-        $response = new \Guzzle\Http\Message\Response($status);
-        $response->setBody($body);
-        $response->setInfo(array('total_time' => 0.1));
 
-        $plugin->addResponse($response);
+        foreach ($responseStack as $body) {
+            $response = new \Guzzle\Http\Message\Response(200);
+            $response->setBody($body);
+            $response->setInfo(array('total_time' => 0.1));
+            $plugin->addResponse($response);
+        }
 
         return $plugin;
     }
