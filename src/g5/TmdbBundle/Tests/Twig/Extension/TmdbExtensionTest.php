@@ -64,6 +64,16 @@ class TmdbExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $compare);
     }
 
+    public function testGetImageUrlNull()
+    {
+        $expected = null;
+        $function = 'imageBackdrop'.ucfirst('w300').'Filter';
+        $apiMock = $this->getMockTmdbApiWithImageUrl('w185', false);
+        $extension = new TmdbExtension($apiMock);
+
+        $this->assertNull($extension->{$function}(''));
+    }
+
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Filter 'img_backdrop_w300' allows only one argument as string.
@@ -97,14 +107,14 @@ class TmdbExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('tmdb_extension', $extension->getName());
     }
 
-    private function getMockTmdbApiWithImageUrl($size)
+    private function getMockTmdbApiWithImageUrl($size, $once = true)
     {
         $mock = $this->getMockBuilder('g5\TmdbBundle\Components\Api\TmdbApiClient')
             ->disableOriginalConstructor()
             ->getMock()
         ;
 
-        $mock->expects($this->once())
+        $mock->expects(($once) ? $this->once():$this->any())
             ->method('getImageBaseUrl')
             ->with($this->equalTo($size))
             ->will($this->returnValue('http://localhost/'.$size))
