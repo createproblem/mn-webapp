@@ -14,6 +14,12 @@ use g5\AccountBundle\Entity\User;
  */
 class MovieRepository extends EntityRepository
 {
+    /**
+     * @param  integer $id
+     * @param  User    $user
+     *
+     * @return Movie
+     */
     public function find($id, User $user = null)
     {
         $criteria['id'] = $id;
