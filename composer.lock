@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1baf21f3b2f1ba61af56b9fa06609341",
+    "hash": "a33e6351d15829cc1a0043604c25e3c2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -937,55 +937,6 @@
                 "User management"
             ],
             "time": "2013-09-23 08:24:12"
-        },
-        {
-            "name": "g5/tools-bundle",
-            "version": "dev-master",
-            "target-dir": "g5/ToolsBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/createproblem/g5ToolsBundle.git",
-                "reference": "6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/createproblem/g5ToolsBundle/zipball/6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c",
-                "reference": "6bdcbfc95260c26dbfdd990252c27a4dbe3a6d6c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/console": "~2.1",
-                "symfony/framework-bundle": "~2.1",
-                "twig/twig": "~1.5"
-            },
-            "require-dev": {
-                "symfony/css-selector": "~2.1",
-                "symfony/dom-crawler": "~2.1",
-                "symfony/twig-bundle": "~2.1"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "g5\\ToolsBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "createproblem",
-                    "homepage": "https://github.com/createproblem"
-                }
-            ],
-            "description": "Tools Wrapper bundle for Symfony",
-            "homepage": "https://github.com/createproblem",
-            "keywords": [
-                "Tools Wrapper Api"
-            ],
-            "time": "2013-09-07 22:20:00"
         },
         {
             "name": "guzzle/guzzle",
@@ -2563,7 +2514,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/jsrouting-bundle": 0,
-        "g5/tools-bundle": 20,
         "doctrine/data-fixtures": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
         "jms/serializer-bundle": 20,

@@ -93,7 +93,7 @@ class ApiControllerTest extends \g5WebTestCase
     public function testGetMovieLabelFormAction()
     {
         $this->login($this->client);
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
         $movie = $user->getMovies()[0];
 
         $this->client->request(
@@ -108,7 +108,7 @@ class ApiControllerTest extends \g5WebTestCase
     public function testPostMovieLabelAction()
     {
         $this->login($this->client);
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
         $movie = $user->getMovies()[0];
 
         $name = uniqid();
@@ -118,65 +118,15 @@ class ApiControllerTest extends \g5WebTestCase
         $session = static::$kernel->getContainer()->get('session');
         $session->save();
 
-        $this->client->request(
+        $crawler = $this->client->request(
             'POST',
-            "/movie/api2/movies/{$movie->getId()}/labels",
+            "/movie/api2/movies/{$movie->getId()}/labels.html",
             array('link' => array('movie_id' => $movie->getId(), 'name' => $name, '_token' => $token))
         );
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertGreaterThan(0, $crawler->filter('span')->count());
 
-        $label = json_decode($this->client->getResponse()->getContent(), true);
-        $this->assertEquals($name, $label['name']);
-
-        return $label;
-    }
-
-    /**
-     * @depends testPostMovieLabelAction
-     */
-    public function testPostMovieLabelActionDuplicate($label)
-    {
-        $this->login($this->client);
-        $user = $this->loadTestUser();
-        $movie = $user->getMovies()[0];
-
-        $token = $this->client->getContainer()->get('form.csrf_provider')->generateCsrfToken('g5_movie_link');
-
-        // Session Mock failure workaround
-        $session = static::$kernel->getContainer()->get('session');
-        $session->save();
-
-        $this->client->request(
-            'POST',
-            "/movie/api2/movies/{$movie->getId()}/labels",
-            array('link' => array('movie_id' => $movie->getId(), 'name' => $label['name'], '_token' => $token))
-        );
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals('{"error":"Label already assigned."}', $this->client->getResponse()->getContent());
-
-        return $label;
-    }
-
-    /**
-     * @depends testPostMovieLabelActionDuplicate
-     */
-    public function testDeleteMovieLabelAction($label)
-    {
-        $this->login($this->client);
-        $user = $this->loadTestUser();
-        $movie = $user->getMovies()[0];
-
-        $this->client->request(
-            'DELETE',
-            "/movie/api2/movies/{$movie->getId()}/label?labelId={$label['id']}"
-        );
-
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals('{"status":"ok"}', $this->client->getResponse()->getContent());
-
-        $lm = $this->get('g5_movie.label_manager');
-        $lm->removeLabel($lm->find($label['id']));
+        return $name;
     }
 }

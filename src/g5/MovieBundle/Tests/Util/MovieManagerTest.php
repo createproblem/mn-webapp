@@ -59,7 +59,7 @@ class MovieManagerTest extends \KernelAwareTest
 
     public function testFindMoviesByUser()
     {
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $movies = $this->mm->findMoviesByUser($user);
 
@@ -68,7 +68,7 @@ class MovieManagerTest extends \KernelAwareTest
 
     public function testFind()
     {
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
         $expected = $user->getMovies()[0];
 
         $movie = $this->mm->find($expected->getId(), $user);
@@ -88,7 +88,7 @@ class MovieManagerTest extends \KernelAwareTest
         );
         $model = new \Guzzle\Service\Resource\Model($data);
         $movie = $this->mm->createMovieFromTmdb($model);
-        $movie->setUser($this->loadTestUser());
+        $movie->setUser($this->helper->loadUser('test'));
 
         $this->mm->updateMovie($movie);
 

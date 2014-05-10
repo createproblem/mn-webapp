@@ -15,6 +15,7 @@
       'bundles/g5home/css/bootstrap.min.css'
       'bundles/g5home/css/font-awesome.min.css'
       'bundles/g5home/css/jquery-ui-1.10.0.custom.css'
+      'bundles/g5home/css/selectize.bootstrap3.css'
       'bundles/g5home/css/global.css'
       filter="cssrewrite"
     %}
@@ -54,6 +55,7 @@
         '@g5HomeBundle/Resources/public/js/jquery-ui-1.10.4.custom.min.js'
         '@g5HomeBundle/Resources/public/js/underscore-min.js'
         '@g5HomeBundle/Resources/public/js/backbone-min.js'
+        '@g5HomeBundle/Resources/public/js/selectize.min.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -63,8 +65,8 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     {% javascripts
-        '@g5HomeBundle/Resources/public/js/g5_ajax.js'
         '@g5HomeBundle/Resources/public/js/g5_message.js'
+        '@g5HomeBundle/Resources/public/js/g5_ajax.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

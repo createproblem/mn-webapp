@@ -190,4 +190,14 @@ class Label extends LabelBase
     {
         return $this->movie_count;
     }
+
+    /**
+     * Returns the name norm
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getNameNorm();
+    }
 }

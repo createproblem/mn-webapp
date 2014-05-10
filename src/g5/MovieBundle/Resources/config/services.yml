@@ -32,4 +32,4 @@ services:
 
     g5_movie.link.form.handler:
         class: g5\MovieBundle\Form\Handler\LinkFormHandler
-        arguments: [ "@g5_movie.label_manager", "@g5_movie.movie_manager", "@g5_tools.normalizer" ]
+        arguments: [ "@g5_movie.label_manager", "@g5_movie.movie_manager", "@g5.normalizer" ]

@@ -122,43 +122,12 @@ var g5MovieLabel = (function() {
 
         g5AjaxQueue.ajaxSingle('add-label', {
             'type': 'POST',
-            'url': Routing.generate('post_movie_label', {'id': movieId}),
+            'url': Routing.generate('post_movie_label', {'id': movieId, '_format': 'html' }),
             'data': data
         }, function(response) {
-            if('error' in response) {
-                g5Message.showMessage(response.error);
-            } else {
-                top.labelViews[movieId].addLabel({
-                    id: response.id,
-                    name: response.name,
-                    movieId: movieId
-                });
-            }
+            $('#label-box-'+movieId).html(response);
         });
-        $(form).hide();
-    },
-
-    /**
-     * Renders the item for autocomplete.
-     *
-     * @param  {[object]} ul
-     * @param  {[object]} item
-     * @return {[object]}
-     */
-    renderItem = function(ul, item) {
-        var text;
-
-        if (item.id === 0) {
-            text = '<a><i class="glyphicon glyphicon-plus"></i> ' + item.label + '</a>';
-        } else {
-            text = '<a>' + item.label + '</a>';
-        }
-
-        return $('<li>')
-            .attr('data-value', item.value)
-            .html(text)
-            .appendTo(ul)
-        ;
+        $(form).remove();
     },
 
     /**
@@ -169,41 +138,25 @@ var g5MovieLabel = (function() {
      * @param  {[object]}  form
      */
     bindLabelAutocomplete = function(input, movieId, form) {
-        $(input).autocomplete({
-            source: function(request, response) {
-                var term = request.term;
-                g5AjaxQueue.ajaxSingle('label-loopup', {
+        $(input).selectize({
+            create: true,
+            labelField: 'name',
+            valueField: 'name',
+            searchField: 'name',
+            load: function(query, callback) {
+                g5AjaxQueue.ajaxSingle('label-lookup', {
                     'type': 'GET',
-                    'url': Routing.generate('get_labels', {'q': term})
-                }, function(result) {
-                    var data = [];
-                    var pushItem = true;
-                    $.each(result, function(index, label) {
-                        if (term === label.name)
-                            pushItem = false;
-
-                        data.push({
-                            'label': label.name,
-                            'value': label.name,
-                            'id': label.id
-                        });
-                    });
-                    if (pushItem) {
-                        data.push({
-                            'label': term,
-                            'value': term,
-                            'id': 0
-                        });
-                    }
-                    response(data);
+                    'url': Routing.generate('get_labels', {'q': query})
+                }, function(response) {
+                    callback(response);
                 });
             },
-            select: function(event, ui) {
-                submitForm(form, movieId);
-            }
-        }).data("ui-autocomplete")._renderItem = renderItem;
+            onItemAdd: function(value, $item) {
+            },
 
-        $(input).focus();
+            onDelete: function(values) {
+            }
+        });
     };
 
 
@@ -219,6 +172,8 @@ var g5MovieLabel = (function() {
          */
         bindLabelEvent: function(triggerElement, movieId) {
             var resultElement = $('#label-form-'+movieId);
+            var saveElement = $('#label-save-'+movieId);
+
 
             $(triggerElement).on('click', function() {
                 g5AjaxQueue.ajaxSingle('label-form', {
@@ -230,12 +185,17 @@ var g5MovieLabel = (function() {
                     var labelInput = $('#label-form-' + movieId + ' input#link_name');
                     var labelForm = $('#label-form-' + movieId + ' form');
 
-                    $(labelInput).on('blur', function() {
-                        $(labelForm).remove();
+                    $(saveElement).on('click', function() {
+                        submitForm(labelForm, movieId);
+
+                        $(this).hide();
+                        $(triggerElement).show();
                     });
 
                     bindLabelAutocomplete(labelInput, movieId, labelForm);
                 });
+                $(this).hide();
+                $(saveElement).show();
             });
         },
 
@@ -258,7 +218,7 @@ $(document).ready(function() {
     top.labelViews = {};
 
     // bind label autocomplete form and events
-    $('.btnLabelAdd').each(function(index, el) {
+    $('.label-trigger').each(function(index, el) {
         // Extract movieId
         var movieId = $(el).attr('data-movieid');
 
@@ -267,20 +227,39 @@ $(document).ready(function() {
 
     // Bind label box events for
     // controlling
-    $('.label-box').each(function(index, labelBox) {
-        // extract movieId
-        var movieId = $(labelBox).attr('data-movieid');
-        var labelView = g5MovieLabel.createView({
-            el: $(labelBox)
-        });
-        $.each(labels[movieId], function(index, label) {
-            labelView.addLabel({
-                id: label.id,
-                name: label.name,
-                movieId: movieId
-            });
-        });
+    // $('.label-box').each(function(index, labelBox) {
+    //     // extract movieId
+    //     var movieId = $(labelBox).attr('data-movieid');
+    //     var labelView = g5MovieLabel.createView({
+    //         el: $(labelBox)
+    //     });
+    //     $.each(labels[movieId], function(index, label) {
+    //         labelView.addLabel({
+    //             id: label.id,
+    //             name: label.name,
+    //             movieId: movieId
+    //         });
+    //     });
 
-        top.labelViews[movieId] = labelView;
-    });
+    //     top.labelViews[movieId] = labelView;
+    // });
 });
+
+// $(document).ready(function() {
+//     $('.input-labels').selectize({
+//         persist: true,
+//         create: true,
+//         labelField: 'name',
+//         valueField: 'name',
+//         searchField: 'name',
+
+//         load: function(query, callback) {
+//             g5AjaxQueue.ajaxSingle('label-lookup', {
+//                 'type': 'GET',
+//                 'url': Routing.generate('get_labels', {'q': query})
+//             }, function(response) {
+//                 callback(response);
+//             });
+//         }
+//     });
+// });

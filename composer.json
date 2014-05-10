@@ -22,7 +22,6 @@
 
         "friendsofsymfony/user-bundle": "*",
         "friendsofsymfony/jsrouting-bundle": "@stable",
-        "g5/tools-bundle": "dev-master",
         "doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "jms/serializer-bundle": "dev-master",

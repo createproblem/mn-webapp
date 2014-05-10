@@ -51,6 +51,9 @@ var g5AjaxQueue = (function() {
                     this.loadingHide();
                 }
                 srQueue[queue] = null;
+            })
+            .fail(function() {
+                g5Message.showMessage('Error please try again later.');
             });
 
             jqxhr.queueId = queue;

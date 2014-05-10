@@ -31,6 +31,11 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
     protected $rootDir;
 
     /**
+     * @var TestHelper
+     */
+    protected $helper;
+
+    /**
      * @return null;
      */
     public function setUp()
@@ -42,96 +47,14 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         $this->container = $this->kernel->getContainer();
         $this->entityManager = $this->container->get('doctrine')->getManager();
 
+        $this->helper = new TestHelper($this->container);
+
         parent::setUp();
     }
 
     protected function getTestDataDir()
     {
         return $this->kernel->getRootDir().'/Resources/meta/TestData';
-    }
-
-    /**
-     * @param  boolean $save
-     *
-     * @return g5\MovieBundle\Entity\Movie
-     */
-    protected function createTestMovie($save = true)
-    {
-        $mm = $this->container->get('g5_movie.movie_manager');
-        $um = $this->container->get('fos_user.user_manager');
-
-        $movie = $mm->createMovie();
-        $user = $um->findUserByUsername('test');
-
-        $movie->setTmdbId(9070);
-        $movie->setTitle('Power Rangers');
-        $movie->setReleaseDate(new DateTime(1995));
-        $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_9070.txt'));
-        $movie->setPosterPath('/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg');
-        $movie->setBackdropPath('/u5jVc4Ks48ldQ4hvHos0JxCDhg4.jpg');
-        $movie->setCreatedAt(new \DateTime());
-        $movie->setUser($user);
-
-        if (true === $save) {
-            try {
-                $mm->updateMovie($movie);
-            } catch (Doctrine\DBAL\DBALException $e) {
-                $this->fail($e->getMessage());
-            }
-        }
-
-        return $movie;
-    }
-
-    protected function deleteMovie(\g5\MovieBundle\Entity\Movie $movie)
-    {
-        $mm = $this->container->get('g5_movie.movie_manager');
-        $mm->removeMovie($movie);
-    }
-
-    /**
-     * @param  boolean $save
-     *
-     * @return \g5\MovieBundle\Entity\Label
-     */
-    protected function createTestLabel($save = true)
-    {
-        $lm = $this->container->get('g5_movie.label_manager');
-        $um = $this->container->get('fos_user.user_manager');
-
-        $label = $lm->createLabel();
-        $user = $um->findUserByUsername('test');
-
-        $label->setName('Test-Label');
-        $label->setNameNorm('test-label');
-        $label->setUser($user);
-
-        if (true === $save) {
-            try {
-                $lm->updateLabel($label);
-            } catch (Doctrine\DBAL\DBALException $e) {
-                $this->fail($e->getMessage());
-            }
-        }
-
-        return $label;
-    }
-
-    protected function deleteLabel(\g5\MovieBundle\Entity\Label $label)
-    {
-        $lm = $this->container->get('g5_movie.label_manager');
-        $lm->removeLabel($label);
-    }
-
-    /**
-     * @return g5\AccountBundle\Entity\User
-     */
-    protected function loadTestUser()
-    {
-        $um = $this->container->get('fos_user.user_manager');
-        $user = $um->findUserByUsername('test');
-
-        return $user;
     }
 
     public function tearDown()

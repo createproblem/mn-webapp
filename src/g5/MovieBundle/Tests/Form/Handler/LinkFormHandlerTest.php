@@ -28,19 +28,20 @@ class LinkFormHandlerTest extends \KernelAwareTest
 
         $this->mm = $this->get('g5_movie.movie_manager');
         $this->lm = $this->get('g5_movie.label_manager');
-        $normalizer = $this->get('g5_tools.normalizer');
+        $normalizer = $this->get('g5.normalizer');
 
         $this->handler = new LinkFormHandler($this->lm, $this->mm, $normalizer);
     }
 
-    public function testProcessNewLabel()
+    public function testProcessNewAndRemoveLabel()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $movie = $user->getMovies()[0];
-        $name = uniqid();
-        $link = $this->getLink($movie->getId(), $name);
+        $expected = array(uniqid());
+
+        $link = $this->getLink($movie->getId(), join(',', $expected));
 
         $form->expects($this->once())
             ->method('isValid')
@@ -52,44 +53,21 @@ class LinkFormHandlerTest extends \KernelAwareTest
             ->will($this->returnValue($link))
         ;
 
-        $label = $this->handler->process($form, $user);
-
-        $this->assertEquals($name, $label->getName());
-
-        return $name;
+        $labels = $this->handler->process($form, $user);
+        foreach ($expected as $name) {
+            $this->assertTrue(in_array($name, $labels));
+        }
     }
 
-    public function testProcessWrongMovie()
-    {
-        $user = $this->loadTestUser();
-
-        $name = uniqid();
-        $link = $this->getLink(4999, $name);
-
-        $form = $this->getMockForm();
-        $form->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(true))
-        ;
-        $form->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue($link))
-        ;
-
-        $label = $this->handler->process($form, $user);
-        $this->assertFalse($label);
-    }
-
-    /**
-     * @depends testProcessNewLabel
-     */
-    public function testProcessDuplicateLabel($name)
+    public function testProcessLinkExisting()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $movie = $user->getMovies()[0];
-        $link = $this->getLink($movie->getId(), $name);
+        $expected = array('top-hits');
+
+        $link = $this->getLink($movie->getId(), join(',', $expected));
 
         $form->expects($this->once())
             ->method('isValid')
@@ -101,24 +79,18 @@ class LinkFormHandlerTest extends \KernelAwareTest
             ->will($this->returnValue($link))
         ;
 
-        $label = $this->handler->process($form, $user);
-
-        $this->assertFalse($label);
-        $this->assertEquals(array('error' => 'Label already assigned.'), $this->handler->getErrors());
-
-        return $name;
+        $labels = $this->handler->process($form, $user);
+        foreach ($expected as $name) {
+            $this->assertTrue(in_array($name, $labels));
+        }
     }
 
-    /**
-     * @depends testProcessDuplicateLabel
-     */
-    public function testProcessExistingLabel($name)
+    public function testProcessMovieNotFound()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
-        $movie = $user->getMovies()[1];
-        $link = $this->getLink($movie->getId(), $name);
+        $link = $this->getLink(9999, join(',', array(uniqid())));
 
         $form->expects($this->once())
             ->method('isValid')
@@ -130,29 +102,8 @@ class LinkFormHandlerTest extends \KernelAwareTest
             ->will($this->returnValue($link))
         ;
 
-        $label = $this->handler->process($form, $user);
-
-        $this->assertEquals($name, $label->getName());
-        $this->lm->removeLabel($label);
-    }
-
-    public function testProcessNotValid()
-    {
-        $form = $this->getMockForm();
-        $user = $this->loadTestUser();
-
-        $movie = $user->getMovies()[0];
-        $link = $this->getLink($movie->getId(), uniqid());
-
-        $form->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(false))
-        ;
-
-        $label = $this->handler->process($form, $user);
-
-        $this->assertFalse($label);
-        $this->assertNull($this->handler->getErrors());
+        $labels = $this->handler->process($form, $user);
+        $this->assertFalse($labels);
     }
 
     private function getMockForm()
