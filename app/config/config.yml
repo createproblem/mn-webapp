@@ -103,10 +103,6 @@ fos_rest:
     routing_loader:
         default_format: json
 
-g5_tools:
-    tmdb:
-        api_key: "%tmdb_api_key%"
-
 g5_tmdb:
     api_key: "%tmdb_api_key%"
     fixture_dir: "%kernel.root_dir%/../src/g5/TmdbBundle/Resources/fixtures/response"

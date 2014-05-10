@@ -17,7 +17,7 @@ use g5\MovieBundle\Form\Model\Link;
 use g5\MovieBundle\Util\LabelManager;
 use g5\MovieBundle\Util\MovieManager;
 use g5\AccountBundle\Entity\User;
-use g5\ToolsBundle\Util\Normalizer;
+use g5\HomeBundle\Components\Normalizer;
 
 class LinkFormHandler
 {

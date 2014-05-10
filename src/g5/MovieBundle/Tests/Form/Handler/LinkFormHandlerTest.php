@@ -28,7 +28,7 @@ class LinkFormHandlerTest extends \KernelAwareTest
 
         $this->mm = $this->get('g5_movie.movie_manager');
         $this->lm = $this->get('g5_movie.label_manager');
-        $normalizer = $this->get('g5_tools.normalizer');
+        $normalizer = $this->get('g5.normalizer');
 
         $this->handler = new LinkFormHandler($this->lm, $this->mm, $normalizer);
     }

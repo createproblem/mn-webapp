@@ -1,8 +1,12 @@
 parameters:
     g5_home.twig.js_extension.class: g5\HomeBundle\Twig\Extension\JSExtension
+    g5.normalizer.class: g5\HomeBundle\Components\Normalizer
 
 services:
     g5_home.twig.js_extension:
         class: "%g5_home.twig.js_extension.class%"
         tags:
             - { name: twig.extension }
+
+    g5.normalizer:
+        class: "%g5.normalizer.class%"
