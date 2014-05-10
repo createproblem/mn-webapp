@@ -44,7 +44,13 @@ class LabelRepository extends EntityRepository
         return $qb->getResult();
     }
 
-    public function findByNamesNorm($names, User $user)
+    /**
+     * @param  array  $names
+     * @param  User   $user
+     *
+     * @return array
+     */
+    public function findByNamesNorm(array $names, User $user)
     {
         $qb = $this->createQueryBuilder('l');
 
@@ -61,7 +67,13 @@ class LabelRepository extends EntityRepository
         return $qb->getResult();
     }
 
-    public function find($id, g5\AccountBundle\Entity\User $user = null)
+    /**
+     * @param  integer   $id
+     * @param  User|null $user
+     *
+     * @return Label
+     */
+    public function find($id, User $user = null)
     {
         $criteria['id'] = $id;
 
