@@ -24,7 +24,7 @@ class MovieManager
     /**
      * @var Doctrine\ORM\EntityRepository
      */
-    private $repository;
+    public $repository;
 
     /**
      * Constructor.
@@ -65,37 +65,6 @@ class MovieManager
     public function createMovie()
     {
         return new Movie();
-    }
-
-    /**
-     * @param  array    $criteria
-     * @param  array    $orderBy
-     * @param  integer  $limit
-     * @param  integer  $offset
-     *
-     * @return array
-     */
-    public function findMoviesBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-    }
-
-    public function findMoviesByUser(User $user, array $orderBy = null, $limit = null, $offset = null)
-    {
-        $criteria = array('user' => $user);
-
-        return $this->findMoviesBy($criteria, $orderBy, $limit, $offset);
-    }
-
-    public function find($id, User $user = null)
-    {
-        $criteria['id'] = $id;
-
-        if (null !== $user) {
-            $criteria['user'] = $user;
-        }
-
-        return $this->repository->findOneBy($criteria);
     }
 
     /**

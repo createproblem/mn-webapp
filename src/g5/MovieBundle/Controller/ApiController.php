@@ -109,7 +109,7 @@ class ApiController extends Controller
     public function getMovieLabelFormAction($id)
     {
         $movieManager = $this->get('g5_movie.movie_manager');
-        $movie = $movieManager->find($id);
+        $movie = $movieManager->repository->find($id);
 
         $value = array();
         foreach ($movie->getLabels() as $label) {

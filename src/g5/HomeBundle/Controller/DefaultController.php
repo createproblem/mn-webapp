@@ -14,7 +14,7 @@ class DefaultController extends Controller
 
         $serializer = $this->get('jms_serializer');
         $movieManager = $this->get('g5_movie.movie_manager');
-        $movies = $movieManager->findMoviesByUser($this->getUser());
+        $movies = $movieManager->repository->findByUser($this->getUser());
 
         foreach ($movies as $movie) {
             $labels[$movie->getId()] = $movie->getLabels();

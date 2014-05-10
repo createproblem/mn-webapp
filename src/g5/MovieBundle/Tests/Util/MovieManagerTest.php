@@ -49,33 +49,6 @@ class MovieManagerTest extends \KernelAwareTest
         $this->assertEquals($data['backdrop_path'], $movie->getBackdropPath());
     }
 
-    public function testFindMoviesBy()
-    {
-        $movies = $this->mm->findMoviesBy(array('tmdb_id' => 550));
-
-        $this->assertArrayHasKey(0, $movies);
-        $this->assertEquals(550, $movies[0]->getTmdbId());
-    }
-
-    public function testFindMoviesByUser()
-    {
-        $user = $this->helper->loadUser('test');
-
-        $movies = $this->mm->findMoviesByUser($user);
-
-        $this->assertArrayHasKey(0, $movies);
-    }
-
-    public function testFind()
-    {
-        $user = $this->helper->loadUser('test');
-        $expected = $user->getMovies()[0];
-
-        $movie = $this->mm->find($expected->getId(), $user);
-
-        $this->assertEquals($expected->getId(), $movie->getId());
-    }
-
     public function testUpdateMovie()
     {
         $data = array(
@@ -102,7 +75,7 @@ class MovieManagerTest extends \KernelAwareTest
      */
     public function testRemoveMovie($id)
     {
-        $movie = $this->mm->find($id);
+        $movie = $this->mm->repository->find($id);
 
         $this->mm->removeMovie($movie);
 

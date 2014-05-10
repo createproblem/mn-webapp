@@ -70,7 +70,7 @@ class LinkFormHandler
                 $labelsRaw[$nameNorm] = $name;
             }
 
-            $movie = $this->movieManager->find($link->getMovieId(), $user);
+            $movie = $this->movieManager->repository->find($link->getMovieId(), $user);
 
             if (!$movie) {
                 $this->errors['error'] = 'Movie not found.';

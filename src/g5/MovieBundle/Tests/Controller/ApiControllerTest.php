@@ -87,7 +87,7 @@ class ApiControllerTest extends \g5WebTestCase
         $this->assertGreaterThan(0, $movie['id']);
 
         $mm = $this->get('g5_movie.movie_manager');
-        $mm->removeMovie($mm->find($movie['id']));
+        $mm->removeMovie($mm->repository->find($movie['id']));
     }
 
     public function testGetMovieLabelFormAction()
