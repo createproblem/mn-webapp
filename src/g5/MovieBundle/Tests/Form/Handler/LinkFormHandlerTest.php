@@ -65,7 +65,16 @@ class LinkFormHandlerTest extends \KernelAwareTest
         $user = $this->helper->loadUser('test');
 
         $movie = $user->getMovies()[0];
-        $expected = array('top-hits');
+
+
+        $label = $this->lm->createLabel();
+        $name = uniqid();
+        $label->setName($name);
+        $label->setNameNorm($name);
+        $label->setUser($this->helper->loadUser('test'));
+        $this->lm->updateLabel($label);
+
+        $expected = array('top-hits', $name);
 
         $link = $this->getLink($movie->getId(), join(',', $expected));
 
