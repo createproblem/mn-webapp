@@ -36,7 +36,7 @@ class LinkFormHandlerTest extends \KernelAwareTest
     public function testProcessNewAndRemoveLabel()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $movie = $user->getMovies()[0];
         $expected = array(uniqid());
@@ -62,7 +62,7 @@ class LinkFormHandlerTest extends \KernelAwareTest
     public function testProcessLinkExisting()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $movie = $user->getMovies()[0];
         $expected = array('top-hits');
@@ -88,7 +88,7 @@ class LinkFormHandlerTest extends \KernelAwareTest
     public function testProcessMovieNotFound()
     {
         $form = $this->getMockForm();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
 
         $link = $this->getLink(9999, join(',', array(uniqid())));
 

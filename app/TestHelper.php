@@ -21,23 +21,29 @@ final class TestHelper
     public function createTestMovie($save = true)
     {
         $mm = $this->container->get('g5_movie.movie_manager');
-        $um = $this->container->get('fos_user.user_manager');
+        $unique = uniqid();
 
         $movie = $mm->createMovie();
-        $user = $um->findUserByUsername('test');
-
+        $movie->setUser($this->loadUser('test'));
         $movie->setTmdbId(uniqid());
         $movie->setTitle('Power Rangers');
         $movie->setReleaseDate(new DateTime(1995));
-        $movie->setOverview(file_get_contents($this->getTestDataDir().'/overview_9070.txt'));
+        $movie->setOverview('Test Overview');
         $movie->setPosterPath('/A3ijhraMN0tvpDnPoyVP7NulkSr.jpg');
         $movie->setBackdropPath('/u5jVc4Ks48ldQ4hvHos0JxCDhg4.jpg');
         $movie->setCreatedAt(new \DateTime());
-        $movie->setUser($user);
 
-        $mm->updateMovie($movie);
+        if (true === $save) {
+            $mm->updateMovie($movie);
+        }
 
         return $movie;
+    }
+
+    public function loadUser($username)
+    {
+        $um = $this->container->get('fos_user.user_manager');
+        return $um->findUserByUsername($username);
     }
 
     public function getTmdbApi($responseStack = array())

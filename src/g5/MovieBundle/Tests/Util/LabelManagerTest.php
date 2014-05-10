@@ -34,56 +34,62 @@ class LabelManagerTest extends \KernelAwareTest
         $this->assertInstanceOf('g5\MovieBundle\Entity\Label', $label);
     }
 
-    public function testFindLabelsBy()
+    public function testUpdateLabel()
     {
-        $expectedLabel = $this->createTestLabel();
+        $label = $this->lm->createLabel();
+        $label->setName(uniqid());
+        $label->setNameNorm(uniqid());
+        $label->setUser($this->helper->loadUser('test'));
 
-        $labels = $this->lm->findLabelsBy(array('id' => $expectedLabel->getId()));
+        $this->lm->updateLabel($label);
+
+        $this->assertNotNull($label->getId());
+
+        return $label->getId();
+    }
+
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testFindLabelsBy($id)
+    {
+        $labels = $this->lm->findLabelsBy(array('id' => $id));
 
         $this->assertTrue(is_array($labels));
-        $this->assertEquals($expectedLabel->getId(), $labels[0]->getId());
-
-        $this->deleteLabel($expectedLabel);
+        $this->assertEquals($id, $labels[0]->getId());
     }
 
-    public function testFindLabelBy()
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testFindLabelBy($id)
     {
-        $expectedLabel = $this->createTestLabel();
-
-        $label = $this->lm->findLabelBy(array('id' => $expectedLabel->getId()));
-
-        $this->assertEquals($expectedLabel->getId(), $label->getId());
-
-        $this->deleteLabel($expectedLabel);
+        $label = $this->lm->findLabelBy(array('id' => $id));
+        $this->assertEquals($id, $label->getId());
     }
 
-    public function testFindLabelsByNameWithLike()
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testFindLabelsByNameWithLike($id)
     {
-        $expectedLabel = $this->createTestLabel();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
+        $label = $this->lm->find($id);
 
-        $labels = $this->lm->findLabelsByNameWithLike('Test-L', $user);
+        $labels = $this->lm->findLabelsByNameWithLike($label->getName(), $user);
 
         $this->assertTrue(is_array($labels));
         $this->assertInstanceOf('g5\MovieBundle\Entity\Label', $labels[0]);
-        $this->assertEquals($expectedLabel->getName(), $labels[0]->getName());
-
-        $this->deleteLabel($expectedLabel);
+        $this->assertEquals($label->getName(), $labels[0]->getName());
     }
 
-    public function testRemoveLabel()
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testLoadTopLabels($id)
     {
-        $expectedLabel = $this->createTestLabel();
-
-        $this->lm->removeLabel($expectedLabel);
-
-        $this->assertNull($expectedLabel->getId());
-    }
-
-    public function testLoadTopLabels()
-    {
-        $label = $this->createTestLabel();
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
+        $label = $this->lm->find($id);
 
         $label->setMovieCount(99);
         $this->lm->updateLabel($label);
@@ -91,17 +97,28 @@ class LabelManagerTest extends \KernelAwareTest
         $labels = $this->lm->loadTopLabels($user);
 
         $this->assertEquals($labels[0]->getId(), $label->getId());
-
-        $this->deleteLabel($label);
     }
 
-    public function testFind()
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testFind($id)
     {
-        $user = $this->loadTestUser();
-        $expected = $user->getLabels()[0];
+        $user = $this->helper->loadUser('test');
+        $label = $this->lm->find($id, $user);
 
-        $label = $this->lm->find($expected->getId(), $user);
+        $this->assertEquals($id, $label->getId());
+    }
 
-        $this->assertEquals($expected, $label);
+    /**
+     * @depends testUpdateLabel
+     */
+    public function testRemoveLabel($id)
+    {
+        $label = $this->lm->find($id);
+
+        $this->lm->removeLabel($label);
+
+        $this->assertNull($label->getId());
     }
 }

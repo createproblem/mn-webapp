@@ -93,7 +93,7 @@ class ApiControllerTest extends \g5WebTestCase
     public function testGetMovieLabelFormAction()
     {
         $this->login($this->client);
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
         $movie = $user->getMovies()[0];
 
         $this->client->request(
@@ -108,7 +108,7 @@ class ApiControllerTest extends \g5WebTestCase
     public function testPostMovieLabelAction()
     {
         $this->login($this->client);
-        $user = $this->loadTestUser();
+        $user = $this->helper->loadUser('test');
         $movie = $user->getMovies()[0];
 
         $name = uniqid();
