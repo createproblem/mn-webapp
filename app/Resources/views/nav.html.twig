@@ -38,8 +38,8 @@
               <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
             {% endif %}
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-              {# <li class="divider"></li>
-              <li><a href="#"><i class="fa fa-medkit"></i> Tools</a></li> #}
+              <li class="divider"></li>
+              <li><a href="{{ path('g5_movie_tools_index') }}"><i class="fa fa-medkit"></i> Tools</a></li>
             {% endif %}
           </ul>
         </li>

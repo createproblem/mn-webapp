@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div class="margin-top-xs"></div>
+<div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Label Manager</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9">
+        <button id="btnDeleteUnusedLabels" type="button" class="btn btn-danger">Delete unused labels</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5MovieBundle/Resources/public/js/tools.labelmanager.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

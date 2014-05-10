@@ -29,4 +29,26 @@ class LabelApiControllerTest extends \g5WebTestCase
 
         $this->assertEquals($content, '[{"id":1,"name":"Horror","name_norm":"horror"}]');
     }
+
+    public function testDeleteLabelsAction()
+    {
+        $this->login($this->client);
+        $lm = $this->get('g5_movie.label_manager');
+        $user = $this->helper->loadUser('test');
+
+        $label = $lm->createLabel();
+        $label->setName(uniqid());
+        $label->setNameNorm($label->getName());
+        $label->setUser($user);
+        $lm->updateLabel($label);
+
+        $this->client->request(
+            'DELETE',
+            '/label/api2/labels?unused=true'
+            // array('unused' => true)
+        );
+
+        $content = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertGreaterThanOrEqual(1, $content['labels_deleted']);
+    }
 }
