@@ -37,11 +37,6 @@ class LinkFormHandler
     protected $normalizer;
 
     /**
-     * @var array
-     */
-    private $errors = array();
-
-    /**
      * Constructor.
      *
      * @param LabelManager $labelManager
@@ -67,40 +62,58 @@ class LinkFormHandler
     {
         if ($form->isValid()) {
             $link = $form->getData();
+            $raw = explode(',', $link->getName());
+            $labelsRaw = array();
+
+            foreach ($raw as $name) {
+                $nameNorm = $this->normalizer->normalizeUtf8String($name);
+                $labelsRaw[$nameNorm] = $name;
+            }
+
             $movie = $this->movieManager->find($link->getMovieId(), $user);
 
             if (!$movie) {
+                $this->errors['error'] = 'Movie not found.';
                 return false;
             }
 
-            $labelNameNorm = $this->normalizer->normalizeUtf8String($link->getName());
-            $label = $this->labelManager->findLabelBy(array('user' => $user, 'name_norm' => $labelNameNorm));
+            // find existing labels
+            $labelsExist = $this->labelManager->repository->findByNamesNorm(array_keys($labelsRaw), $user);
+            foreach ($labelsExist as $label) {
+                if (isset($labelsRaw[$label->getNameNorm()])) {
+                    unset($labelsRaw[$label->getNameNorm()]);
+                }
+            }
 
-            if (!$label) {
+            // delete labels
+            $labelsDel = array_diff($movie->getLabels(), $labelsExist);
+
+            foreach ($labelsDel as $label) {
+                $movie->removeLabel($label);
+            }
+
+            // link new labels
+            foreach ($labelsExist as $label) {
+                if (!$movie->hasLabel($label)) {
+                    $movie->addLabel($label);
+                }
+            }
+
+            // add new labels
+            foreach ($labelsRaw as $nameNorm => $name) {
+                if (strlen($nameNorm) === 0)
+                    continue;
                 $label = $this->labelManager->createLabel();
-                $label->setName($link->getName());
-                $label->setNameNorm($labelNameNorm);
+                $label->setName($name);
+                $label->setNameNorm($nameNorm);
                 $label->setUser($user);
                 $this->labelManager->updateLabel($label);
-
-                $movie->addLabel($label);
-            } elseif ($movie->hasLabel($label)) {
-                $this->errors['error'] = 'Label already assigned.';
-                return false;
-            } else {
                 $movie->addLabel($label);
             }
 
             $this->movieManager->updateMovie($movie);
-            return $label;
+
+            return $movie->getLabels();
         }
-        $this->errors = $form->getErrors();
-        return false;
     }
-
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
 }

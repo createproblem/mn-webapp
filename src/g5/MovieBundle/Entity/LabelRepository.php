@@ -12,6 +12,7 @@
 namespace g5\MovieBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use g5\AccountBundle\Entity\User;
 
 /**
  * LabelRepository
@@ -39,6 +40,23 @@ class LabelRepository extends EntityRepository
                 ':user' => $user,
             ))
             ->getQuery();
+
+        return $qb->getResult();
+    }
+
+    public function findByNamesNorm($names, User $user)
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        $ors = array();
+        foreach ($names as $value) {
+            $ors[] = $qb->expr()->eq('l.name_norm', $qb->expr()->literal($value));
+        }
+
+        $qb = $qb->andwhere(join(' OR ', $ors))
+            ->andwhere($qb->expr()->eq('l.user', $qb->expr()->literal($user->getId())))
+            ->getQuery()
+        ;
 
         return $qb->getResult();
     }

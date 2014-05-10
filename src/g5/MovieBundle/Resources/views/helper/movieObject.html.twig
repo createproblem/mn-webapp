@@ -6,8 +6,11 @@
 {% endif %}
 
 <div class="media margin-bottom-sd">
-    <button id="label-trigger-{{ uid }}" data-movieid="{{ uid }}" class="btnLabelAdd btn btn-sm pull-right" >
+    <button id="label-trigger-{{ uid }}" data-movieid="{{ uid }}" class="label-trigger btn btn-sm pull-right" >
         <span class="glyphicon glyphicon-tag"></span>
+    </button>
+    <button id="label-save-{{ uid }}" data-movieid="{{ uid }}" class="label-save btn btn-sm pull-right" style="display: none;">
+        <span class="glyphicon glyphicon-floppy-disk"></span>
     </button>
     <a class="pull-left" href="#">
         <img class="media-object movie-img-md" src="{{ movie.posterPath|img_poster_w185 }}">
@@ -19,8 +22,13 @@
                 <span class="glyphicon glyphicon-star"></span>
             </button>
         </h4>
-        <div id="label-form-{{ uid }}" style="display: none;"></div>
+        {# <div class="control-group">
+            <input type="text" value="awesome,neat" class="demo-default selectized input-labels" tabindex="-1">
+        </div> #}
+        {# </div> #}
+        <div class="control-group" id="label-form-{{ uid }}" style="display: none;"></div>
         <div id="label-box-{{ uid }}" class="label-box" data-movieid="{{ uid }}">
+            {% include 'g5MovieBundle:Label:labelBox.html.twig' with { 'labels': movie.labels } %}
             {# {% for label in movie.getLabels() %}
                 {% include 'g5MovieBundle:Label:label.html.twig' with { 'label': label } %}
             {% endfor %} #}

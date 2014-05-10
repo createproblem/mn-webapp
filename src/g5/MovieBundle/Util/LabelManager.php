@@ -23,7 +23,7 @@ class LabelManager
     /**
      * @var Doctrine\ORM\EntityRepository
      */
-    private $repository;
+    public $repository;
 
     /**
      * Constructor.

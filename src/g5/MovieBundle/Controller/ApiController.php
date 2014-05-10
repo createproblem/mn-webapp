@@ -112,7 +112,13 @@ class ApiController extends Controller
         $movieManager = $this->get('g5_movie.movie_manager');
         $movie = $movieManager->find($id);
 
+        $value = array();
+        foreach ($movie->getLabels() as $label) {
+            $value[] = $label->getName();
+        }
+
         $link = new Link();
+        $link->setName(join(',', $value));
         $link->setMovieId($movie->getId());
 
         $form = $this->createForm('link', $link);
@@ -146,64 +152,13 @@ class ApiController extends Controller
         $handler = $this->get('g5_movie.link.form.handler');
 
         $form->bind($request);
-        $label = $handler->process($form, $this->getUser());
-
-        if (!$label) {
-            $data = $handler->getErrors();
-        } else {
-            $data = $label;
-        }
-        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
-        // $labelId = $params['labelId'];
-
-        // $label = $labelManager->findByUser($labelId, $this->getUser());
-        // $movie = $movieManager->find($id);
-
-        // $movieLabel = $movie->addLabel($label);
-
-        // $errors = $validator->validate($movieLabel);
-        // if (count($errors) === 0) {
-        //     $movieManager->updateMovie($movie);
-        //     $data = array('label' => $label);
-        // } else {
-        //     $data = array('errors' => $errors);
-        // }
-
-
-        $view = View::create($data)
-            ->setStatusCode($status)
-        ;
-
-        return $this->get('fos_rest.view_handler')->handle($view);
-    }
-
-    /**
-     * @RestAnnotation\QueryParam(
-     *     name="labelId",
-     *     description="The label id.",
-     *     strict=true,
-     *     nullable=false,
-     *     requirements="^\d+$"
-     * )
-     */
-    public function deleteMovieLabelAction($id, ParamFetcher $paramFetcher)
-    {
-        $labelManager = $this->get('g5_movie.label_manager');
-        $movieManager = $this->get('g5_movie.movie_manager');
-
-        $params = $paramFetcher->all();
-
-        $movie = $movieManager->find($id);
-        $label = $labelManager->find($params['labelId']);
-
-        $movie->removeLabel($label);
-        $movieManager->updateMovie($movie);
-
-        $data = array('status' => 'ok');
+        $labels = $handler->process($form, $this->getUser());
 
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
-        $view = View::create($data)
+
+        $view = View::create(array('labels' => $labels))
             ->setStatusCode($status)
+            ->setTemplate('g5MovieBundle:Label:labelBox.html.twig')
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
