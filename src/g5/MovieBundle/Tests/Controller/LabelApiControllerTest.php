@@ -21,7 +21,7 @@ class LabelApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'GET',
-            '/label/api2/labels',
+            '/label/api/labels',
             array('q' => 'h')
         );
 
@@ -44,7 +44,7 @@ class LabelApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'DELETE',
-            '/label/api2/labels?unused=true'
+            '/label/api/labels?unused=true'
             // array('unused' => true)
         );
 

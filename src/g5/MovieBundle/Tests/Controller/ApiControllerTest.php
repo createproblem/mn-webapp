@@ -34,7 +34,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'GET',
-            '/movie/api2/movies/550/tmdb',
+            '/movie/api/movies/550/tmdb',
             array('tmdbId' => 550),
             array()
             // array('HTTP_X-Requested-With' => 'XMLHttpRequest')
@@ -53,7 +53,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'POST',
-            '/movie/api2/movies',
+            '/movie/api/movies',
             array('tmdbId' => 550),
             array()
             // array('HTTP_X-Requested-With' => 'XMLHttpRequest')
@@ -74,7 +74,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'POST',
-            '/movie/api2/movies',
+            '/movie/api/movies',
             array('tmdbId' => 550),
             array()
             // array('HTTP_X-Requested-With' => 'XMLHttpRequest')
@@ -98,7 +98,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $this->client->request(
             'GET',
-            "/movie/api2/movies/{$movie->getId()}/label/form",
+            "/movie/api/movies/{$movie->getId()}/label/form",
             array('_format' => 'html')
         );
 
@@ -120,7 +120,7 @@ class ApiControllerTest extends \g5WebTestCase
 
         $crawler = $this->client->request(
             'POST',
-            "/movie/api2/movies/{$movie->getId()}/labels.html",
+            "/movie/api/movies/{$movie->getId()}/labels.html",
             array('link' => array('movie_id' => $movie->getId(), 'name' => $name, '_token' => $token))
         );
 

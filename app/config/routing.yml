@@ -13,14 +13,14 @@ g5_movie:
 g5_movie_api:
     type:     rest
     resource: g5\MovieBundle\Controller\ApiController
-    prefix: /movie/api2
+    prefix: /movie/api
     options:
         expose: true
 
 g5_movie_label_api:
     type:     rest
     resource: g5\MovieBundle\Controller\LabelApiController
-    prefix: /label/api2
+    prefix: /label/api
     options:
         expose: true
 

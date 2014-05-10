@@ -75,7 +75,6 @@ class ApiController extends Controller
      *     nullable=false,
      *     requirements="^\d+$"
      * )
-     *
      */
     public function postMovieAction(ParamFetcher $paramFetcher)
     {

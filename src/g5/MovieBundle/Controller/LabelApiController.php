@@ -24,8 +24,14 @@ class LabelApiController extends Controller
      *
      * @RestAnnotation\QueryParam(
      *     name="q",
-     *     description="Page of the overview.",
-     *     requirements="^[a-zA-Z0-9.' ']+$"
+     *     description="Query for the label name."
+     * )
+     *
+     * @ApiDoc(
+     *     description="Get labels.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
      * )
      *
      * @param ParamFetcher $paramFetcher
@@ -49,9 +55,16 @@ class LabelApiController extends Controller
     /**
      * @RestAnnotation\QueryParam(
      *     name="unused",
-     *     description="Page of the overview.",
+     *     description="Filter labels by movie_count equals 0.",
      *     requirements="^(true|false)$",
      *     strict=true
+     * )
+     *
+     * @ApiDoc(
+     *     description="Delets labels.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
      * )
      *
      * @param ParamFetcher $paramFetcher
