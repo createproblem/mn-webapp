@@ -39,7 +39,7 @@ class LabelApiController extends Controller
     public function getLabelsAction($q)
     {
         $labelManager = $this->get('g5_movie.label_manager');
-        $labels = $labelManager->findLabelsByNameWithLike($q, $this->getUser());
+        $labels = $labelManager->repository->findByNameWithLike($q, $this->getUser());
 
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
 

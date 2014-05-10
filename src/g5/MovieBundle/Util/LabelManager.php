@@ -46,54 +46,6 @@ class LabelManager
     }
 
     /**
-     * @param  array    $criteria
-     * @param  array    $orderBy
-     * @param  integer  $limit
-     * @param  integer  $offset
-     *
-     * @return array
-     */
-    public function findLabelsBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-    }
-
-    /**
-     * @param  array  $criteria
-     *
-     * @return Label|null
-     */
-    public function findLabelBy(array $criteria)
-    {
-        return $this->repository->findOneBy($criteria);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function findLabelsByNameWithLike($name, \g5\AccountBundle\Entity\User $user)
-    {
-        return $this->repository->findByNameWithLike($name, $user);
-    }
-
-    /**
-     * @param  int                           $id
-     * @param  \g5\AccountBundle\Entity\User $user [description]
-     *
-     * @return \g5\MovieBundle\Entity\Label
-     */
-    public function find($id, \g5\AccountBundle\Entity\User $user = null)
-    {
-        $criteria['id'] = $id;
-
-        if (null !== $user) {
-            $criteria['user'] = $user;
-        }
-
-        return $this->repository->findOneBy($criteria);
-    }
-
-    /**
      * @param  Label  $label
      */
     public function updateLabel(Label $label)
@@ -109,10 +61,5 @@ class LabelManager
     {
         $this->em->remove($label);
         $this->em->flush();
-    }
-
-    public function loadTopLabels(\g5\AccountBundle\Entity\User $user, $limit = 5)
-    {
-        return $this->findLabelsBy(array('user' => $user), array('movie_count' => 'DESC'), $limit);
     }
 }

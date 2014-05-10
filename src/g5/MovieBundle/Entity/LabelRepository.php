@@ -60,4 +60,15 @@ class LabelRepository extends EntityRepository
 
         return $qb->getResult();
     }
+
+    public function find($id, g5\AccountBundle\Entity\User $user = null)
+    {
+        $criteria['id'] = $id;
+
+        if (null !== $user) {
+            $criteria['user'] = $user;
+        }
+
+        return $this->findOneBy($criteria);
+    }
 }
