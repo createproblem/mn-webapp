@@ -103,6 +103,10 @@ fos_rest:
     routing_loader:
         default_format: json
 
+knp_paginator:
+    template:
+        pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig
+
 g5_tmdb:
     api_key: "%tmdb_api_key%"
     fixture_dir: "%kernel.root_dir%/../src/g5/TmdbBundle/Resources/fixtures/response"

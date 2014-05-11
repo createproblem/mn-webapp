@@ -16,14 +16,21 @@ class DefaultController extends Controller
         $movieManager = $this->get('g5_movie.movie_manager');
         $movies = $movieManager->repository->findByUser($this->getUser());
 
-        foreach ($movies as $movie) {
+        $paginator  = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $movies,
+            $this->getRequest()->query->get('page', 1),
+            25
+        );
+
+        foreach ($pagination as $movie) {
             $labels[$movie->getId()] = $movie->getLabels();
         }
 
         $labels = $serializer->serialize($labels, 'json');
 
         return $this->render('g5HomeBundle:Default:test.html.twig', array(
-            'movies' => $movies,
+            'pagination' => $pagination,
             'labels' => $labels
         ));
     }

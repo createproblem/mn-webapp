@@ -2,12 +2,12 @@
 
 {% block body %}
 <div class="margin-top-xs"></div>
-{% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": movies } %}
+{% include 'g5MovieBundle:helper:movieGrid.html.twig' with { "movies": pagination } %}
 
 <div class="row">
-    <div class="text-center">
-        {# {{ paginationBar(pagination) }} #}
-    </div>
+<div class="text-center">
+    {{ knp_pagination_render(pagination) }}
+</div>
 </div>
 {{ toJS('labels', labels) }}
 {% endblock %}
