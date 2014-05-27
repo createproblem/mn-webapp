@@ -32,7 +32,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "g5MovieBundle", "g5HomeBundle" ]
+    bundles:        [ "g5HomeBundle" ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -80,9 +80,9 @@ swiftmailer:
 
 # FOSUserBundle
 fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    db_driver: mongodb # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: g5\AccountBundle\Entity\User
+    user_class: g5\AccountBundle\Document\User
     # group:
     #     group_class: g5\AccountBundle\Document\Group
     # encoder:

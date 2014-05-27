@@ -1,0 +1,6 @@
+g5\AccountBundle\Document\User:
+    type: document
+
+    fields:
+        id:
+            id: true
