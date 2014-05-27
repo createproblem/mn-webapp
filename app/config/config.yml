@@ -60,15 +60,15 @@ doctrine:
         auto_mapping: true
 
 # Mongodb Configuration
-# doctrine_mongodb:
-#     connections:
-#         default:
-#             server: mongodb://%database_host%:%database_port%
-#             options: {}
-#     default_database: mn
-#     document_managers:
-#         default:
-#             auto_mapping: true
+doctrine_mongodb:
+    connections:
+        default:
+            server: mongodb://localhost:27017
+            options: {}
+    default_database: mn
+    document_managers:
+        default:
+            auto_mapping: true
 
 # Swiftmailer Configuration
 swiftmailer:
