@@ -1,0 +1,51 @@
+g5\MovieBundle\Document\Movie:
+    type: document
+
+    fields:
+        id:
+            id: true
+
+        tmdb_id:
+            type: integer
+
+        title:
+            type: string
+
+        overview:
+            type: text
+            nullable: true
+
+        poster_path:
+            type: string
+            nullable: true
+
+        backdrop_path:
+            type: string
+            nullable: true
+
+        release_date:
+            type: date
+
+        created_at:
+            type: datetime
+
+        label_count:
+            type: integer
+
+        favorite:
+            type: boolean
+
+    referenceOne:
+        user:
+            targetDocument: g5\AccountBundle\Document\User
+            cascade: all
+
+    indexes:
+        user_tmdb_idx:
+            options:
+                unique: true
+                save: true
+            keys:
+                id: asc
+                tmdb_id: asc
+
