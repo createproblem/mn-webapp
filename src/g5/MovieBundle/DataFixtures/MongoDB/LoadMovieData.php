@@ -47,10 +47,14 @@ class LoadMovieData extends AbstractFixture implements ContainerAwareInterface, 
 
         $user = $this->getReference('test-user');
 
+        $labels = array('label-Action', 'label-Horror', 'label-Top-Hits');
+        $label = $this->getReference($labels[array_rand($labels, 1)]);
+
         foreach ($dataFiles as $file) {
             $data = file_get_contents($file);
             $movie = $this->createMovieFromData(json_decode($data, true));
             $movie->setUser($user);
+            $movie->addLabel($label);
             $manager->persist($movie);
         }
 

@@ -3,7 +3,6 @@
 namespace g5\MovieBundle\Document;
 
 
-
 /**
  * g5\MovieBundle\Document\Movie
  */
@@ -64,6 +63,15 @@ class Movie
      */
     protected $user;
 
+    /**
+     * @var g5\MovieBundle\Document\Label
+     */
+    protected $labels = array();
+
+    public function __construct()
+    {
+        $this->labels = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -293,5 +301,35 @@ class Movie
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add label
+     *
+     * @param g5\MovieBundle\Document\Label $label
+     */
+    public function addLabel(\g5\MovieBundle\Document\Label $label)
+    {
+        $this->labels[] = $label;
+    }
+
+    /**
+     * Remove label
+     *
+     * @param g5\MovieBundle\Document\Label $label
+     */
+    public function removeLabel(\g5\MovieBundle\Document\Label $label)
+    {
+        $this->labels->removeElement($label);
+    }
+
+    /**
+     * Get labels
+     *
+     * @return Doctrine\Common\Collections\Collection $labels
+     */
+    public function getLabels()
+    {
+        return $this->labels;
     }
 }

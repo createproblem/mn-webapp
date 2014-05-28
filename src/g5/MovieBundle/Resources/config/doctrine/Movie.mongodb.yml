@@ -40,6 +40,10 @@ g5\MovieBundle\Document\Movie:
             targetDocument: g5\AccountBundle\Document\User
             cascade: all
 
+    embedMany:
+        labels:
+            targetDocument: Label
+
     indexes:
         user_tmdb_idx:
             options:
