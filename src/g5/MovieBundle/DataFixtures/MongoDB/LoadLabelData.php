@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\AccountBundle\DataFixtures\MongoDB;
+namespace g5\MovieBundle\DataFixtrues\MongoDB;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -17,7 +17,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadUserData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+use g5\MovieBundle\Document\Label;
+
+class LoadLabelData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     /**
      * @var ContainerInterface
@@ -37,17 +39,24 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
      */
     public function load(ObjectManager $manager)
     {
-        $userManager = $this->container->get('fos_user.user_manager');
-        $user = $userManager->createUser();
+        $user = $this->getReference('test-user');
 
-        $user->setUsername('test');
-        $user->setEmail('test@example.com');
-        $user->setPlainPassword('test');
-        $user->setEnabled(true);
+        $labelData = array(
+            array('name' => 'Horror'),
+            array('name' => 'Action'),
+            array('name' => 'Top-Hits'),
+        );
 
-        $userManager->updateUser($user);
+        foreach ($labelData as $data) {
+            $label = new Label();
+            $label->setName($data['name']);
+            $label->setUser($user);
 
-        $this->addReference('test-user', $user);
+            $manager->persist($label);
+            $this->addReference('label-'.$label->getName(), $label);
+        }
+
+        $manager->flush();
     }
 
     /**
@@ -55,6 +64,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
      */
     public function getOrder()
     {
-        return 1;
+        return 2;
     }
 }

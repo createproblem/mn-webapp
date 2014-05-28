@@ -1,0 +1,14 @@
+g5\MovieBundle\Document\Label:
+    type: document
+
+    fields:
+        id:
+            id: true
+
+        name:
+            type: string
+
+    referenceOne:
+        user:
+            targetDocument: g5\AccountBundle\Document\User
+            cascade: all

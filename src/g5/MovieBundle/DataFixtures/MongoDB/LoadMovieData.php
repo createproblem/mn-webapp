@@ -9,7 +9,7 @@
 * file that was distributed with this source code.
 */
 
-namespace g5\AccountBundle\DataFixtures\ORM;
+namespace g5\AccountBundle\DataFixtures\MongoDB;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
