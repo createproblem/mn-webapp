@@ -6,13 +6,13 @@ g5\MovieBundle\Document\Movie:
             id: true
 
         tmdb_id:
-            type: integer
+            type: int
 
         title:
             type: string
 
         overview:
-            type: text
+            type: string
             nullable: true
 
         poster_path:
@@ -27,10 +27,10 @@ g5\MovieBundle\Document\Movie:
             type: date
 
         created_at:
-            type: datetime
+            type: date
 
         label_count:
-            type: integer
+            type: int
 
         favorite:
             type: boolean

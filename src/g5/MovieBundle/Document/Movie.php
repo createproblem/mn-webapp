@@ -15,7 +15,7 @@ class Movie
     protected $id;
 
     /**
-     * @var integer $tmdb_id
+     * @var int $tmdb_id
      */
     protected $tmdb_id;
 
@@ -25,7 +25,7 @@ class Movie
     protected $title;
 
     /**
-     * @var text $overview
+     * @var string $overview
      */
     protected $overview;
 
@@ -45,12 +45,12 @@ class Movie
     protected $release_date;
 
     /**
-     * @var datetime $created_at
+     * @var date $created_at
      */
     protected $created_at;
 
     /**
-     * @var integer $label_count
+     * @var int $label_count
      */
     protected $label_count;
 
@@ -58,6 +58,11 @@ class Movie
      * @var boolean $favorite
      */
     protected $favorite;
+
+    /**
+     * @var g5\AccountBundle\Document\User
+     */
+    protected $user;
 
 
     /**
@@ -76,7 +81,7 @@ class Movie
      * @param integer $tmdbId
      * @return self
      */
-    public function setTmdbId(\integer $tmdbId)
+    public function setTmdbId($tmdbId)
     {
         $this->tmdb_id = $tmdbId;
         return $this;
@@ -120,7 +125,7 @@ class Movie
      * @param text $overview
      * @return self
      */
-    public function setOverview(\text $overview)
+    public function setOverview($overview)
     {
         $this->overview = $overview;
         return $this;
@@ -205,10 +210,10 @@ class Movie
     /**
      * Set createdAt
      *
-     * @param datetime $createdAt
+     * @param date $createdAt
      * @return self
      */
-    public function setCreatedAt(\datetime $createdAt)
+    public function setCreatedAt($createdAt)
     {
         $this->created_at = $createdAt;
         return $this;
@@ -217,7 +222,7 @@ class Movie
     /**
      * Get createdAt
      *
-     * @return datetime $createdAt
+     * @return date $createdAt
      */
     public function getCreatedAt()
     {
@@ -230,7 +235,7 @@ class Movie
      * @param integer $labelCount
      * @return self
      */
-    public function setLabelCount(\integer $labelCount)
+    public function setLabelCount($labelCount)
     {
         $this->label_count = $labelCount;
         return $this;
@@ -267,11 +272,6 @@ class Movie
     {
         return $this->favorite;
     }
-    /**
-     * @var g5\AccountBundle\Document\User
-     */
-    protected $user;
-
 
     /**
      * Set user
