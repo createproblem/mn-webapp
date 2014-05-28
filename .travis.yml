@@ -6,6 +6,7 @@ php:
 branches:
     except:
         - experimental
+        - refactoring/mongodb
 
 before_script:
     - mysql -e 'create database mn_test;'
