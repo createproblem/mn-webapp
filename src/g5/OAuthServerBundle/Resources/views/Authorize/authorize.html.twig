@@ -1,0 +1,19 @@
+{% block body %}
+    <div class="form">
+        <form class="vertical" action="{{ path('fos_oauth_server_authorize', {
+            "client_id":  app.request.query.get('client_id'),
+            "response_type": app.request.query.get('response_type'),
+            "redirect_uri": app.request.query.get('redirect_uri'),
+            "state": app.request.query.get('state'),
+            'scope': app.request.query.get('scope')
+        }) }}" method="POST"  {{ form_enctype(form) }} >
+            <div class="form_title">
+                Grant access to {{ client.getName() }}?
+            </div>
+            {{ form_widget(form) }}
+            <div class="form_button">
+                <input type="submit" value="Authorize" />
+            </div>
+        </form>
+    </div>
+{% endblock %}

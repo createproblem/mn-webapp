@@ -114,3 +114,12 @@ g5_tmdb:
 jms_serializer:
     metadata:
         auto_detection: true
+
+fos_oauth_server:
+    db_driver:  mongodb
+    client_class:        g5\OAuthServerBundle\Document\Client
+    access_token_class:  g5\OAuthServerBundle\Document\AccessToken
+    refresh_token_class: g5\OAuthServerBundle\Document\RefreshToken
+    auth_code_class:     g5\OAuthServerBundle\Document\AuthCode
+    service:
+        user_provider: fos_user.user_manager

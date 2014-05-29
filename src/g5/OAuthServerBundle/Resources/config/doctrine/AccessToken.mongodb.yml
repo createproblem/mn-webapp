@@ -1,0 +1,13 @@
+g5\OAuthServerBundle\Document\AccessToken:
+    type: document
+
+    fields:
+        id:
+            id: true
+
+    referenceOne:
+        client:
+            targetDocument: Client
+        user:
+            targetDocument: g5\AccountBundle\Document\User
+

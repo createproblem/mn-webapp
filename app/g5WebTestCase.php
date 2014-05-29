@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Finder\Finder;
+use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
+use g5\OAuthServerBundle\Document\AccessToken;
 
 use g5\MovieBundle\Entity\Movie;
 
@@ -65,6 +67,37 @@ abstract class g5WebTestCase extends WebTestCase
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
+    }
+
+    protected function loginOAuth($email, $newToken)
+    {
+        $om = $this->get('doctrine_mongodb')->getManager();
+        $um = $this->get('fos_user.user_manager');
+        $cm = $this->get('fos_oauth_server.client_manager.default');
+
+        $oAuthClient = $cm->findClientBy(array('name' => 'TestClient'));
+        $user = $um->findUserByEmail($email);
+
+        $session = $this->get('session');
+        $firewall = 'oauth_authorize';
+
+        $token = new OAuthToken(array('ROLE_ADMIN'));
+        $token->setAuthenticated(true);
+        $token->setToken($newToken);
+
+        $accessToken = new AccessToken();
+        $accessToken->setUser($user);
+        $accessToken->setClient($oAuthClient);
+        $accessToken->setToken($newToken);
+
+        $om->persist($accessToken);
+        $om->flush();
+
+        $session->set('_security_'.$firewall, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie($session->getName(), $session->getId());
+        $this->client->getCookieJar()->set($cookie);
     }
 
     /**

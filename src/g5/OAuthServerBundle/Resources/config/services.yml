@@ -1,0 +1,17 @@
+parameters:
+#    g5_o_auth_server.example.class: g5\OAuthServerBundle\Example
+
+services:
+    g5_oauth_server.authorize.form_type:
+        class: g5\OAuthServerBundle\Form\Type\AuthorizeFormType
+
+    g5_oauth_server.authorize.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments: ["g5_oauth_server_authorize", "@g5_oauth_server.authorize.form_type"]
+
+    g5_oauth_server.authorize.form_handler:
+        class: g5\OAuthServerBundle\Form\Handler\AuthorizeFormHandler
+        scope: request
+        arguments: ["@g5_oauth_server.authorize.form", "@request", "@security.context", "@fos_oauth_server.server"]
