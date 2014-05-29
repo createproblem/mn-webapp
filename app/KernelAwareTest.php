@@ -16,11 +16,6 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
     protected $kernel;
 
     /**
-     * @var Doctrine\ORM\EntityManager
-     */
-    protected $entityManager;
-
-    /**
      * @var Symfony\Component\DependencyInjection\Container
      */
     protected $container;
@@ -45,7 +40,6 @@ abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
         $this->rootDir = $this->kernel->getRootDir();
 
         $this->container = $this->kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine')->getManager();
 
         $this->helper = new TestHelper($this->container);
 
