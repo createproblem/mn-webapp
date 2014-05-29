@@ -11,30 +11,30 @@
 
 namespace g5\MovieBundle\Util;
 
-use g5\MovieBundle\Entity\Label;
+use g5\MovieBundle\Document\Label;
 
 class LabelManager
 {
     /**
-     * @var Doctrine\ORM\EntityManager
+     * @var Doctrine\ODM\MongoDB\DocumentManager
      */
-    private $em;
+    private $dm;
 
     /**
-     * @var Doctrine\ORM\EntityRepository
+     * @var Doctrine\ODM\DocumentRepository
      */
     public $repository;
 
     /**
      * Constructor.
      *
-     * @param Doctrine\ORM\EntityRepository $repository
-     * @param Doctrine\ORM\EntityManager    $em
+     * @param Doctrine\ODM\DocumentRepository         $repository
+     * @param Doctrine\ODM\MongoDB\DocumentManager    $dm
      */
-    public function __construct($repository, $em)
+    public function __construct($repository, $dm)
     {
         $this->repository = $repository;
-        $this->em = $em;
+        $this->dm = $dm;
     }
 
     /**
@@ -50,8 +50,8 @@ class LabelManager
      */
     public function updateLabel(Label $label)
     {
-        $this->em->persist($label);
-        $this->em->flush();
+        $this->dm->persist($label);
+        $this->dm->flush();
     }
 
     /**
@@ -59,7 +59,7 @@ class LabelManager
      */
     public function removeLabel(Label $label)
     {
-        $this->em->remove($label);
-        $this->em->flush();
+        $this->dm->remove($label);
+        $this->dm->flush();
     }
 }

@@ -32,6 +32,6 @@ class DefaultControllerTest extends \g5WebTestCase
 
         $crawler = $this->client->request('GET', '/');
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('h4:contains("Fight Club")')->count());
+        $this->assertEquals(1, $crawler->filter('p:contains("Admin interface for all your needs.")')->count());
     }
 }

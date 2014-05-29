@@ -38,11 +38,12 @@ g5\MovieBundle\Document\Movie:
     referenceOne:
         user:
             targetDocument: g5\AccountBundle\Document\User
-            cascade: all
+            # cascade: all
 
     referenceMany:
         labels:
             targetDocument: Label
+            # cascade: all
 
     indexes:
         user_tmdb_idx:

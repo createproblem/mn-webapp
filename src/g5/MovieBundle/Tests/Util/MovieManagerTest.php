@@ -26,7 +26,7 @@ class MovieManagerTest extends \KernelAwareTest
 
     public function testCreateMovie()
     {
-        $this->assertInstanceOf('g5\MovieBundle\Entity\Movie', $this->mm->createMovie());
+        $this->assertInstanceOf('g5\MovieBundle\Document\Movie', $this->mm->createMovie());
     }
 
     public function testCreateMovieFromTmdb()
@@ -78,7 +78,8 @@ class MovieManagerTest extends \KernelAwareTest
         $movie = $this->mm->repository->find($id);
 
         $this->mm->removeMovie($movie);
+        $compare = $this->mm->repository->find($movie->getId());
 
-        $this->assertNull($movie->getId());
+        $this->assertNull($compare);
     }
 }

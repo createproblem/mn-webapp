@@ -12,7 +12,7 @@
 namespace g5\MovieBundle\Util;
 
 use Symfony\Component\Security\Core\User\UserInterface as User;
-use g5\MovieBundle\Entity\Movie;
+use g5\MovieBundle\Document\Movie;
 
 class MovieManager
 {

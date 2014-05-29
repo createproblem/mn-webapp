@@ -11,8 +11,8 @@ services:
         public: false
 
     g5_movie.repository.label:
-        class: Doctrine\ORM\EntityRepository
-        factory_service: doctrine.orm.entity_manager
+        class: Doctrine\ODM\DocumentRepository
+        factory_service: doctrine_mongodb.odm.document_manager
         factory_method: getRepository
         arguments: [ "g5MovieBundle:Label" ]
         public: false
@@ -23,7 +23,7 @@ services:
 
     g5_movie.label_manager:
         class: "%g5_movie.label_manager.class%"
-        arguments: [ "@g5_movie.repository.label", "@doctrine.orm.entity_manager" ]
+        arguments: [ "@g5_movie.repository.label", "@doctrine_mongodb.odm.document_manager" ]
 
     g5_movie.link.form.type:
         class: g5\MovieBundle\Form\Type\LinkType

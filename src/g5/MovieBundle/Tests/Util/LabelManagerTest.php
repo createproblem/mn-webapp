@@ -31,14 +31,13 @@ class LabelManagerTest extends \KernelAwareTest
     {
         $label = $this->lm->createLabel();
 
-        $this->assertInstanceOf('g5\MovieBundle\Entity\Label', $label);
+        $this->assertInstanceOf('g5\MovieBundle\Document\Label', $label);
     }
 
     public function testUpdateLabel()
     {
         $label = $this->lm->createLabel();
         $label->setName(uniqid());
-        $label->setNameNorm(uniqid());
         $label->setUser($this->helper->loadUser('test'));
 
         $this->lm->updateLabel($label);
@@ -56,7 +55,7 @@ class LabelManagerTest extends \KernelAwareTest
         $label = $this->lm->repository->find($id);
 
         $this->lm->removeLabel($label);
-
-        $this->assertNull($label->getId());
+        $compare = $this->lm->repository->find($label->getId());
+        $this->assertNull($compare);
     }
 }

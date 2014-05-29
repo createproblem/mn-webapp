@@ -19,3 +19,5 @@ composer.phar
 db.sh
 phpunit.xml
 cache.sh
+routes.sh
+apidoc.sh
