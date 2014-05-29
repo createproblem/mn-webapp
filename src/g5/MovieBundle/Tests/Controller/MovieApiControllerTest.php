@@ -17,11 +17,15 @@ class MovieApiControllerTest extends \g5WebTestCase
 {
     public function testGetMoviesAction()
     {
-        $this->client->request('GET', '/api/movies.json');
+        $token = uniqid();
+        $this->loginOAuth('test@example.com', $token);
+
+        $this->client->request('GET', '/api/movies.json', array('access_token' => $token));
 
         $content = $this->client->getResponse()->getContent();
         $content = json_decode($content, true);
 
         $this->assertTrue(is_array($content));
+        $this->assertGreaterThan(0, count($content));
     }
 }

@@ -20,7 +20,7 @@ class MovieApiController extends FOSRestController
 {
     /**
      * @ApiDoc(
-     *     description="Get movies",
+     *     description="Returns all movies.",
      *     statusCodes={
      *         200="Returned when successful"
      *     }
@@ -28,9 +28,10 @@ class MovieApiController extends FOSRestController
      */
     public function getMoviesAction()
     {
-        $mm = $this->get('g5_movie.movie_manager');
+        $user = $this->getUser();
 
-        $movies = $mm->repository->findAll();
+        $mm = $this->get('g5_movie.movie_manager');
+        $movies = $mm->repository->findBy(array('user.id' => $user->getId()));
 
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
         $view = View::create()
