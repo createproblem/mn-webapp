@@ -1,11 +1,7 @@
 parameters:
-    database_driver:   pdo_mysql
     database_host:     localhost
-    database_port:     3306
+    database_port:     27017
     database_name:     mn
-    database_user:     ~
-    database_password: ~
-    database_path:     ~
 
     mailer_transport:  smtp
     mailer_host:       localhost

@@ -1,18 +1,13 @@
 parameters:
-    database_driver:   pdo_mysql
-    database_host:     localhost
-    database_port:     3306
-    database_name:     mn_test
-    database_user:     root
-    database_password: ~
-    database_path:     ~
+    database_host:      localhost
+    database_port:      27017
+    database_name:      mn
 
-    mailer_transport:  smtp
-    mailer_host:       localhost
-    mailer_user:       ~
-    mailer_password:   ~
+    mailer_transport:   smtp
+    mailer_host:        localhost
+    mailer_user:        ~
+    mailer_password:    ~
 
-    locale:            en
-    secret:            c9f701ef4542e7caf82379d4c82a4ab6
-
-    tmdb_api_key:      123
+    locale:             en
+    secret:             106d9e49e7c48d1007acf14b4163e6d93b
+    tmdb_api_key:       ~

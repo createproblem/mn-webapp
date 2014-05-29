@@ -9,11 +9,11 @@ branches:
         - refactoring/mongodb
 
 before_script:
-    - mysql -e 'create database mn_test;'
+    - phpenv config-add php_test.ini
     - cp app/config/parameters_test.yml app/config/parameters.yml
-    - composer install
+    - composer install --no-dev
     - php app/console assetic:dump
-    - php app/console doctrine:schema:create
-    - php app/console doctrine:fixtures:load --append
+    - php app/console doctrine:mongodb:fixtures:load --append
+    - php app/console doctrine:mongodb:schema:create --index --db --collection
 
 script: phpunit --coverage-text -c app/
