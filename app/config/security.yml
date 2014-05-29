@@ -22,13 +22,13 @@ security:
             fos_oauth: true
             stateless: true
 
-        # oauth_authorize:
-        #     pattern: ^/oauth/v2/auth
-        #     form_login:
-        #         provider: fos_userbundle
-        #         check_path: /oauth/v2/auth_login_check
-        #         login_path: /oauth/v2/auth_login
-        #     anonymous: true
+        oauth_authorize:
+            pattern: ^/oauth/v2/auth
+            form_login:
+                provider: fos_userbundle
+                check_path: /oauth/v2/auth_login_check
+                login_path: /oauth/v2/auth_login
+            anonymous: true
 
         oauth_token:
             pattern: ^/oauth/v2/token
@@ -49,8 +49,6 @@ security:
 
     access_control:
         - { path: ^/account/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/account/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/movie/, role: ROLE_USER }
-        - { path: ^/label/, role: ROLE_USER }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/oauth/v2/auth_login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/oauth/v2/auth, role: IS_AUTHENTICATED_FULLY }
