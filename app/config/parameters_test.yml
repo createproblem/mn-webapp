@@ -1,7 +1,7 @@
 parameters:
     database_host:      localhost
     database_port:      27017
-    database_name:      mn
+    database_name:      mn_test
 
     mailer_transport:   smtp
     mailer_host:        localhost

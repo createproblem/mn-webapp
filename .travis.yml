@@ -18,4 +18,4 @@ before_script:
     - php app/console doctrine:mongodb:fixtures:load --append
     - php app/console doctrine:mongodb:schema:create --index --db --collection
 
-script: phpunit --coverage-text -c app/
+script: phpunit -c app/
