@@ -1,9 +1,4 @@
-# MovieController
-g5_movie_new:
-    pattern: /new
-    defaults: { _controller: g5MovieBundle:Movie:new }
-
-# ToolsController
-g5_movie_tools_index:
-    pattern: /tools
-    defaults: { _controller: g5MovieBundle:Tools:index }
+# MovieApiController
+movies:
+    type:     rest
+    resource: g5\MovieBundle\Controller\MovieApiController

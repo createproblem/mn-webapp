@@ -26,7 +26,6 @@
             {% endif %}
             {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') and not is_granted('IS_AUTHENTICATED_FULLY') %}
               <li><a href="{{ path('fos_user_security_login') }}"><i class="fa fa-sign-in"></i> Login</a></li>
-              <li><a href="{{ path('fos_user_registration_register') }}">Register</a></li>
             {% endif %}
           </ul>
         </li>

@@ -17,25 +17,25 @@ use g5\MovieBundle\Entity\Movie;
 class MovieManager
 {
     /**
-     * @var Doctrine\ORM\EntityManager
+     * @var Doctrine\ODM\MongoDB\DocumentManager
      */
-    private $em;
+    private $dm;
 
     /**
-     * @var Doctrine\ORM\EntityRepository
+     * @var Doctrine\ODM\DocumentRepository
      */
     public $repository;
 
     /**
      * Constructor.
      *
-     * @param Doctrine\ORM\EntityRepository $repository
-     * @param Doctrine\ORM\EntityManager    $em
+     * @param Doctrine\ODM\DocumentRepository         $repository
+     * @param Doctrine\ODM\MongoDB\DocumentManager    $dm
      */
-    public function __construct($repository, $em)
+    public function __construct($repository, $dm)
     {
         $this->repository = $repository;
-        $this->em = $em;
+        $this->dm = $dm;
     }
 
     /**
@@ -73,8 +73,8 @@ class MovieManager
      */
     public function updateMovie(Movie $movie)
     {
-        $this->em->persist($movie);
-        $this->em->flush();
+        $this->dm->persist($movie);
+        $this->dm->flush();
     }
 
     /**
@@ -83,7 +83,7 @@ class MovieManager
      */
     public function removeMovie(Movie $movie)
     {
-        $this->em->remove($movie);
-        $this->em->flush();
+        $this->dm->remove($movie);
+        $this->dm->flush();
     }
 }

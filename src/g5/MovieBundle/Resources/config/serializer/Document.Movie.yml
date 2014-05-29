@@ -1,0 +1,17 @@
+g5\MovieBundle\Document\Movie:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+        title:
+            expose: true
+        release_date:
+            expose: true
+        labels:
+            expose: true
+        overview:
+            expose: true
+        poster_path:
+            expose: true
+        backdrop_path:
+            expose: true

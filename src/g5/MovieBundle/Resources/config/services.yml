@@ -4,8 +4,8 @@ parameters:
 
 services:
     g5_movie.repository.movie:
-        class: Doctrine\ORM\EntityRepository
-        factory_service: doctrine.orm.entity_manager
+        class: Doctrine\ODM\DocumentRepository
+        factory_service: doctrine_mongodb.odm.document_manager
         factory_method: getRepository
         arguments: [ "g5MovieBundle:Movie" ]
         public: false
@@ -19,7 +19,7 @@ services:
 
     g5_movie.movie_manager:
         class: "%g5_movie.movie_manager.class%"
-        arguments: [ "@g5_movie.repository.movie", "@doctrine.orm.entity_manager" ]
+        arguments: [ "@g5_movie.repository.movie", "@doctrine_mongodb.odm.document_manager" ]
 
     g5_movie.label_manager:
         class: "%g5_movie.label_manager.class%"
