@@ -11,10 +11,6 @@ g5_account:
     resource: "@g5AccountBundle/Resources/config/routing.yml"
     prefix:   /account
 
-g5_o_auth_server:
-    resource: "@g5OAuthServerBundle/Resources/config/routing.yml"
-    prefix:   /
-
 # FOSJsRouting
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
@@ -24,13 +20,5 @@ fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix: /account
 
-# NelmioApiDocBundle
-NelmioApiDocBundle:
-    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
-    prefix:   /doc
-
 fos_oauth_server_token:
     resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
-
-fos_oauth_server_authorize:
-    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"

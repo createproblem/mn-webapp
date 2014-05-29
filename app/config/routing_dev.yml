@@ -12,3 +12,17 @@ _configurator:
 
 _main:
     resource: routing.yml
+
+
+g5_o_auth_server:
+    resource: "@g5OAuthServerBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+# NelmioApiDocBundle
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc
