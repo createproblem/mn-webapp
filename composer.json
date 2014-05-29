@@ -30,7 +30,8 @@
         "nelmio/api-doc-bundle": "@stable",
         "doctrine/mongodb-odm": "1.0.*@dev",
         "doctrine/mongodb-odm-bundle": "3.0.*@dev",
-        "friendsofsymfony/oauth-server-bundle": "dev-master"
+        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "nelmio/cors-bundle": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.1.*"

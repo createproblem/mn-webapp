@@ -123,3 +123,12 @@ fos_oauth_server:
     auth_code_class:     g5\OAuthServerBundle\Document\AuthCode
     service:
         user_provider: fos_user.user_manager
+
+nelmio_cors:
+    defaults:
+        allow_methods: []
+    paths:
+        '^/oauth/v2/token':
+            allow_origin: ['*']
+        '^/api':
+            allow_origin: ['*']
