@@ -6,7 +6,9 @@ php:
 branches:
     except:
         - experimental
-        - refactoring/mongodb
+
+services:
+    - mongodb
 
 before_script:
     - phpenv config-add php_test.ini
