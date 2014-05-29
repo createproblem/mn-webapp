@@ -1,9 +1,3 @@
-# g5_account_registration:
-#     pattern:  /registration
-#     defaults: { _controller: g5AccountBundle:Registration:index }
-
-# g5_account_create:
-#     pattern: /create
-#     defaults: { _controller: g5AccountBundle:Registration:create }
-#     requirements:
-#         _method: POST
+g5_account_admin_index:
+    pattern: /admin/user
+    defaults: { _controller: g5AccountBundle:Admin:index }
