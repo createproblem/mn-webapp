@@ -114,6 +114,12 @@ g5_tmdb:
 jms_serializer:
     metadata:
         auto_detection: true
+        directories:
+            FOSUserBundle:
+                namespace_prefix: "FOS\\UserBundle"
+                path: "@g5AccountBundle/Resources/config/serializer/fos"
+
+
 
 fos_oauth_server:
     db_driver:  mongodb

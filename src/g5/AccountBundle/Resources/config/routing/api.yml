@@ -1,0 +1,4 @@
+me:
+    type:     rest
+    resource: g5\AccountBundle\Controller\UserApiController
+    name_prefix:  g5_api_

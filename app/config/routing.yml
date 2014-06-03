@@ -11,6 +11,11 @@ g5_account:
     resource: "@g5AccountBundle/Resources/config/routing.yml"
     prefix:   /account
 
+g5_account_api:
+    type: rest
+    resource: "@g5AccountBundle/Resources/config/routing/api.yml"
+    prefix:   /api
+
 # FOSJsRouting
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
