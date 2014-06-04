@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+php app/console doctrine:mongodb:schema:drop
+echo "y" | php app/console doctrine:mongodb:fixtures:load
+php app/console doctrine:mongodb:schema:create --index --db --collection

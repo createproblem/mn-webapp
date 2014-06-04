@@ -32,7 +32,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ "g5HomeBundle" ]
+    bundles:        [ "g5HomeBundle", "g5AccountBundle" ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -99,7 +99,7 @@ nelmio_api_doc: ~
 
 # FOSRestBundle
 fos_rest:
-    # param_fetcher_listener: force
+    param_fetcher_listener: true
     routing_loader:
         # default_format: json
         include_format: true

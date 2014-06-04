@@ -12,6 +12,8 @@
 namespace g5\AccountBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
 {
@@ -23,5 +25,28 @@ class AdminController extends Controller
         return $this->render('g5AccountBundle:Admin:index.html.twig', array(
             'users' => $users
         ));
+    }
+
+    public function generateTokenAction(Request $request)
+    {
+    	$tm = $this->get('fos_oauth_server.access_token_manager');
+    	$cm = $this->get('fos_oauth_server.client_manager');
+    	$um = $this->get('fos_user.user_manager');
+    	$oauth = $this->get('fos_oauth_server.server');
+    	$serializer = $this->get('jms_serializer');
+
+    	$client = $cm->findClientBy(array('name' => 'TestClient'));
+    	$user = $um->findUserBy(array('id' => $request->query->get('user_id')));
+
+    	if (null === $user) {
+    		throw $this->createNotFoundException('User not found');
+    	}
+
+    	$access_token = $oauth->createAccessToken($client, $user);
+
+    	$response = new JsonResponse();
+    	$response->setData($access_token);
+
+    	return $response;
     }
 }

@@ -1,3 +1,13 @@
 g5_account_admin_index:
     pattern: /admin/user
     defaults: { _controller: g5AccountBundle:Admin:index }
+    requirements:
+        _method: GET
+
+g5_account_admin_generate_token:
+    pattern: /admin/user/generate-token
+    defaults: { _controller: g5AccountBundle:Admin:generateToken }
+    requirements:
+        _method: GET
+    options:
+        expose: true

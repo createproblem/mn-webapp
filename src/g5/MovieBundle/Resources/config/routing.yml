@@ -2,3 +2,10 @@
 movies:
     type:     rest
     resource: g5\MovieBundle\Controller\MovieApiController
+    name_prefix: g5_api_movie_
+
+tmdb:
+    type:     rest
+    resource: g5\MovieBundle\Controller\TmdbApiController
+    name_prefix: g5_api_tmdb_
+    prefix: /tmdb

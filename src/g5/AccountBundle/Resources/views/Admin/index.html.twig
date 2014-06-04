@@ -8,6 +8,7 @@
                 <tr>
                     <th>#</th>
                     <th>Email</th>
+                    <th>Token</th>
                     <th>Options</th>
                 </tr>
             </thead>
@@ -16,9 +17,10 @@
                     <tr>
                         <td>{{ user.id }}</td>
                         <td>{{ user.email }}</td>
+                        <td id="token-{{ user.id }}"></td>
                         <td>
                             <button class="btn btn-danger btn-xs">Delete</button>
-                            <button class="btn btn-warning btn-xs">Clear Tokens</button>
+                            <button class="btn-gen-token btn btn-warning btn-xs" data-user-id="{{ user.id }}">Generate Token</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -26,4 +28,12 @@
         </table>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@g5AccountBundle/Resources/public/js/admin.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

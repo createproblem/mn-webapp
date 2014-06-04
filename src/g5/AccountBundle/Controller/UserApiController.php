@@ -18,6 +18,14 @@ use FOS\RestBundle\View\View;
 
 class UserApiController extends FOSRestController
 {
+    /**
+     * @ApiDoc(
+     *     description="Returns the current user.",
+     *     statusCodes={
+     *         200="Returned when successful"
+     *     }
+     * )
+     */
     public function meAction()
     {
         $user = $this->getUser();
