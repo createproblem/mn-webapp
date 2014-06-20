@@ -53,6 +53,6 @@ class LoadClientData extends AbstractFixture implements ContainerAwareInterface,
      */
     public function getOrder()
     {
-        return 2;
+        return 4;
     }
 }
