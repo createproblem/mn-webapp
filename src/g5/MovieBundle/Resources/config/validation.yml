@@ -1,8 +1,9 @@
 # src/g5/MovieBundle/Resources/config/validation.yml
-g5\MovieBundle\Entity\Movie:
+g5\MovieBundle\Document\Movie:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+        - Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique:
             fields: [user, tmdb_id]
+            repositoryMethod: findUniqueBy
             errorPath: tmdb_id
             message: "Movie already in your database."
 

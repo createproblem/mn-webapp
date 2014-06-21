@@ -1,5 +1,6 @@
 g5\MovieBundle\Document\Movie:
     type: document
+    repositoryClass: g5\MovieBundle\Repository\MovieRepository
 
     fields:
         id:
@@ -51,6 +52,6 @@ g5\MovieBundle\Document\Movie:
                 unique: true
                 save: true
             keys:
-                id: asc
+                user: asc
                 tmdb_id: asc
 
