@@ -28,4 +28,9 @@ class MovieApiControllerTest extends \g5WebTestCase
         $this->assertTrue(is_array($content));
         $this->assertGreaterThan(0, count($content));
     }
+
+    public function testPostMovieAction()
+    {
+        $this->markTestSkipped('Not yet implemented');
+    }
 }

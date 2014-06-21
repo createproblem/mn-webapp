@@ -55,10 +55,19 @@ class TmdbApiController extends FOSRestController
 
         $api = $this->get('g5_tmdb.api.default');
         $result = $api->getSearchMovie(array('query' => $query));
+
+        $data = array(
+            'movies' => $result['results'],
+            'total_results' => $result['total_results'],
+            'page' => $result['page'],
+            'total_pages' => $result['total_pages']
+        );
+
         $status = HttpCodes::HTTP_OK;
 
-        $view = View::create($result)
+        $view = View::create()
             ->setStatusCode($status)
+            ->setData($data)
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
