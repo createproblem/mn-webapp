@@ -61,7 +61,7 @@ class MovieManagerTest extends \KernelAwareTest
         );
         $model = new \Guzzle\Service\Resource\Model($data);
         $movie = $this->mm->createMovieFromTmdb($model);
-        $movie->setUser($this->helper->loadUser('test'));
+        $movie->setUser($this->helper->loadUser('test@example.com'));
 
         $this->mm->updateMovie($movie);
 

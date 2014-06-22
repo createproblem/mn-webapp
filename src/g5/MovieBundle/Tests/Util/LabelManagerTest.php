@@ -38,7 +38,7 @@ class LabelManagerTest extends \KernelAwareTest
     {
         $label = $this->lm->createLabel();
         $label->setName(uniqid());
-        $label->setUser($this->helper->loadUser('test'));
+        $label->setUser($this->helper->loadUser('test@example.com'));
 
         $this->lm->updateLabel($label);
 

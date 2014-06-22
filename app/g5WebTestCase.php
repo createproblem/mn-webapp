@@ -48,7 +48,7 @@ abstract class g5WebTestCase extends WebTestCase
 
     protected function login(&$client)
     {
-        $this->loginAs($client, 'test');
+        $this->loginAs($client, 'test@example.com');
     }
 
     protected function loginAs(&$client, $username)
