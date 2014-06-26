@@ -41,8 +41,8 @@ class LoadClientData extends AbstractFixture implements ContainerAwareInterface,
 
         $client = new Client();
         $client->setName('TestClient');
-        $client->setRedirectUris(array('http://localhost:8000', 'http://localhost:9000'));
-        $client->setAllowedGrantTypes(array('refresh_token', 'password', 'client_credentials', 'code'));
+        $client->setRedirectUris(array('http://localhost:8000', 'http://localhost:9000', 'http://localhost:6284'));
+        $client->setAllowedGrantTypes(array('refresh_token', 'password', 'client_credentials', 'code', 'authorization_code'));
         $manager->persist($client);
 
         $manager->flush();
