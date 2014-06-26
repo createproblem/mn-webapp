@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Public ID</th>
+                    <th>Secret ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td>{{ client.name }}</td>
+                        <td>{{ client.id }}_{{ client.randomId }}</td>
+                        <td>{{ client.secret }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

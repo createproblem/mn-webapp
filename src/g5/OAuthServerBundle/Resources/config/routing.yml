@@ -5,3 +5,9 @@ g5_oauth_server_auth_login:
 g5_oauth_server_auth_login_check:
     pattern: /oauth/v2/auth_login_check
     defaults: { _controller: g5OAuthServerBundle:Security:loginCheck }
+
+g5_oauth_server_admin_index:
+    pattern: /admin/clients
+    defaults: { _controller: g5OAuthServerBundle:Admin:index }
+    requirements:
+        _method: GET

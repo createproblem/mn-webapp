@@ -49,6 +49,6 @@ security:
 
     access_control:
         - { path: ^/account/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/admin/, role: ROLE_USER }
         - { path: ^/oauth/v2/auth_login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/v2/auth, role: IS_AUTHENTICATED_FULLY }
