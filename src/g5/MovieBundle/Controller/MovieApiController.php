@@ -32,7 +32,7 @@ class MovieApiController extends FOSRestController
         $user = $this->getUser();
 
         $mm = $this->get('g5_movie.movie_manager');
-        $movies = $mm->repository->findBy(array('user.id' => $user->getId()));
+        $movies = $mm->repository->findBy(array('user.id' => $user->getId()), array('created_at' => '-1'));
 
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
         $view = View::create()
