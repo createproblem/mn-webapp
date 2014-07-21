@@ -29,6 +29,7 @@ class MovieRepository extends DocumentRepository
             ->field('user')->references($user)
             ->limit($limit)
             ->skip($skip)
+            ->sort('created_at', 'ACS')
             ->getQuery()
             ->execute();
     }
