@@ -43,22 +43,30 @@ class MovieApiController extends FOSRestController
         $user = $this->getUser();
 
         $page = $paramFetcher->get('page') === null ? 1 : (int)$paramFetcher->get('page');
-        $max = $paramFetcher->get('max');
+        $max = $paramFetcher->get('max') === null ? 100 : (int)$paramFetcher->get('max');
+        $skip = $page - 1;
 
         $mm = $this->get('g5_movie.movie_manager');
-        $moviesCursor = $mm->repository->findPaginated($user);
+        $moviesCursor = $mm->repository->findPaginated($user, $max, $max * $skip);
 
         $data = array(
             'total_results' => $moviesCursor->count(),
+            'page' => $page,
+            'max_pages' => ceil($moviesCursor->count() / $max),
+            'max_items' => $max,
             'movies' => $moviesCursor->toArray(false),
-            'page' => $page
         );
 
-        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
-        $view = View::create()
-            ->setStatusCode($status)
-            ->setData($data)
-        ;
+        $view = View::create();
+
+        if (empty($data['movies'])) {
+            $status = \FOS\RestBundle\Util\Codes::HTTP_NOT_FOUND;
+        } else {
+            $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+            $view->setData($data);
+        }
+
+        $view->setStatusCode($status);
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
