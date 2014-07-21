@@ -22,4 +22,13 @@ class MovieRepository extends DocumentRepository
     {
         return $this->findBy(array('user.id' => $criteria['user'], 'tmdb_id' => $criteria['tmdb_id']));
     }
+
+    public function findPaginated($user)
+    {
+        return $this->createQueryBuilder()
+            ->field('user')->references($user)
+            ->limit(2)
+            ->getQuery()
+            ->execute();
+    }
 }

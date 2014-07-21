@@ -20,6 +20,17 @@ use FOS\RestBundle\View\View;
 class MovieApiController extends FOSRestController
 {
     /**
+     * @RestAnnotation\QueryParam(
+     *     name="page",
+     *     strict=false,
+     *     requirements="^[0-9]+$"
+     * )
+     *
+     * @RestAnnotation\QueryParam(
+     *     name="max",
+     *     requirements="^[0-9]+$"
+     * )
+     *
      * @ApiDoc(
      *     description="Returns all movies.",
      *     statusCodes={
@@ -27,17 +38,26 @@ class MovieApiController extends FOSRestController
      *     }
      * )
      */
-    public function getMoviesAction()
+    public function getMoviesAction(ParamFetcher $paramFetcher)
     {
         $user = $this->getUser();
 
+        $page = $paramFetcher->get('page') === null ? 1 : (int)$paramFetcher->get('page');
+        $max = $paramFetcher->get('max');
+
         $mm = $this->get('g5_movie.movie_manager');
-        $movies = $mm->repository->findBy(array('user.id' => $user->getId()), array('created_at' => '-1'));
+        $moviesCursor = $mm->repository->findPaginated($user);
+
+        $data = array(
+            'total_results' => $moviesCursor->count(),
+            'movies' => $moviesCursor->toArray(false),
+            'page' => $page
+        );
 
         $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
         $view = View::create()
             ->setStatusCode($status)
-            ->setData($movies)
+            ->setData($data)
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
