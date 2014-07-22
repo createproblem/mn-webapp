@@ -6,6 +6,7 @@ php:
 branches:
     except:
         - experimental
+        - master
 
 services:
     - mongodb
