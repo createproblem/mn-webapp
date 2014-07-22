@@ -9,3 +9,8 @@ tmdb:
     resource: g5\MovieBundle\Controller\TmdbApiController
     name_prefix: g5_api_tmdb_
     prefix: /tmdb
+
+labels:
+    type: rest
+    resource: g5\MovieBundle\Controller\LabelApiController
+    name_prefix: g5_api_label_
