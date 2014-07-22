@@ -132,7 +132,7 @@ fos_oauth_server:
 
 nelmio_cors:
     defaults:
-        allow_methods: ['POST']
+        allow_methods: ['POST', 'GET', 'PUT']
         allow_headers: ['*']
     paths:
         '^/oauth/v2/token':
