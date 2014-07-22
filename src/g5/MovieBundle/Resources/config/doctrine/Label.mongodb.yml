@@ -1,5 +1,6 @@
 g5\MovieBundle\Document\Label:
     type: document
+    repositoryClass: g5\MovieBundle\Repository\LabelRepository
 
     fields:
         id:

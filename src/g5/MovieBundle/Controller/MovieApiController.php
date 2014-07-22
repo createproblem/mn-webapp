@@ -116,4 +116,78 @@ class MovieApiController extends FOSRestController
 
         return $this->get('fos_rest.view_handler')->handle($view);
     }
+
+    public function getMovieAction($id)
+    {
+        $movieManager = $this->get('g5_movie.movie_manager');
+        $movie = $movieManager->repository->find($id);
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($movie)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    /**
+     * @RestAnnotation\RequestParam(
+     *     name="labels",
+     *     strict=false,
+     *     nullable=false
+     * )
+     */
+    public function putMovieAction($id, ParamFetcher $paramFetcher)
+    {
+        $labelManager = $this->get('g5_movie.label_manager');
+        $movieManager = $this->get('g5_movie.movie_manager');
+
+        $movie = $movieManager->repository->find($id);
+
+        $labelData = $paramFetcher->get('labels');
+        $labelsRaw = explode(',', $labelData);
+
+        $labelsExists = $labelManager->repository->findByNameIn($labelsRaw);
+
+        // find new labels
+        $labelsNew = array();
+        foreach ($labelsRaw as $name) {
+            $found = false;
+            foreach ($labelsExists as $label) {
+                if ($label->getName() === $name) {
+                    $found = true;
+                }
+            }
+            if (false === $found) {
+                $l = $labelManager->createLabel();
+                $l->setName($name);
+                $labelsNew[] = $l;
+            }
+        }
+
+        $movieLabels = $movie->getLabels();
+
+        foreach ($movie->getLabels() as $label) {
+            if (!in_array($label, $labelsExists)) {
+                $movie->removeLabel($label);
+            } else {
+                unset($labelsExists[array_keys($labelsExists, $label, true)[0]]);
+            }
+        }
+
+        foreach ($labelsExists as $label) {
+            $movie->addLabel($label);
+        }
+
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+
+        $view = View::create()
+            ->setStatusCode($status)
+            ->setData($labelsNew)
+        ;
+
+        return $this->get('fos_rest.view_handler')->handle($view);
+    }
 }
