@@ -13,3 +13,8 @@ g5\MovieBundle\Entity\MovieLabel:
             fields: [movie, label]
             errorPath: label
             message: "Label already assigned."
+
+g5\MovieBundle\Document\Label:
+    properties:
+        name:
+            - NotBlank: ~

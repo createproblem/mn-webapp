@@ -33,4 +33,88 @@ class MovieApiControllerTest extends \g5WebTestCase
     {
         $this->markTestSkipped('Not yet implemented');
     }
+
+    public function testPutMovieActionAddNewLabel()
+    {
+        $token = uniqid();
+        $newLabelName = uniqid();
+        $this->loginOAuth('test@example.com', $token);
+
+        $mm = $this->get('g5_movie.movie_manager');
+        $movie = $mm->repository->findOneBy(array());
+
+        $labelsExists = join(',', array_map(function($label) {
+            return $label->getName();
+        }, $movie->getLabels()->toArray()));
+
+        $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
+
+        $this->client->request('PUT', $url, array(
+            'labels' => $labelsExists.','.$newLabelName
+        ));
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        $content = json_decode($this->client->getResponse()->getContent(), true);
+        $labels = $content['labels'];
+
+        $expected = array_map(function($label) {
+            return $label->getName();
+        }, $movie->getLabels()->toArray());
+
+        $compare = array_map(function($label) {
+            return $label['name'];
+        }, $labels);
+
+        $this->assertEquals($expected, $compare);
+
+        return $movie->getId();
+    }
+
+    /**
+     * @depends testPutMovieActionAddNewLabel
+     */
+    public function testPutMovieActionRemoveLabel($id)
+    {
+        $token = uniqid();
+        $this->loginOAuth('test@example.com', $token);
+
+        $mm = $this->get('g5_movie.movie_manager');
+        $movie = $mm->repository->find($id);
+
+        $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
+
+        $this->client->request('PUT', $url, array(
+            'labels' => ''
+        ));
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $content = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertEquals($content['labels'], array());
+
+        return $movie->getId();
+    }
+
+    /**
+     * @depends testPutMovieActionRemoveLabel
+     */
+    public function testPutMovieActionLinkLabel($id)
+    {
+        $token = uniqid();
+        $this->loginOAuth('test@example.com', $token);
+
+        $mm = $this->get('g5_movie.movie_manager');
+        $movie = $mm->repository->find($id);
+
+        $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
+
+        $this->client->request('PUT', $url, array(
+            'labels' => 'Horror'
+        ));
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $content = json_decode($this->client->getResponse()->getContent(), true);
+
+        $this->assertEquals($content['labels'][0]['name'], 'Horror');
+    }
 }

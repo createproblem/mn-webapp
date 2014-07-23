@@ -78,4 +78,9 @@ class Label
     {
         return $this->user;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

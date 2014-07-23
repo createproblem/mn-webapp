@@ -8,6 +8,7 @@ g5\MovieBundle\Document\Label:
 
         name:
             type: string
+            unique: true
 
     referenceOne:
         user:

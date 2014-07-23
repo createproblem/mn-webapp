@@ -141,53 +141,70 @@ class MovieApiController extends FOSRestController
      */
     public function putMovieAction($id, ParamFetcher $paramFetcher)
     {
-        $labelManager = $this->get('g5_movie.label_manager');
-        $movieManager = $this->get('g5_movie.movie_manager');
+        $user = $this->getUser();
+        $lm = $this->get('g5_movie.label_manager');
+        $mm = $this->get('g5_movie.movie_manager');
+        $validator = $this->get('validator');
 
-        $movie = $movieManager->repository->find($id);
+        $movie = $mm->repository->find($id);
 
-        $labelData = $paramFetcher->get('labels');
-        $labelsRaw = explode(',', $labelData);
-
-        $labelsExists = $labelManager->repository->findByNameIn($labelsRaw);
+        $labelNames = explode(',', $paramFetcher->get('labels'));
+        $labelsExist = $lm->repository->findByNameIn($labelNames);
 
         // find new labels
-        $labelsNew = array();
-        foreach ($labelsRaw as $name) {
-            $found = false;
-            foreach ($labelsExists as $label) {
-                if ($label->getName() === $name) {
-                    $found = true;
-                }
-            }
-            if (false === $found) {
-                $l = $labelManager->createLabel();
-                $l->setName($name);
-                $labelsNew[] = $l;
-            }
+        $newLabels = array_map(function($name) use ($lm) {
+            $l = $lm->createLabel();
+            $l->setName($name);
+            return $l;
+        }, array_diff($labelNames, $this->getLabelNames($labelsExist->toArray())));
+
+        // find link labels
+        $linkLabels = array_diff($labelsExist->toArray(), $movie->getLabels()->toArray());
+
+        // find remove labels
+        $removeLabels = array_diff($movie->getLabels()->toArray(), $labelsExist->toArray());
+
+        // remove labels from movie
+        foreach ($removeLabels as $label) {
+            $movie->removeLabel($label);
         }
 
-        $movieLabels = $movie->getLabels();
-
-        foreach ($movie->getLabels() as $label) {
-            if (!in_array($label, $labelsExists)) {
-                $movie->removeLabel($label);
-            } else {
-                unset($labelsExists[array_keys($labelsExists, $label, true)[0]]);
-            }
-        }
-
-        foreach ($labelsExists as $label) {
+        // link labels
+        foreach ($linkLabels as $label) {
             $movie->addLabel($label);
         }
 
-        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
+        // save new labels and link
+        foreach ($newLabels as $label) {
+            $label->setUser($user);
+            $errors = $validator->validate($label);
+            if (count($errors) === 0) {
+                $lm->updateLabel($label);
+                $movie->addLabel($label);
+            }
+        }
+        $mm->updateMovie($movie);
 
+        $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
         $view = View::create()
             ->setStatusCode($status)
-            ->setData($labelsNew)
+            ->setData($movie)
         ;
 
         return $this->get('fos_rest.view_handler')->handle($view);
+    }
+
+    /**
+     * Formats an array of labels to an array of label names
+     *
+     * @param  array  $labels
+     *
+     * @return array
+     */
+    private function getLabelNames(array $labels)
+    {
+        return array_map(function($label) {
+            return $label->getName();
+        }, $labels);
     }
 }
