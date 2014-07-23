@@ -48,6 +48,7 @@ class MovieApiController extends FOSRestController
 
         $mm = $this->get('g5_movie.movie_manager');
         $moviesCursor = $mm->repository->findPaginated($user, $max, $max * $skip);
+        $movies = $mm->repository->findBy(array('user.id' => $user->getId()), array('created_at' => 'ASC'));
 
         $data = array(
             'total_results' => $moviesCursor->count(),
@@ -63,7 +64,7 @@ class MovieApiController extends FOSRestController
             $status = \FOS\RestBundle\Util\Codes::HTTP_NOT_FOUND;
         } else {
             $status = \FOS\RestBundle\Util\Codes::HTTP_OK;
-            $view->setData($data);
+            $view->setData($movies);
         }
 
         $view->setStatusCode($status);
