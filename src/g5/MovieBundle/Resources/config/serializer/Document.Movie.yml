@@ -15,3 +15,5 @@ g5\MovieBundle\Document\Movie:
             expose: true
         backdrop_path:
             expose: true
+        created_at:
+            expose: true

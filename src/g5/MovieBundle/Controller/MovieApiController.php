@@ -48,7 +48,7 @@ class MovieApiController extends FOSRestController
 
         $mm = $this->get('g5_movie.movie_manager');
         $moviesCursor = $mm->repository->findPaginated($user, $max, $max * $skip);
-        $movies = $mm->repository->findBy(array('user.id' => $user->getId()), array('created_at' => 'ASC'));
+        $movies = $mm->repository->findBy(array('user.id' => $user->getId()));
 
         $data = array(
             'total_results' => $moviesCursor->count(),
@@ -147,9 +147,13 @@ class MovieApiController extends FOSRestController
         $mm = $this->get('g5_movie.movie_manager');
         $validator = $this->get('validator');
 
+        $labelNames = array_map(function($label) {
+            return $label['name'];
+        }, $paramFetcher->get('labels'));
+
         $movie = $mm->repository->find($id);
 
-        $labelNames = explode(',', $paramFetcher->get('labels'));
+        // $labelNames = explode(',', $paramFetcher->get('labels'));
         $labelsExist = $lm->repository->findByNameIn($labelNames);
 
         // find new labels

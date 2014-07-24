@@ -43,14 +43,17 @@ class MovieApiControllerTest extends \g5WebTestCase
         $mm = $this->get('g5_movie.movie_manager');
         $movie = $mm->repository->findOneBy(array());
 
-        $labelsExists = join(',', array_map(function($label) {
-            return $label->getName();
-        }, $movie->getLabels()->toArray()));
+        $labelsExists = array();
+        foreach ($movie->getLabels() as $label) {
+            $labelsExists[] = array(
+                'name' => $label->getName()
+            );
+        }
 
         $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
 
         $this->client->request('PUT', $url, array(
-            'labels' => $labelsExists.','.$newLabelName
+            'labels' => $labelsExists
         ));
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
@@ -85,7 +88,7 @@ class MovieApiControllerTest extends \g5WebTestCase
         $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
 
         $this->client->request('PUT', $url, array(
-            'labels' => ''
+            'labels' => array()
         ));
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
@@ -109,7 +112,7 @@ class MovieApiControllerTest extends \g5WebTestCase
         $url = '/api/movies/'.$movie->getId().'.json?access_token='.$token;
 
         $this->client->request('PUT', $url, array(
-            'labels' => 'Horror'
+            'labels' => array(array('name' => 'Horror'))
         ));
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
